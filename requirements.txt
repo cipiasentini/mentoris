@@ -1,0 +1,10 @@
+Django==2.0.4
+django-appconf==1.0.1
+django-crispy-forms==1.7.2
+django-pyodbc-azure==2.0.4.1
+django-widget-tweaks==1.4.2
+djangoajax==3.0.2
+Pillow==5.1.0
+pyodbc==4.0.23
+pytz==2018.4
+six==1.11.0

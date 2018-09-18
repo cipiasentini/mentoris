@@ -1,0 +1,13 @@
+{% extends "menu/index.html" %}
+
+{% block title %}<title>Tutorías: Sysacad - Materias</title>{% endblock %}
+
+{% block content %}
+    {% block lista_alumnos %}
+        <ul>
+            {% for m in materias %}
+                <li>Plan: {{m.plan}}, Especialidad: {{m.especialid}}, Materia: {{m.materia}}</li>
+            {% endfor %}
+        </ul>
+    {% endblock %}
+{% endblock %}

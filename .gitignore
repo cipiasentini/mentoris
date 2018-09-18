@@ -1,0 +1,8 @@
+menu/migrations
+sysacad/migrations
+.idea
+*.py[co]
+.DS_Store
+venv/
+__pycache__
+/settings_secret.py

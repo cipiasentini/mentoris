@@ -1,0 +1,50 @@
+#separador {
+    margin-top: 10px;
+}
+
+/*.margintop {*/
+    /*margin-top: 15rem !important;*/
+/*}*/
+
+html,
+body {
+    height: 100%;
+}
+
+.index-container {
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#logo-header {
+    background-color: #215889;
+    -webkit-filter: drop-shadow(5px 5px 5px #222);
+    filter: drop-shadow(5px 5px 5px #222);
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10%;
+}
+
+#logo-header img {
+    height: 180px;
+    width: 180px;
+    -webkit-filter: drop-shadow(5px 5px 5px #222);
+    filter: drop-shadow(5px 5px 5px #222);
+}
+
+#logo-header h1 {
+    padding-left: 50px;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    -webkit-filter: drop-shadow(5px 5px 5px #222);
+    filter: drop-shadow(5px 5px 5px #222);
+}
+
+.stackem div {
+    width: 100%;
+}

@@ -1,0 +1,58 @@
+{% extends "menu/index.html" %}
+{% load widget_tweaks %}
+
+{% block title %}<title>Tutorías: Iniciar sesión</title>{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {% if form.errors %}
+                    <div id="separador" class="alert alert-danger" role="alert">
+                        Usuario y contraseña son incorrectos, intente nuevamente.
+                    </div>
+                {% endif %}
+
+                {% if next %}
+                    {% if user.is_authenticated %}
+                        <div id="separador" class="alert alert-primary" role="alert">
+                            Tu cuenta no tiene los permisos necesarios para acceder a esta pagina.
+                        </div>
+                    {% else %}
+                        <div id="separador" class="alert alert-danger" role="alert">
+                            Por favor inicie sesión para ver esta pagina.
+                        </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <p>
+                        {{ form.username.label_tag}}
+                        {{ form.username|add_class:"form-control input-lg" }}
+                    </p>
+                    <p>
+                        {{ form.password.label_tag }}
+                        {{ form.password|add_class:"form-control input-lg" }}
+                    </p>
+
+                    <button class="btn btn-primary" type="submit" value="login">Acceder</button>
+                    <input type="hidden" name="next" value="{{ next }}" />
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                 <p><a href="{% url 'password_reset' %}">No recuerda su contraseña?</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="next" value="{{ next }}" />
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

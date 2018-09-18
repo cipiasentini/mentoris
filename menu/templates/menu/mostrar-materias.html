@@ -1,0 +1,22 @@
+{% extends "menu/index.html" %}
+
+{% block title %}<title>Tutorías: Mostrar materias</title>{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {% block lista_alumnos %}
+                    <ul>
+                        {% for m in materias %}
+                            <li>{{m.nombre}} {{m.apellido}}</li>
+                        {% endfor %}
+                    </ul>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{# ESTE NO ESTA SIENDO USADO ACTUALMENTE #}
