@@ -19,17 +19,17 @@
 
             {% if form.is_bound %}
                 {% if field.errors %}
-                    {% render_field field class="form-control is-invalid" aria-describedby="button-addon1" %}
+                    {% render_field field class="form-control bg-light is-invalid" aria-describedby="button-addon1" %}
                     {% for error in field.errors %}
                         <div class="invalid-feedback">
                             {{ error }}
                         </div>
                     {% endfor %}
                 {% else %}
-                    {% render_field field class="form-control is-valid" aria-describedby="button-addon1" %}
+                    {% render_field field class="form-control bg-light is-valid" aria-describedby="button-addon1" %}
                 {% endif %}
             {% else %}
-                {% render_field field class="form-control" aria-describedby="button-addon1" %}
+                {% render_field field class="form-control bg-light" aria-describedby="button-addon1" %}
             {% endif %}
 
             {% if field.help_text %}

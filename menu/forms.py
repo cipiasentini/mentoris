@@ -74,17 +74,23 @@ class agregarTutorPersonalizadoForm(ModelForm):
         exclude = ['fecha_alta', 'legajo', 'carrera', 'usuario']
 
 class agregarTutorForm(forms.Form):
+    TIPOS = (
+        ('Motivacional', 'Motivacional'),
+        ('Educacional', 'Educacional'),
+        ('Psicologico', 'Psicologico')
+    )
     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
-    tipo = forms.CharField(help_text="Ingrese el TIPO del tutor.")
+    tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.")
+    # tipo = forms.CharField(help_text="Ingrese el TIPO del tutor.")
     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
     # usuario = forms.CharField(help_text="Ingrese el USUARIO del tutor.")
-    # def clean_dni(self):
-    #     data = self.cleaned_data['dni']
-    #     # Check dni numerico
-    #     if data.isnumeric():
-    #         return data
-    #     else:
-    #         raise ValidationError('Por favor ingrese un DNI valido')
+        # def clean_dni(self):
+        #     data = self.cleaned_data['dni']
+        #     # Check dni numerico
+        #     if data.isnumeric():
+        #         return data
+        #     else:
+        #         raise ValidationError('Por favor ingrese un DNI valido')
 
 
 class buscarTutorForm(forms.Form):

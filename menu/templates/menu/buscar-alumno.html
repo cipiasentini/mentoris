@@ -16,17 +16,20 @@
             </div>
         </div>
     {% endblock %}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    {% include 'common/form_template.html' with form=form %}
-                    <button type="submit" class="btn btn-primary">Buscar</button>
-                </form>
-            </div>
+    <div class="py-3">
+    <h2>Buscar Alumno</h2>
+    <form class="mt-3" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {% include 'common/form_template.html' with form=form %}
         </div>
-    </div>
+        <div class="clearfix mb-3">
+          <div class="float-right">
+            <button type="submit" class="btn btn-secondary"  value="login" tabindex="3">Buscar</button>
+          </div>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
     {% if alumno_inst %}
         <div class="container">
             <div class="row">
