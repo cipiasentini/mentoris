@@ -3,46 +3,5 @@
 {% block title %}<title>Tutorías: Histórico de alumno</title>{% endblock %}
 
 {% block content %}
-    {% block warning %}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    {% if not_found %}
-                        <div class="alert alert-danger" role="alert">
-                            No existe ningun alumno con ese legajo o nombre.
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    {% endblock %}
-    <div class="py-3">
-    <h2>Buscar Alumno</h2>
-    <form class="mt-3" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {% include 'common/form_template.html' with form=form %}
-        </div>
-        <div class="clearfix mb-3">
-          <div class="float-right">
-            <button type="submit" class="btn btn-secondary"  value="login" tabindex="3">Buscar</button>
-          </div>
-        </div>
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
-    {% if alumno_inst %}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">{{ alumno_inst.legajo }}</li>
-                        <li class="list-group-item">{{ alumno_inst.dni }}</li>
-                        <li class="list-group-item">{{ alumno_inst.nombre }}</li>
-                        <li class="list-group-item">{{ alumno_inst.observaciones }}</li>
-                        <li class="list-group-item">{{ alumno_inst.fecha_alta }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    {% endif %}
+    {% include "menu/buscar-alumno-atomico.html" %}
 {% endblock %}

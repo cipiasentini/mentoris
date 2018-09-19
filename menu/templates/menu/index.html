@@ -17,264 +17,180 @@
 </head>
 
 <body class="bg-dark">
-    <div class="container-fluid px-0">
-        {% block full-navbar %}
-            <header>
-                <div class="bg-dark">
-                    <nav class="navbar navbar-expand-lg navbar-dark col-lg-9 mx-auto">
-                        <a class="navbar-brand d-block d-lg-none"  href="{% url 'menu:index' %}"><i class="fa fa-bug mr-2" aria-hidden="true"></i>
-                            <img src="{% static "logo.png" %}" width="45" height="45" class="d-inline-block align-content-center" alt="">
-                            Tutorias UTN FRRe
-                        </a>
-                        {#    boton cuando es pantalla chica    #}
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        {#    lo que se collapsea    #}
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                            <ul class="navbar-nav mr-auto">
-                                {#       logo         #}
-            {#                    <a class="navbar-brand" href="{% url 'menu:index' %}">#}
-            {#                        <img src="{% static "logo.png" %}" width="45" height="45" class="d-inline-block align-content-center" alt="">#}
-            {#                        Tutorias UTN FRRe#}
-            {#                    </a>#}
-                                {#     items de la navbar        #}
-                                <li class="nav-item {% if nbar == 'index' %}active{% endif %}">
-                                    <a class="nav-link" href="{% url 'menu:index' %}">Inicio</a>
+<div class="container-fluid px-0">
+    {% block full-navbar %}
+        <header>
+            <div class="d-none d-lg-block p-3 bg-light border-top border-dark">
+                <div class="col-lg-9 mx-auto text-center">
+                    <h1 class="m-0 font-weight-bold"><a class="text-dark" href="/"><img src="{% static "logo.png" %}" width="80" height="80" class="d-inline-block align-content-center" alt="">Tutorias UTN FRRe</a></h1>
+                </div>
+            </div>
+            <div class="bg-dark">
+                <nav class="navbar navbar-expand-lg navbar-dark col-lg-9 mx-auto">
+                    <a class="navbar-brand d-block d-lg-none"  href="{% url 'menu:index' %}">
+                        <img src="{% static "logo.png" %}" width="45" height="45" class="d-inline-block align-content-center" alt="">
+                        Tutorias UTN FRRe
+                    </a>
+                    {#    boton cuando es pantalla chica    #}
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    {#    lo que se collapsea    #}
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            {#     items de la navbar        #}
+                            <li class="nav-item {% if nbar == 'index' %}active{% endif %}">
+                                <a class="nav-link" href="{% url 'menu:index' %}">Inicio</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle {% if nbar == 'alumnos' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Alumno
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Buscar alumno</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Nuevo alumno</a>
+                                    <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Editar alumno</a>
+                                    <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Eliminar alumno</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle {% if nbar == 'intervencion' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Intervención
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'menu:alta-intervencion' %}">Nueva intervención</a>
+                                    <a class="dropdown-item" href="#">Editar intervención</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Otra cosa</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle {% if nbar == 'tutores' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tutor
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'menu:buscar-tutor' %}">Buscar tutor</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Nuevo tutor</a>
+                                    <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Editar tutor</a>
+                                    <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Baja tutor</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Registrar actividad</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Asignar tutor a grupo</a>
+                                    <a class="dropdown-item" href="#">Ver alumnos a cargo</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle {% if nbar == 'informes' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Informes
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="">Obtener ranking de consultas por tema</a>
+                                    <a class="dropdown-item" href="">Obtener resumen de rendimiento por colegio</a>
+                                    <a class="dropdown-item" href="">Obtener resumen de categorización de alumnos</a>
+                                </div>
+                            </li>
+                            {% if user.is_staff %}
+                                <li class="nav-item {% if nbar == 'tareas' %}active{% endif %}">
+                                    <a class="nav-link" href="#">Agenda de tareas</a>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle {% if nbar == 'alumnos' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Alumno
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Buscar alumno</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Nuevo alumno</a>
-                                        <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Editar alumno</a>
-                                        <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Eliminar alumno</a>
-                                    </div>
+                            {% endif %}
+                            <li class="nav-item {% if nbar == 'sysacad' %}active{% endif %}">
+                                <a class="nav-link" href="{% url 'sysacad:index' %}">Sysacad Test Data</a>
+                            </li>
+                            {#                <li class="nav-item {% if nbar == 'mostrar-materias' %}active{% endif %}">#}
+                            {#                    <a class="nav-link" href="{% url 'menu:mostrar-materias' %}">Materias</a>#}
+                            {#                </li>#}
+                            {% if user.is_staff %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin">Administrador</a>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle {% if nbar == 'intervencion' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Intervencion
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="#">Nueva intervención</a>
-                                        <a class="dropdown-item" href="#">Editar intervención</a>
-                                        <a class="dropdown-item" href="#">Eliminar intervención</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Otra cosa</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle {% if nbar == 'tutores' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Tutor
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{% url 'menu:buscar-tutor' %}">Buscar tutor</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Nuevo tutor</a>
-                                        <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Editar tutor</a>
-                                        <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Baja tutor</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Registrar actividad</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Asignar tutor a grupo</a>
-                                        <a class="dropdown-item" href="#">Ver alumnos a cargo</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle {% if nbar == 'informes' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Informes
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="">Obtener ranking de consultas por tema</a>
-                                        <a class="dropdown-item" href="">Obtener resumen de rendimiento por colegio</a>
-                                        <a class="dropdown-item" href="">Obtener resumen de categorización de alumnos</a>
-                                    </div>
-                                </li>
-                                {% if user.is_staff %}
-                                    <li class="nav-item {% if nbar == 'tareas' %}active{% endif %}">
-                                        <a class="nav-link" href="#">Agenda de tareas</a>
-                                    </li>
-                                {% endif %}
-                                <li class="nav-item {% if nbar == 'sysacad' %}active{% endif %}">
-                                    <a class="nav-link" href="{% url 'sysacad:index' %}">Sysacad Test Data</a>
-                                </li>
-                                {#                <li class="nav-item {% if nbar == 'mostrar-materias' %}active{% endif %}">#}
-                                {#                    <a class="nav-link" href="{% url 'menu:mostrar-materias' %}">Materias</a>#}
-                                {#                </li>#}
-                                {% if user.is_staff %}
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/admin">Administrador</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                            <ul class="navbar-nav ml-auto">
-                                {% if user.is_authenticated %}
-                                    <li class="nav-item active dropdown">
-                                      <button type="button" class="btn btn-link nav-link dropdown-toggle" id="dropdown-right-menu-link-auth" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% endif %}
+                        </ul>
+                        <ul class="navbar-nav ml-auto">
+                            {% if user.is_authenticated %}
+                                <li class="nav-item active dropdown">
+                                    <button type="button" class="btn btn-link nav-link dropdown-toggle" id="dropdown-right-menu-link-auth" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <img class="rounded" src="https://www.gravatar.com/avatar/a96a7247f421d7c468ce4008249c324e?s=24&amp;d=https://github.com/identicons/a96a7247f421d7c468ce4008249c324e.png" alt="profile" style="width: 24px; height: 24px;"><span class="ml-2">{{ user.first_name }} {{ user.last_name }}</span>
-                                      </button>
-                                      <div class="dropdown-menu" aria-labelledby="dropdown-right-menu-link-auth">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown-right-menu-link-auth">
                                         <span class="dropdown-header">Iniciaste sesión como <b>{{ user.first_name }} {{ user.last_name }}</b></span>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="/users/profile/johnthereaper">Mi perfil</a>
                                         <a class="dropdown-item" href="/users/settings">Configuración</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{% url 'logout' %}?next={{request.path}}">Cerrar sesión</a>
-                                      </div>
-                                    </li>
-                                {% else %}
-                                    <li class="nav-item active dropdown">
-                                      <button type="button" class="btn btn-link nav-link dropdown-toggle" id="dropdown-right-menu-link-noauth" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    </div>
+                                </li>
+                            {% else %}
+                                <li class="nav-item active dropdown">
+                                    <button type="button" class="btn btn-link nav-link dropdown-toggle" id="dropdown-right-menu-link-noauth" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <img class="rounded" src="https://www.gravatar.com/avatar/93e8812f3f724471d8c70f1af174b3b9?s=24&amp;d=https://github.com/identicons/93e8812f3f724471d8c70f1af174b3b9.png" alt="profile" style="width: 24px; height: 24px;"><span class="ml-2">Invitado</span>
-                                      </button>
-                                      <div class="dropdown-menu" aria-labelledby="dropdown-right-menu-link-noauth">
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdown-right-menu-link-noauth">
                                         <span class="dropdown-header">No has iniciado sesión</span>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item active" href="{% url 'login' %}">Iniciar sesión</a>
                                         <a class="dropdown-item" href="/users/sign-up">Registrarse</a>
-                                      </div>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </header>
-        {% endblock %}
-
-        {#        cuerpo  #}
-        <div class="row mx-0 bg-white">
-            <div class="col-lg-8 mx-auto px-4 py-4">
-                <noscript>
-                  &lt;div class="alert alert-warning alert-dismissible" role="alert"&gt;
-                  &lt;span&gt;&lt;b&gt;Warning!&lt;/b&gt; Please enable javascript in your web browser.&lt;/span&gt;
-                  &lt;/div&gt;
-                </noscript>
-                <main>
-                    {% block content %}
-                        {% block warning %}
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        {% if not_found %}
-                                            <div id="separador" class="alert alert-danger" role="alert">
-                                                No existe ningun alumno con ese legajo o nombre.
-                                            </div>
-                                        {% endif %}
                                     </div>
-                                </div>
-                            </div>
-                        {% endblock %}
-
-
-                        <div class="py-3">
-                        <h2>Buscar Alumno</h2>
-                        <form class="mt-3" method="post">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                {% include 'common/form_template.html' with form=form %}
-                            </div>
-                            <div class="clearfix mb-3">
-                              <div class="float-right">
-                                <button type="submit" class="btn btn-secondary"  value="login" tabindex="3">Buscar</button>
-                              </div>
-                            </div>
-                            <input type="hidden" name="next" value="{{ next }}" />
-                        </form>
-
-{#                        {% block mentoris-logo %}#}
-{#                            <div class="row">#}
-{#                                <div class="col" id="logo-header">#}
-{#                                    <img src="{% static "logo.png" %}" alt="Mentoris">#}
-{#                                    <h1>Mentoris</h1>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        {% endblock %}#}
-{##}
-{#                        <div class="index-container">#}
-{#                            <form method="post" novalidate>#}
-{#                                <div class="row">#}
-{#                                    <div class="col col-lg-11">#}
-{#                                        {% csrf_token %}#}
-{#                                        {% include 'common/form_template.html' with form=form %}#}
-{#                                    </div>#}
-{#                                    <div class="col col-lg-1 m-auto">#}
-{#                                        <button type="submit" class="btn btn-primary">Buscar</button>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </form>#}
-{#                        </div>#}
-
-                        {% if alumno_inst %}
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col-md-6 stackem">
-                                        <ul class="list-group list-group-flush">
-                                            <li class="list-group-item">Legajo: {{ alumno_inst.legajo }}</li>
-                                            <li class="list-group-item">DNI: {{ alumno_inst.dni }}</li>
-                                            <li class="list-group-item">Nombre: {{ alumno_inst.nombre }}</li>
-                                            <li class="list-group-item">Observaciones: {{ alumno_inst.observaciones }}</li>
-                                            <li class="list-group-item">Fecha de alta: {{ alumno_inst.fecha_alta }}</li>
-                                        </ul>
-                                        <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Editar</button>
-                                    </div>
-                                    <div class="col-md-6 stackem">
-                                        <ul class="list-group list-group-flush">
-                                            {% for int in intervenciones %}
-                                                <li class="list-group-item">Legajo: {{ int }} <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li
-                                            {% endfor %}
-
-                                            <li class="list-group-item">Legajo: {{ alumno_inst.legajo }} <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li>
-                                            <li class="list-group-item">DNI: {{ alumno_inst.dni }}</li>
-                                            <li class="list-group-item">Nombre: {{ alumno_inst.nombre }}</li>
-                                            <li class="list-group-item">Observaciones: {{ alumno_inst.observaciones }}</li>
-                                            <li class="list-group-item">Fecha de alta: {{ alumno_inst.fecha_alta }}</li>
-                                        </ul>
-                                        <button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Agregar intervención</button>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endblock %}
-
-                </main>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </nav>
             </div>
+        </header>
+    {% endblock %}
+
+    {#        cuerpo  #}
+    <div class="row mx-0 bg-white">
+        <div class="col-lg-8 mx-auto px-4 py-4">
+            <noscript>
+                &lt;div class="alert alert-warning alert-dismissible" role="alert"&gt;
+                &lt;span&gt;&lt;b&gt;Warning!&lt;/b&gt; Please enable javascript in your web browser.&lt;/span&gt;
+                &lt;/div&gt;
+            </noscript>
+            <main>
+                {% block content %}
+                    {% include "menu/buscar-alumno-atomico.html" %}
+                {% endblock %}
+            </main>
         </div>
-        <footer>
-          <div class="bg-dark border-top">
+    </div>
+    <footer>
+        <div class="bg-dark border-top">
             <nav class="navbar navbar-expand-lg navbar-dark col-md-7 mx-auto">
-              <div class="navbar-text mr-auto">
-                <span class="text-light">© <a class="text-light" href="https://github.com/cipiasentini/tutoriasNuevo" target="_blank">Grupo 4</a> 2018 Copyright. Todos los derechos reservados.</span>
-              </div>
+                <div class="navbar-text mr-auto">
+                    <span class="text-light">© <a class="text-light" href="https://github.com/cipiasentini/tutoriasNuevo" target="_blank">Grupo 4</a> 2018 Copyright. Todos los derechos reservados.</span>
+                </div>
                 {% if user.is_authenticated %}
-                  <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav ml-auto">
-                      <li class="nav-item">
-                        <a class="nav-link" href="/users/profile/johnthereaper">Mi perfil</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="/users/settings">Configuración</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link" href="{% url 'logout' %}?next={{request.path}}">Cerrar sesión</a>
-                      </li>
-                    </ul>
-                  </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/users/profile/johnthereaper">Mi perfil</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/users/settings">Configuración</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}?next={{request.path}}">Cerrar sesión</a>
+                            </li>
+                        </ul>
+                    </div>
                 {% endif %}
             </nav>
-          </div>
-        </footer>
-    </div>
+        </div>
+    </footer>
+</div>
 
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 
 </html>

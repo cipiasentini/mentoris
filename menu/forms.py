@@ -1,7 +1,7 @@
 from django import forms
 # from django.forms import (ModelForm, ModelChoiceField, TextInput)
 from django.forms import ModelForm
-from .models import Alumno, Tutor
+from .models import Alumno, Tutor, Intervencion
 # from sysacad.models import Persona
 from django.core.exceptions import ValidationError
 
@@ -43,21 +43,14 @@ from django.core.exceptions import ValidationError
 
 
 class buscarAlumnoForm(forms.Form):
-    legajo_alumno = forms.CharField(help_text="Ingrese el legajo o nombre del alumno.")
+    id = forms.CharField(help_text="Ingrese el legajo o dni del alumno.")
 
-    def clean_legajo_alumno(self):
-        data = self.cleaned_data['legajo_alumno']
-
-        # Check date is not in past.
-        if data.isalpha():
-            return data
-            # raise ValidationError('El legajo debe ser numerico')
+    def clean_id(self):
+        data = self.cleaned_data['id']
+        if not data.isnumeric():
+            raise forms.ValidationError('No ingresó un dni o legajo válido.')
         elif data.isnumeric():
-            if (int(data) >= 10000) and (int(data) <= 99999):
-                return data
-            raise ValidationError('Legajo o nombre invalido')
-        else:
-            raise ValidationError('Legajo o nombre invalido')
+            return data
 
 
 class agregarAlumnoForm(ModelForm):
@@ -73,24 +66,22 @@ class agregarTutorPersonalizadoForm(ModelForm):
         model = Tutor
         exclude = ['fecha_alta', 'legajo', 'carrera', 'usuario']
 
+
+class agregarIntervencionForm(ModelForm):
+    class Meta:
+        model = Intervencion
+        fields = ['tipo', 'estado', 'descripcion', 'fecha_alta', 'fecha_baja', 'materia', 'tutor_asignado']
+        # exclude = ['']
+
+
 class agregarTutorForm(forms.Form):
     TIPOS = (
         ('Motivacional', 'Motivacional'),
-        ('Educacional', 'Educacional'),
-        ('Psicologico', 'Psicologico')
+        ('Académico', 'Academico')
     )
     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
     tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.")
-    # tipo = forms.CharField(help_text="Ingrese el TIPO del tutor.")
     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
-    # usuario = forms.CharField(help_text="Ingrese el USUARIO del tutor.")
-        # def clean_dni(self):
-        #     data = self.cleaned_data['dni']
-        #     # Check dni numerico
-        #     if data.isnumeric():
-        #         return data
-        #     else:
-        #         raise ValidationError('Por favor ingrese un DNI valido')
 
 
 class buscarTutorForm(forms.Form):

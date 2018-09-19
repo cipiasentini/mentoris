@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
-from .models import Alumno, Tutor
+from .models import Alumno, Tutor, Intervencion
 from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno)
-from .forms import (agregarAlumnoForm,  buscarAlumnoForm)
+from .forms import (agregarAlumnoForm,  buscarAlumnoForm, agregarIntervencionForm)
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm)
 from django.contrib.auth.models import User
 
@@ -21,39 +21,47 @@ def index(request):
     if request.method == 'POST':
         form = buscarAlumnoForm(request.POST)
         if form.is_valid():
-            legajo = form.cleaned_data['legajo_alumno']
-            if legajo.isnumeric():
+            # form.id
+            id = form.cleaned_data['id']
+            if (int(id) < 999999):
                 try:
-                    alumno = Alumno.objects.get(legajo=legajo)
+                    alumno = Alumno.objects.get(legajo=id)
                 except:
-                    return render(request, 'menu/index.html', {'form': form, 'not_found': True, 'nbar': 'index'})
+                    return render(request, 'menu/buscar-alumno.html', {'form': form, 'not_found': True, 'nbar': 'index'})
             else:
                 try:
-                    alumno = Alumno.objects.get(nombre__contains=legajo)
+                    alumno = Alumno.objects.get(dni=id)
                 except:
-                    return render(request, 'menu/index.html', {'form': form, 'not_found': True, 'nbar': 'index'})
-            return render(request, 'menu/index.html', {'form': form, 'alumno_inst': alumno, 'nbar': 'index'})
+                    return render(request, 'menu/buscar-alumno.html',
+                                  {'form': form, 'not_found': True, 'nbar': 'alumnos'})
+            return render(request, 'menu/buscar-alumno.html', {'form': form, 'alumno_inst': alumno, 'nbar': 'index'})
+        else:
+            return render(request, 'menu/buscar-alumno.html', {'form': form,  'nbar': 'index'})
     else:
         form = buscarAlumnoForm()
-        return render(request, 'menu/index.html', {'form': form, 'nbar': 'index'})
+        return render(request, 'menu/buscar-alumno.html', {'form': form, 'nbar': 'index'})
 
 
 def buscarAlumno(request):
     if request.method == 'POST':
         form = buscarAlumnoForm(request.POST)
         if form.is_valid():
-            legajo = form.cleaned_data['legajo_alumno']
-            if legajo.isnumeric():
+            # form.id
+            id = form.cleaned_data['id']
+            if (int(id) < 999999):
                 try:
-                    alumno = Alumno.objects.get(legajo=legajo)
+                    alumno = Alumno.objects.get(legajo=id)
                 except:
                     return render(request, 'menu/buscar-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
             else:
                 try:
-                    alumno = Alumno.objects.get(nombre__contains=legajo)
+                    alumno = Alumno.objects.get(dni=id)
                 except:
-                    return render(request, 'menu/buscar-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
+                    return render(request, 'menu/buscar-alumno.html',
+                                  {'form': form, 'not_found': True, 'nbar': 'alumnos'})
             return render(request, 'menu/buscar-alumno.html', {'form': form, 'alumno_inst': alumno, 'nbar': 'alumnos'})
+        else:
+            return render(request, 'menu/buscar-alumno.html', {'form': form,  'nbar': 'alumnos'})
     else:
         form = buscarAlumnoForm()
         return render(request, 'menu/buscar-alumno.html', {'form': form, 'nbar': 'alumnos'})
@@ -140,6 +148,32 @@ def agregarTutorPersonalizado(request):
     else:
         form = agregarTutorPersonalizadoForm()
         return render(request, 'menu/alta-tutor-personalizada.html', {'form': form, 'nbar': 'tutores'})
+
+@login_required
+def agregarIntervencion(request):
+    if request.method == 'POST':
+        form = agregarIntervencionForm(request.POST)
+        if form.is_valid():
+            dni = form.cleaned_data['dni']
+            observaciones = form.cleaned_data['observaciones']
+            try:
+                persona_sysacad = SysacadPersona.objects.get(pk = dni)
+                alumno_sysacad = SysacadAlumno.objects.get(pk = dni)
+            except SysacadAlumno.DoesNotExist:
+                return render(request, 'menu/alta-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
+            nuevo_alumno = Alumno(
+                nombre=persona_sysacad.nombre,
+                dni=dni,
+                legajo=alumno_sysacad.legajo,
+                observaciones=observaciones
+            )
+            Alumno.save(nuevo_alumno)
+            form = agregarIntervencionForm()
+            return render(request, 'menu/alta-alumno.html', {'form': form, 'alumno': nuevo_alumno, 'success': True, 'nbar': 'alumnos'})
+    else:
+        form = agregarIntervencionForm()
+        return render(request, 'menu/alta-intervencion.html', {'form': form, 'nbar': 'intervencion'})
+
 
 @login_required
 def buscarTutor(request):

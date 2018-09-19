@@ -11,4 +11,5 @@ urlpatterns = [
     path('nuevo/tutor', views.agregarTutor, name = 'alta-tutor'),
     path('nuevo/tutor-manual', views.agregarTutorPersonalizado, name = 'alta-tutor-personalizada'),
     path('buscar/tutor', views.buscarTutor, name = 'buscar-tutor'),
+    path('nueva/intervencion', views.agregarIntervencion, name = 'alta-intervencion'),
 ]

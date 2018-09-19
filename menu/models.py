@@ -17,12 +17,14 @@ class Tutor(Persona):
     tipo = models.CharField(max_length=30)
     horario = models.CharField(max_length=50, blank=True, null=True)
     usuario = models.CharField(max_length=20, null=True)
+    fecha_desvinculacion = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return ' Nombre de tutor: {}, Tipo: {}'.format(self.nombre, self.tipo)
 
 class Alumno(Persona):
     legajo = models.IntegerField(unique=True, blank=True)
+    situacion_riesgo = models.CharField(max_length=60, null=True, blank=True)
     observaciones = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -33,5 +35,6 @@ class Intervencion(models.Model):
     estado = models.TextField(max_length=40, null=True, blank=True)
     descripcion = models.TextField(null=True, blank=True)
     fecha_alta = models.DateTimeField(default=timezone.now)
+    fecha_baja = models.DateTimeField(null=True, blank=True)
     materia = models.TextField(max_length=40, null=True, blank=True)
     tutor_asignado = models.ForeignKey('Tutor', on_delete=models.DO_NOTHING)

@@ -1,0 +1,77 @@
+
+{% block warning %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                {% if not_found %}
+                    <div id="separador" class="alert alert-danger" role="alert">
+                        No existe ningun alumno con ese legajo o nombre.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+<div class="py-3">
+    <h2>Buscar Alumno</h2>
+    <form class="mt-3" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {% include 'common/form_template.html' with form=form %}
+        </div>
+        <div class="clearfix mb-3">
+            <div class="float-right">
+                <button type="submit" class="btn btn-secondary"  value="login" tabindex="3">Buscar</button>
+            </div>
+        </div>
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+
+    {% if alumno_inst %}
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            Datos personales
+                        </button>
+                    </h5>
+                </div>
+
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Legajo: {{ alumno_inst.legajo }}</li>
+                            <li class="list-group-item">DNI: {{ alumno_inst.dni }}</li>
+                            <li class="list-group-item">Nombre: {{ alumno_inst.nombre }}</li>
+                            <li class="list-group-item">Observaciones: {{ alumno_inst.observaciones }}</li>
+                            <li class="list-group-item">Fecha de alta: {{ alumno_inst.fecha_alta }}</li>
+                            <li class="list-group-item"><button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Editar</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            Intervenciones
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for int in intervenciones %}
+                                <li class="list-group-item">Legajo: {{ int }} <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li>
+                            {% endfor %}
+                            <li class="list-group-item"><button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Agregar intervención</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
