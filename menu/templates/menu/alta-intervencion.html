@@ -2,6 +2,7 @@
 
 {% block title %}<title>Tutorías: Nueva intervención</title>{% endblock %}
 
+
 {% block content %}
     {% block warning %}
         <div class="container">
@@ -9,12 +10,12 @@
                 <div class="col">
                     {% if not_found %}
                         <div id="separador" class="alert alert-danger" role="alert">
-                            No existe ningun alumno con ese legajo o nombre.
+                            No se pudo dar de alta la intervención, revise los campos ingresados.
                         </div>
                     {% endif %}
                     {% if success %}
                         <div id="separador" class="alert alert-success" role="alert">
-                            El alumno {{ alumno.nombre }} fue agregado correctamente.
+                            La intervención al alumno {{ alumno.nombre }} fue agregada correctamente.
                         </div>
                     {% endif %}
                 </div>
@@ -24,7 +25,7 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <form method="post" novalidate>
+                <form method="post">
                     {% csrf_token %}
                     {% include 'common/form_template.html' with form=form %}
                     <button type="submit" class="btn btn-primary">Añadir</button>

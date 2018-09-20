@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
-    'menu',
     'sysacad',
+    'menu',
+    'django_select2',
 ]
 
 MIDDLEWARE = [

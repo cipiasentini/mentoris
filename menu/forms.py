@@ -4,7 +4,8 @@ from django.forms import ModelForm
 from .models import Alumno, Tutor, Intervencion
 # from sysacad.models import Persona
 from django.core.exceptions import ValidationError
-
+from django_select2.forms import Select2MultipleWidget, Select2TagWidget
+from sysacad.models import Materia
 
 # class ModelTextInput(TextInput):
 #     def __init__(self, model_class, query_field, attrs=None):
@@ -67,11 +68,20 @@ class agregarTutorPersonalizadoForm(ModelForm):
         exclude = ['fecha_alta', 'legajo', 'carrera', 'usuario']
 
 
-class agregarIntervencionForm(ModelForm):
-    class Meta:
-        model = Intervencion
-        fields = ['tipo', 'estado', 'descripcion', 'fecha_alta', 'fecha_baja', 'materia', 'tutor_asignado']
-        # exclude = ['']
+# class agregarIntervencionForm(ModelForm):
+#     class Meta:
+#         model = Intervencion
+#         # fields = ['tipo', 'estado', 'descripcion', 'fecha_alta', 'fecha_baja', 'materia', 'tutor_asignado']
+#         exclude = ['fecha_alta']
+
+class agregarIntervencionForm(forms.Form):
+    # tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de intervención.", queryset=Intervencion.objects.filter().values('tipo').distinct(), widget=Select2TagWidget)
+    tipo = forms.CharField(help_text="Ingrese el tipo de intervención.")
+    materia = forms.ModelChoiceField(help_text="Ingrese la materia a la cual corresponda la consulta.", queryset=Materia.objects.all(), widget=Select2MultipleWidget)
+    tutor_asignado = forms.ModelChoiceField(help_text="Ingrese el tutor que se encarga de la consulta.", queryset=Tutor.objects.all(), widget=Select2MultipleWidget)
+    # estado = forms.CharField()
+    descripcion = forms.CharField(widget=forms.Textarea)
+    # fecha_baja = forms.DateTimeField()
 
 
 class agregarTutorForm(forms.Form):
@@ -80,7 +90,7 @@ class agregarTutorForm(forms.Form):
         ('Académico', 'Academico')
     )
     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
-    tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.")
+    tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2MultipleWidget)
     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
 
 

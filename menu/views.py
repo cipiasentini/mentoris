@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from .models import Alumno, Tutor, Intervencion
-from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno)
+from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria)
 from .forms import (agregarAlumnoForm,  buscarAlumnoForm, agregarIntervencionForm)
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm)
 from django.contrib.auth.models import User
@@ -154,22 +154,22 @@ def agregarIntervencion(request):
     if request.method == 'POST':
         form = agregarIntervencionForm(request.POST)
         if form.is_valid():
-            dni = form.cleaned_data['dni']
-            observaciones = form.cleaned_data['observaciones']
-            try:
-                persona_sysacad = SysacadPersona.objects.get(pk = dni)
-                alumno_sysacad = SysacadAlumno.objects.get(pk = dni)
-            except SysacadAlumno.DoesNotExist:
-                return render(request, 'menu/alta-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
-            nuevo_alumno = Alumno(
-                nombre=persona_sysacad.nombre,
-                dni=dni,
-                legajo=alumno_sysacad.legajo,
-                observaciones=observaciones
+            # try:
+            #     mat = SysacadMateria.objects.get(form.cleaned_data['materia'])
+            #     tut = Tutor.objects.get(form.cleaned_data['tutor_asignado'])
+            # except:
+            #     return render(request, 'menu/alta-intervencion.html', {'form': form, 'nbar': 'intervencion'})
+            nueva_intervencion = Intervencion(
+                tipo=str(form.cleaned_data['tipo']),
+                descripcion=str(form.cleaned_data['descripcion']),
+                materia=int(form.data.get('materia')),
+                tutor_asignado=int(form.data.get('tutor_asignado'))
             )
-            Alumno.save(nuevo_alumno)
+            Intervencion.save(nueva_intervencion)
             form = agregarIntervencionForm()
-            return render(request, 'menu/alta-alumno.html', {'form': form, 'alumno': nuevo_alumno, 'success': True, 'nbar': 'alumnos'})
+            return render(request, 'menu/alta-intervencion.html', {'form': form, 'intervencion': nueva_intervencion, 'success': True, 'nbar': 'intervencion'})
+        else:
+            return render(request, 'menu/alta-intervencion.html', {'form': form,  'nbar': 'intervencion'})
     else:
         form = agregarIntervencionForm()
         return render(request, 'menu/alta-intervencion.html', {'form': form, 'nbar': 'intervencion'})

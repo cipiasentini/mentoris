@@ -61,6 +61,10 @@ class Materia(models.Model):
         managed = False
         db_table = 'Sysacad].[MATERIA'
         unique_together = (('especialid', 'plan', 'materia'),)
+        ordering = ['materia']
+
+    def __str__(self):
+        return 'Especialidad: {} Materia codigo: {}, Nombre: {}'.format(self.especialid, self.materia, self.nombre)
 
 
 class Matcom(models.Model):

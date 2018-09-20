@@ -8,3 +8,4 @@ Pillow==5.1.0
 pyodbc==4.0.23
 pytz==2018.4
 six==1.11.0
+select2=6.3.1
