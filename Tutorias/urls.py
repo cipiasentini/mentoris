@@ -21,5 +21,6 @@ urlpatterns = [
     path('sysacad/', include('sysacad.urls')),
     path('login/', include('django.contrib.auth.urls')),
     path('menu/', include('menu.urls')),
+    path('select2/', include('django_select2.urls')),
     path('', include('menu.urls')),
 ]

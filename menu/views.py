@@ -79,9 +79,11 @@ def agregarAlumno(request):
             except SysacadAlumno.DoesNotExist:
                 return render(request, 'menu/alta-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
             nuevo_alumno = Alumno(
-                nombre=persona_sysacad.nombre,
-                dni=dni,
+                # nombre=persona_sysacad.nombre,
+                # dni=dni,
+                dni=persona_sysacad,
                 legajo=alumno_sysacad.legajo,
+                situacion_riesgo='Ninguna',
                 observaciones=observaciones
             )
             Alumno.save(nuevo_alumno)
@@ -105,12 +107,12 @@ def agregarTutor(request):
                               {'form': agregarTutorPersonalizadoForm(request.POST),
                                'alta_manual': True, 'nbar': 'tutores'})
             nuevo_tutor = Tutor(
-                nombre=persona_sysacad.nombre.rstrip(),
-                dni=dni,
+                # nombre=persona_sysacad.nombre.rstrip(),
+                dni=persona_sysacad,
                 legajo=alumno_sysacad.legajo,
-                telefono=persona_sysacad.telefono,
-                mail=persona_sysacad.mail.rstrip(),
-                carrera=alumno_sysacad.especialid,
+                # telefono=persona_sysacad.telefono,
+                # mail=persona_sysacad.mail.rstrip(),
+                # carrera=alumno_sysacad.especialid,
                 tipo=form.cleaned_data['tipo'],
                 horario=form.cleaned_data['horario'],
                 # usuario=persona_sysacad.nombre.rsplit(None, 1)[-1],
@@ -122,6 +124,8 @@ def agregarTutor(request):
             user.save()
             form = agregarTutorForm()
             return render(request, 'menu/alta-tutor.html', {'form': form, 'tutor': nuevo_tutor, 'success': True, 'nbar': 'tutores'})
+        else:
+            return render(request, 'menu/alta-tutor.html', {'form': form,  'nbar': 'tutores'})
     else:
         form = agregarTutorForm()
         return render(request, 'menu/alta-tutor.html', {'form': form, 'nbar': 'tutores'})
@@ -154,16 +158,16 @@ def agregarIntervencion(request):
     if request.method == 'POST':
         form = agregarIntervencionForm(request.POST)
         if form.is_valid():
-            # try:
-            #     mat = SysacadMateria.objects.get(form.cleaned_data['materia'])
-            #     tut = Tutor.objects.get(form.cleaned_data['tutor_asignado'])
-            # except:
-            #     return render(request, 'menu/alta-intervencion.html', {'form': form, 'nbar': 'intervencion'})
+            try:
+                mat = SysacadMateria.objects.get(form.cleaned_data['materia'])
+                tut = Tutor.objects.get(form.cleaned_data['tutor_asignado'])
+            except:
+                return render(request, 'menu/alta-intervencion.html', {'form': form, 'nbar': 'intervencion'})
             nueva_intervencion = Intervencion(
                 tipo=str(form.cleaned_data['tipo']),
                 descripcion=str(form.cleaned_data['descripcion']),
-                materia=int(form.data.get('materia')),
-                tutor_asignado=int(form.data.get('tutor_asignado'))
+                materia=mat,
+                tutor_asignado=tut
             )
             Intervencion.save(nueva_intervencion)
             form = agregarIntervencionForm()

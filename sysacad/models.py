@@ -64,7 +64,8 @@ class Materia(models.Model):
         ordering = ['materia']
 
     def __str__(self):
-        return 'Especialidad: {} Materia codigo: {}, Nombre: {}'.format(self.especialid, self.materia, self.nombre)
+        return 'Especialidad: {}, Plan: {}, Materia codigo: {}, Nombre: {}'.format(self.especialid, self.plan,
+                                                                                   self.materia, self.nombre)
 
 
 class Matcom(models.Model):
@@ -249,6 +250,10 @@ class Alumcom(models.Model):
         managed = False
         db_table = 'Sysacad].[alumCom'
         unique_together = (('facultad', 'legajo', 'especialid', 'plan', 'materia', 'comision', 'anoacademi'),)
+
+    def __str__(self):
+        return 'Legajo: {}, Facultad: {}, Materia codigo: {}, especialid: {}'.format(self.legajo, self.facultad,
+                                                                                   self.materia, self.especialid)
 
 
 class Alumno(models.Model):

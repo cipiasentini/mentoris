@@ -43,9 +43,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'compositefk',
+    'django_select2',
     'sysacad',
     'menu',
-    'django_select2',
 ]
 
 MIDDLEWARE = [
@@ -197,3 +198,8 @@ STATICFILES_DIRS = [
 
 DATABASE_ROUTERS = ['Tutorias.TutoriasRouter.TutoriasRouter']
 
+
+# PARA SELECT2
+
+SELECT2_JS = '/static/js/select2.min.js'
+SELECT2_CSS = '/static/css/select2.min.css'
