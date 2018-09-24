@@ -63,7 +63,7 @@
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             {% for int in intervenciones %}
-                                <li class="list-group-item">Legajo: {{ int }} <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li>
+                                <li class="list-group-item">Tipo: {{ int.tipo }} || Descripción: {{ int.descripcion }}  || {{ int.estado }}  <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li>
                             {% endfor %}
                             <li class="list-group-item"><button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Agregar intervención</button></li>
                         </ul>

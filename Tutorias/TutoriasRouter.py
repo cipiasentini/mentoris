@@ -42,8 +42,11 @@ class TutoriasRouter:
     def db_for_read(self, model, **hints):
         return decide_on_model(model)
 
+    # def db_for_write(self, model, **hints):
+    #     return decide_on_model(model)
+
     def db_for_write(self, model, **hints):
-        return decide_on_model(model)
+        return 'default'
 
     def allow_relation(self, obj1, obj2, **hints):
         # Allow any relation if both models are part of the worlddata app

@@ -76,10 +76,11 @@ class agregarTutorPersonalizadoForm(ModelForm):
 
 class agregarIntervencionForm(forms.Form):
     # tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de intervención.", queryset=Intervencion.objects.filter().values('tipo').distinct(), widget=Select2TagWidget)
-    tipo = forms.CharField(help_text="Ingrese el tipo de intervención.")
+    alumno = forms.ModelChoiceField(help_text="Ingrese el alumno involucrado en la intervención.", queryset=Alumno.objects.all(), widget=Select2Widget)
     materia = forms.ModelChoiceField(help_text="Ingrese la materia a la cual corresponda la consulta.", queryset=Materia.objects.all(), widget=Select2Widget)
     tutor_asignado = forms.ModelChoiceField(help_text="Ingrese el tutor que se encarga de la consulta.", queryset=Tutor.objects.all(), widget=Select2Widget)
     # estado = forms.CharField()
+    tipo = forms.CharField(help_text="Ingrese el tipo de intervención.")
     descripcion = forms.CharField(widget=forms.Textarea)
     # fecha_baja = forms.DateTimeField()
 
@@ -91,6 +92,7 @@ class agregarTutorForm(forms.Form):
     )
     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
     tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
+    # tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.")
     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
 
 
