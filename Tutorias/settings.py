@@ -127,7 +127,7 @@ else:
             'NAME': 'TUTORIAS_DATOS',
             'HOST': 'DESKTOP-SIRB7DH',
             'PORT': '',
-            'USER': 'TAdmin',
+            'USER': 'TutorAdmin',
             'PASSWORD': 'Tutori@s2018',
             'OPTIONS': {
                 'driver': 'ODBC Driver 13 for SQL Server',
@@ -138,7 +138,7 @@ else:
             'NAME': 'SYSACAD',
             'HOST': 'DESKTOP-SIRB7DH',
             'PORT': '',
-            'USER': 'SAdmin',
+            'USER': 'SysacadAdmin',
             'PASSWORD': 'Tutori@s2018',
             'OPTIONS': {
                 'driver': 'ODBC Driver 13 for SQL Server',
