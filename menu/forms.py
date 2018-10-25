@@ -1,11 +1,12 @@
 from django import forms
 # from django.forms import (ModelForm, ModelChoiceField, TextInput)
 from django.forms import ModelForm
-from .models import Alumno, Tutor, Intervencion
+from .models import Alumno, Tutor, Intervencion, Tipo
 # from sysacad.models import Persona
 from django.core.exceptions import ValidationError
 from django_select2.forms import Select2Widget
 from sysacad.models import Materia
+
 
 # class ModelTextInput(TextInput):
 #     def __init__(self, model_class, query_field, attrs=None):
@@ -77,13 +78,17 @@ class agregarTutorPersonalizadoForm(ModelForm):
 class agregarIntervencionForm(forms.Form):
     # tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de intervención.", queryset=Intervencion.objects.filter().values('tipo').distinct(), widget=Select2TagWidget)
     alumno = forms.ModelChoiceField(help_text="Ingrese el alumno involucrado en la intervención.", queryset=Alumno.objects.all(), widget=Select2Widget)
-    materia = forms.ModelChoiceField(help_text="Ingrese la materia a la cual corresponda la consulta.", queryset=Materia.objects.all(), widget=Select2Widget)
+    materia = forms.ModelChoiceField(required=False, help_text="Ingrese la materia a la cual corresponda la consulta.", queryset=Materia.objects.all(), widget=Select2Widget)
     tutor_asignado = forms.ModelChoiceField(help_text="Ingrese el tutor que se encarga de la consulta.", queryset=Tutor.objects.all(), widget=Select2Widget)
     # estado = forms.CharField()
-    tipo = forms.CharField(help_text="Ingrese el tipo de intervención.")
+    # tipo = forms.CharField(help_text="Ingrese el tipo de intervención.")
+    # tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de la intervención.", queryset=Intervencion.objects.values_list('tipo', flat=True), widget=Select2Widget)
+    tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de la intervención.", queryset=Tipo.objects.all(), widget=Select2Widget)
     descripcion = forms.CharField(widget=forms.Textarea)
     # fecha_baja = forms.DateTimeField()
 
+class agregarIntervencionTipoForm(forms.Form):
+    descripcion = forms.CharField()
 
 class agregarTutorForm(forms.Form):
     TIPOS = (
@@ -113,3 +118,8 @@ class buscarTutorForm(forms.Form):
 #     def __init__(self, dni):
 #         super(agregarTutorForm, self).__init__()
 #         self.fields['dni'].queryset = Persona.objects.filter(numerodocu=dni)
+
+class editarAlumnoForm(ModelForm):
+    class Meta:
+        model = Alumno
+        exclude = ['']

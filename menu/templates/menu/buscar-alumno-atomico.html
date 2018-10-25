@@ -46,7 +46,7 @@
                             <li class="list-group-item">Nombre: {{ alumno_inst.nombre }}</li>
                             <li class="list-group-item">Observaciones: {{ alumno_inst.observaciones }}</li>
                             <li class="list-group-item">Fecha de alta: {{ alumno_inst.fecha_alta }}</li>
-                            <li class="list-group-item"><button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Editar</button></li>
+                            <li class="list-group-item"><a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a></li>
                         </ul>
                     </div>
                 </div>
@@ -65,7 +65,9 @@
                             {% for int in intervenciones %}
                                 <li class="list-group-item">Tipo: {{ int.tipo }} || Descripción: {{ int.descripcion }}  || {{ int.estado }}  <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li>
                             {% endfor %}
-                            <li class="list-group-item"><button type="button" class="btn btn-primary" style="margin-top: 10px; float: right;">Agregar intervención</button></li>
+                            <li class="list-group-item">
+                                <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>
+                            </li>
                         </ul>
                     </div>
                 </div>

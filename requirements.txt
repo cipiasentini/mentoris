@@ -1,4 +1,4 @@
-Django==2.0.4
+Django==2.0.8
 django-appconf==1.0.1
 django-crispy-forms==1.7.2
 django-pyodbc-azure==2.0.4.1

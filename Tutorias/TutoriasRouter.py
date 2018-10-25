@@ -50,12 +50,13 @@ class TutoriasRouter:
 
     def allow_relation(self, obj1, obj2, **hints):
         # Allow any relation if both models are part of the worlddata app
-        if obj1._meta.app_label == 'sysacad' and obj2._meta.app_label == 'sysacad':
-            return True
-        # Allow if neither is part of worlddata app
-        elif 'sysacad' not in [obj1._meta.app_label, obj2._meta.app_label]:
-            return True
-        # by default return None - "undecided"
+        # if obj1._meta.app_label == 'sysacad' and obj2._meta.app_label == 'sysacad':
+        #     return True
+        # # Allow if neither is part of worlddata app
+        # elif 'sysacad' not in [obj1._meta.app_label, obj2._meta.app_label]:
+        #     return True
+        # # by default return None - "undecided"
+        return True
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         # allow migrations on the "default" (django related data) DB

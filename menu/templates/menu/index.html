@@ -55,9 +55,9 @@
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Buscar alumno</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Nuevo alumno</a>
-                                    <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Editar alumno</a>
-                                    <a class="dropdown-item" href="{% url 'menu:nuevo' %}">Eliminar alumno</a>
+                                    <a class="dropdown-item" href="{% url 'menu:alta-alumno' %}">Nuevo alumno</a>
+                                    <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Editar alumno</a>
+{#                                    <a class="dropdown-item" href="{% url 'menu:alta-alumno' %}">Eliminar alumno</a>#}
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -66,9 +66,9 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{% url 'menu:alta-intervencion' %}">Nueva intervención</a>
-                                    <a class="dropdown-item" href="#">Editar intervención</a>
+                                    <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Editar intervención</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Otra cosa</a>
+                                    <a class="dropdown-item" href="{% url 'menu:alta-tipo-intervencion' %}">Nuevo tipo de intervención</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">

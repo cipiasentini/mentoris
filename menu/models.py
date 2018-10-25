@@ -38,14 +38,15 @@ class Alumno(Persona):
 
 
 class Intervencion(models.Model):
-    tipo = models.CharField(max_length=40, null=True, blank=True)
+    # tipo = models.CharField(max_length=40, blank= True, null=True)
+    tipo = models.ForeignKey('Tipo', on_delete=models.DO_NOTHING)
     estado = models.CharField(max_length=40, default='Abierta')
     descripcion = models.TextField(null=True, blank=True)
     fecha_alta = models.DateTimeField(default=timezone.now)
     fecha_baja = models.DateTimeField(null=True, blank=True)
     # especialid = models.ForeignKey('sysacad.Materia', on_delete=models.DO_NOTHING)
     # plan = models.ForeignKey('sysacad.Materia', on_delete=models.DO_NOTHING)
-    materia = models.ForeignKey('sysacad.Materia', on_delete=models.DO_NOTHING)
+    materia = models.ForeignKey('sysacad.Materia', on_delete=models.DO_NOTHING, null=True, blank=True)
     tutor_asignado = models.ForeignKey('Tutor', on_delete=models.DO_NOTHING)
     alumno = models.ForeignKey('Alumno', on_delete=models.DO_NOTHING)
 
@@ -54,3 +55,10 @@ class Intervencion(models.Model):
     # })
     # class Meta:
     #     app_label = 'menu'
+
+
+class Tipo(models.Model):
+    descripcion = models.TextField(max_length=40)
+
+    def __str__(self):
+        return '{}'.format(self.descripcion)

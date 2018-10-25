@@ -1,12 +1,19 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
-from .models import Alumno, Tutor, Intervencion
+from .models import Alumno, Tutor, Intervencion, Tipo
 from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria)
-from .forms import (agregarAlumnoForm,  buscarAlumnoForm, agregarIntervencionForm)
+from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agregarIntervencionForm, agregarIntervencionTipoForm)
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm)
 from django.contrib.auth.models import User
 
+def editarAlumno(request, dni):
+    alumno = Alumno.objects.get(dni=dni)
+    form = editarAlumnoForm(request.POST, instance=alumno)
+    if form.is_valid():
+        form.save()
+        return render(request, 'menu/editar-alumno.html', {'form': form, 'alumno_inst': alumno, 'nbar': 'alumno'})
+    return render(request, 'menu/editar-alumno.html', {'form': form, 'nbar': 'alumno'})
 
 def index(request):
     # # Contador de numero de visitas de la sesion
@@ -164,14 +171,22 @@ def agregarIntervencion(request):
         if form.is_valid():
             try:
                 mat = SysacadMateria.objects.get(materia=form.cleaned_data['materia'].materia)
-                tut = Tutor.objects.get(dni=form.cleaned_data['tutor_asignado'].dni)
             except:
-                return render(request, 'menu/alta-intervencion.html', {'form': form, 'not_found': True, 'nbar': 'intervencion'})
+                nueva_intervencion = Intervencion(
+                    tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
+                    descripcion=str(form.cleaned_data['descripcion']),
+                    tutor_asignado=Tutor.objects.get(dni=form.cleaned_data['tutor_asignado'].dni),
+                    alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
+                )
+                Intervencion.save(nueva_intervencion)
+                form = agregarIntervencionForm()
+                return render(request, 'menu/alta-intervencion.html', {'form': form, 'intervencion': nueva_intervencion,
+                                                                       'success': True, 'nbar': 'intervencion'})
             nueva_intervencion = Intervencion(
-                tipo=str(form.cleaned_data['tipo']),
+                tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
                 descripcion=str(form.cleaned_data['descripcion']),
                 materia=mat,
-                tutor_asignado=tut,
+                tutor_asignado=Tutor.objects.get(dni=form.cleaned_data['tutor_asignado'].dni),
                 alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
             )
             Intervencion.save(nueva_intervencion)
@@ -183,6 +198,24 @@ def agregarIntervencion(request):
     else:
         form = agregarIntervencionForm()
         return render(request, 'menu/alta-intervencion.html', {'form': form, 'nbar': 'intervencion'})
+
+@staff_member_required
+def agregarIntervencionTipo(request):
+    if request.method == 'POST':
+        form = agregarIntervencionTipoForm(request.POST)
+        if form.is_valid():
+            nuevo_tipo_intervencion = Tipo(
+                descripcion=str(form.cleaned_data['descripcion']),
+            )
+            Intervencion.save(nuevo_tipo_intervencion)
+            form = agregarIntervencionTipoForm()
+            return render(request, 'menu/alta-tipo-intervencion.html', {'form': form, 'tipo_intervencion': nuevo_tipo_intervencion,
+                                                                   'success': True, 'nbar': 'intervencion'})
+        else:
+            return render(request, 'menu/alta-tipo-intervencion.html', {'form': form,  'nbar': 'intervencion'})
+    else:
+        form = agregarIntervencionTipoForm()
+        return render(request, 'menu/alta-tipo-intervencion.html', {'form': form, 'nbar': 'intervencion'})
 
 
 @login_required
