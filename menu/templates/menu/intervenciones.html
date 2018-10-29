@@ -1,0 +1,141 @@
+{% extends "menu/index.html" %}
+
+{% block title %}<title>Tutorías: Intervenciones a cargo de {{ user.first_name }} {{ user.last_name }}</title>{% endblock %}
+
+{% block content %}
+    <script>
+        $(function () {
+          $('[data-toggle="popover"]').popover()
+        })
+    </script>
+    {% if user.is_staff %}
+        <h2>Estado de las intervenciones</h2>
+    {% else %}
+        <h2>Intervenciones a cargo de {{ user.first_name }} {{ user.last_name }}</h2>
+    {% endif %}
+    <div id="accordion">
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h5 class="mb-0">
+                    <button class="btn btn-link btn-block" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        <h3><span class="pull-left">Abiertas</span></h3>
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Fecha creación</th>
+                                    <th scope="col">Alumno</th>
+                                    {% if user.is_staff %}
+                                        <th scope="col">Tutor Asignado</th>
+                                    {% endif %}
+                                    <th scope="col">Tipo</th>
+    {#                                <th scope="col">Descripción</th>#}
+                                    <th scope="col">Materia</th>
+{#                                    <th scope="col">Estado</th>#}
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for int in intervenciones %}
+                                {% if int.estado == 'Abierta' %}
+                                    <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                        data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                        <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
+                                        <td style="border-width: thick">{{ int.alumno.nombre }}</td>
+                                        {% if user.is_staff %}
+                                            <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
+                                        {% endif %}
+                                        <td style="border-width: thick" >{{ int.tipo }}</td>
+{#                                        <td>{{ int.descripcion }}</td>#}
+                                        <td style="border-width: thick">{{ int.materia.nombre }}</td>
+{#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
+                                    </tr>
+                                    <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                        data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                        {% if user.is_staff %}
+                                            <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                        {% else %}
+                                            <td colspan="3"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header" id="headingTwo">
+                <h5 class="mb-0">
+                    <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <h3><span class="pull-left">Cerradas</span></h3>
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Fecha creación</th>
+                                    <th scope="col">Alumno</th>
+                                    {% if user.is_staff %}
+                                        <th scope="col">Tutor Asignado</th>
+                                    {% endif %}
+                                    <th scope="col">Tipo</th>
+    {#                                <th scope="col">Descripción</th>#}
+                                    <th scope="col">Materia</th>
+{#                                    <th scope="col">Estado</th>#}
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for int in intervenciones %}
+                                {% if int.estado == 'Cerrada' %}
+                                    <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                        data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                        <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
+                                        <td style="border-width: thick">{{ int.alumno.nombre }}</td>
+                                        {% if user.is_staff %}
+                                            <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
+                                        {% endif %}
+                                        <td style="border-width: thick" >{{ int.tipo }}</td>
+{#                                        <td>{{ int.descripcion }}</td>#}
+                                        <td style="border-width: thick">{{ int.materia.nombre }}</td>
+{#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
+                                    </tr>
+                                    <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                        data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                        {% if user.is_staff %}
+                                            <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                        {% else %}
+                                            <td colspan="3"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+{#                        <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>#}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

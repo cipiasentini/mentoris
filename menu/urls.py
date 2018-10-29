@@ -14,4 +14,7 @@ urlpatterns = [
     path('buscar/tutor', views.buscarTutor, name = 'buscar-tutor'),
     path('nueva/intervencion', views.agregarIntervencion, name = 'alta-intervencion'),
     path('nueva/intervencion/tipo', views.agregarIntervencionTipo, name = 'alta-tipo-intervencion'),
+    path('intervenciones', views.listarIntervenciones, name = 'intervenciones'),
+    path('intervenciones/cerrar/<int:id>/', views.cerrarIntervencion, name = 'cerrar-intervencion'),
+    path('intervenciones/abrir/<int:id>/', views.abrirIntervencion, name = 'abrir-intervencion'),
 ]

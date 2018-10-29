@@ -65,10 +65,14 @@
                                     Intervención
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{% url 'menu:intervenciones' %}">Listar intervenciones</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'menu:alta-intervencion' %}">Nueva intervención</a>
                                     <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Editar intervención</a>
+                                    {% if user.is_staff %}
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'menu:alta-tipo-intervencion' %}">Nuevo tipo de intervención</a>
+                                    {% endif %}
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -103,9 +107,6 @@
                                     <a class="nav-link" href="#">Agenda de tareas</a>
                                 </li>
                             {% endif %}
-                            <li class="nav-item {% if nbar == 'sysacad' %}active{% endif %}">
-                                <a class="nav-link" href="{% url 'sysacad:index' %}">Sysacad Test Data</a>
-                            </li>
                             {#                <li class="nav-item {% if nbar == 'mostrar-materias' %}active{% endif %}">#}
                             {#                    <a class="nav-link" href="{% url 'menu:mostrar-materias' %}">Materias</a>#}
                             {#                </li>#}
@@ -127,7 +128,7 @@
                                         <a class="dropdown-item" href="/users/profile/johnthereaper">Mi perfil</a>
                                         <a class="dropdown-item" href="/users/settings">Configuración</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="{% url 'logout' %}?next={{request.path}}">Cerrar sesión</a>
+                                        <a class="dropdown-item" href="{% url 'logout' %}?next={% url 'menu:index' %}">Cerrar sesión</a>
                                     </div>
                                 </li>
                             {% else %}
@@ -139,7 +140,7 @@
                                         <span class="dropdown-header">No has iniciado sesión</span>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item active" href="{% url 'login' %}">Iniciar sesión</a>
-                                        <a class="dropdown-item" href="/users/sign-up">Registrarse</a>
+{#                                        <a class="dropdown-item" href="/users/sign-up">Registrarse</a>#}
                                     </div>
                                 </li>
                             {% endif %}
@@ -160,7 +161,14 @@
             </noscript>
             <main>
                 {% block content %}
-                    {% include "menu/buscar-alumno-atomico.html" %}
+{#                    {% include "menu/buscar-alumno-atomico.html" %}#}
+                    <div class="jumbotron">
+                      <h1 class="display-4">Mentoris!</h1>
+                      <p class="lead">Lorem ipsum.</p>
+                      <hr class="my-4">
+                      <p>Texto texto texto.</p>
+                      <a class="btn btn-primary btn-lg" href="#" role="button">AH OKOK!</a>
+                    </div>
                 {% endblock %}
             </main>
         </div>

@@ -22,9 +22,10 @@
         </div>
     {% endblock %}
     <div class="container">
+    <h2>Agregar nuevo tipo de Intervención</h2>
         <div class="row">
             <div class="col">
-                <form method="post" novalidate>
+                <form method="post">
                     {% csrf_token %}
                     {% include 'common/form_template.html' with form=form %}
                     <button type="submit" class="btn btn-primary">Añadir</button>

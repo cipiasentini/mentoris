@@ -41,10 +41,16 @@
                 <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Legajo: {{ alumno_inst.legajo }}</li>
-                            <li class="list-group-item">DNI: {{ alumno_inst.dni }}</li>
                             <li class="list-group-item">Nombre: {{ alumno_inst.nombre }}</li>
+                            <li class="list-group-item">DNI: {{ alumno_inst.dni }}</li>
+                            <li class="list-group-item">Legajo: {{ alumno_inst.legajo }}</li>
+                            <li class="list-group-item">Email: {{ alumno_inst.mail }}</li>
                             <li class="list-group-item">Observaciones: {{ alumno_inst.observaciones }}</li>
+                            {% if alumno_inst.situacion_riesgo == 'Ninguna' %}
+                                <li class="list-group-item">Situacion de riesgo: <span class="badge badge-success">NO</span></li>
+                            {% else %}
+                                <li class="list-group-item">Situacion de riesgo: <span class="badge badge-danger">SI</span></li>
+                            {% endif %}
                             <li class="list-group-item">Fecha de alta: {{ alumno_inst.fecha_alta }}</li>
                             <li class="list-group-item"><a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a></li>
                         </ul>
@@ -69,6 +75,58 @@
                                 <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>
                             </li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            Materias
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cursando</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Regularizadas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Aprobadas</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Materia</th>
+                                    <th scope="col">Nota 1</th>
+                                    <th scope="col">Nota 2</th>
+                                    <th scope="col">Nota final</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for matAlu in materiasAlumno %}
+                                    {% for mat in materias %}
+                                        {% if mat.materia == matAlu.materia %}
+                                            <tr>
+                                                <th scope="row">{{ mat.nombre }}</th>
+                                                <td>{{ matAlu.nota1 }}</td>
+                                                <td>{{ matAlu.nota2 }}</td>
+                                                <td>{{ matAlu.notafinal }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
                     </div>
                 </div>
             </div>

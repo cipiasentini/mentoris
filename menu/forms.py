@@ -63,29 +63,19 @@ class agregarAlumnoForm(ModelForm):
         # fields = ['legajo', 'nombre', 'apellido', 'nota', 'comentario', 'fecha_alta']
 
 
-class agregarTutorPersonalizadoForm(ModelForm):
-    class Meta:
-        model = Tutor
-        exclude = ['fecha_alta', 'legajo', 'carrera', 'usuario']
-
-
-# class agregarIntervencionForm(ModelForm):
-#     class Meta:
-#         model = Intervencion
-#         # fields = ['tipo', 'estado', 'descripcion', 'fecha_alta', 'fecha_baja', 'materia', 'tutor_asignado']
-#         exclude = ['fecha_alta']
-
 class agregarIntervencionForm(forms.Form):
-    # tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de intervención.", queryset=Intervencion.objects.filter().values('tipo').distinct(), widget=Select2TagWidget)
     alumno = forms.ModelChoiceField(help_text="Ingrese el alumno involucrado en la intervención.", queryset=Alumno.objects.all(), widget=Select2Widget)
     materia = forms.ModelChoiceField(required=False, help_text="Ingrese la materia a la cual corresponda la consulta.", queryset=Materia.objects.all(), widget=Select2Widget)
     tutor_asignado = forms.ModelChoiceField(help_text="Ingrese el tutor que se encarga de la consulta.", queryset=Tutor.objects.all(), widget=Select2Widget)
-    # estado = forms.CharField()
-    # tipo = forms.CharField(help_text="Ingrese el tipo de intervención.")
-    # tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de la intervención.", queryset=Intervencion.objects.values_list('tipo', flat=True), widget=Select2Widget)
     tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de la intervención.", queryset=Tipo.objects.all(), widget=Select2Widget)
     descripcion = forms.CharField(widget=forms.Textarea)
-    # fecha_baja = forms.DateTimeField()
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(agregarIntervencionForm, self).__init__(*args, **kwargs)
+        if not user.is_staff:
+            del self.fields['tutor_asignado']
+
 
 class agregarIntervencionTipoForm(forms.Form):
     descripcion = forms.CharField()
@@ -100,6 +90,19 @@ class agregarTutorForm(forms.Form):
     # tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.")
     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
 
+
+class agregarTutorPersonalizadoForm(forms.Form):
+    TIPOS = (
+        ('Motivacional', 'Motivacional'),
+        ('Académico', 'Academico'),
+        ('Psicologo', 'Psicologo')
+    )
+    dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
+    nombre = forms.CharField(help_text='Ingrese el nombre y apellido completo del nuevo tutor.')
+    tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
+    telefono = forms.DecimalField(help_text='Ingrese el numero de telefono/celular del tutor.')
+    mail = forms.EmailField(help_text='Ingrese el mail del tutor.')
+    horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
 
 class buscarTutorForm(forms.Form):
     dni = forms.CharField(help_text="Ingrese el DNI del tutor.")
@@ -122,4 +125,4 @@ class buscarTutorForm(forms.Form):
 class editarAlumnoForm(ModelForm):
     class Meta:
         model = Alumno
-        exclude = ['']
+        exclude = ['fecha_desvinculacion']

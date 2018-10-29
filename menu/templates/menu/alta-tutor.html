@@ -35,7 +35,7 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <form method="post" novalidate>{% csrf_token %}
+                    <form method="post">{% csrf_token %}
                         {% include 'common/form_template.html' with form=form %}
                         <button type="submit" class="btn btn-primary">Añadir</button>
                     </form>
