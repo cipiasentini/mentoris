@@ -16,16 +16,6 @@
     $(function () {
         $('[data-toggle="popover"]').popover()
     });
-
-$(document).ready(function() {
-    var last=$.cookie('activeAccordionGroup');
-    if (last!=null) {
-        //remove default collapse settings
-        $("#accordion .panel-collapse").removeClass('in');
-        //show the account_last visible group
-        $("#" + last).addClass("in");
-    }
-});
 </script>
 
 <div class="py-3">
