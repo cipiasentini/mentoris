@@ -1,11 +1,12 @@
 from django.contrib import admin
 from .models import Alumno
 from .models import Tutor
-from .models import Intervencion
+from .models import Intervencion, Novedades
 
 admin.site.register(Alumno)
 admin.site.register(Tutor)
 admin.site.register(Intervencion)
+admin.site.register(Novedades)
 
 # con esto yo puedo modificar la manera en que muestro el panel de admin para alumnos
 # @admin.register(Alumno)

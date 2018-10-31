@@ -64,3 +64,10 @@ class Tipo(models.Model):
 
     def __str__(self):
         return '{}'.format(self.descripcion)
+
+
+class Novedades(models.Model):
+    titulo = models.CharField(max_length=60, null=True, blank=True)
+    descripcion = models.TextField()
+    fecha_alta = models.DateTimeField(default=timezone.now)
+    estado = models.CharField(max_length=40, default='Activa')

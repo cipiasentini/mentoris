@@ -1,7 +1,7 @@
 from django import forms
 # from django.forms import (ModelForm, ModelChoiceField, TextInput)
 from django.forms import ModelForm
-from .models import Alumno, Tutor, Intervencion, Tipo
+from .models import Alumno, Tutor, Intervencion, Tipo, Novedades
 # from sysacad.models import Persona
 from django.core.exceptions import ValidationError
 from django_select2.forms import Select2Widget
@@ -126,3 +126,13 @@ class editarAlumnoForm(ModelForm):
     class Meta:
         model = Alumno
         exclude = ['fecha_desvinculacion']
+
+class agregarNovedadForm(ModelForm):
+    class Meta:
+        model = Novedades
+        exclude = ['fecha_alta', 'estado']
+
+class editarNovedadForm(ModelForm):
+    class Meta:
+        model = Novedades
+        exclude = ['fecha_alta', 'estado']

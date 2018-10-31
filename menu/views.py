@@ -1,10 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
-from .models import Alumno, Tutor, Intervencion, Tipo
+from .models import Alumno, Tutor, Intervencion, Tipo, Novedades
 from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria, Alumcom as MateriaAlumno)
 from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agregarIntervencionForm, agregarIntervencionTipoForm)
-from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm)
+from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarNovedadForm)
 from django.contrib.auth.models import User
 from datetime import datetime
 
@@ -57,9 +57,9 @@ def editarAlumno(request, dni):
 #     else:
 #         form = buscarAlumnoForm()
 #         return render(request, 'menu/buscar-alumno.html', {'form': form, 'nbar': 'index'})
-def index(request):
-    if request.method == 'GET':
-        return render(request, 'menu/index.html', {'nbar': 'index'})
+# def index(request):
+#     if request.method == 'GET':
+#         return render(request, 'menu/index.html', {'nbar': 'index'})
 
 def buscarAlumnoId(request, id):
     form = buscarAlumnoForm()
@@ -395,3 +395,81 @@ def abrirIntervencionB(request, id):
         intervencion.save()
         return redirect('menu:buscar-alumno-id', id=intervencion.alumno.legajo)
 
+
+@login_required
+def verNovedades(request):
+    if request.method == 'GET':
+        novedades = Novedades.objects.filter(estado='Activa')
+        return render(request, 'menu/index.html', {'novedades': novedades, 'nbar': 'index'})
+
+@staff_member_required
+def panelNovedades(request):
+    if request.method == 'GET':
+        novedades = Novedades.objects.all()
+        return render(request, 'menu/panel-novedades.html', {'novedades': novedades, 'nbar': 'administrador'})
+
+@login_required
+def cerrarNovedad(request, id):
+    if request.method == 'GET':
+        try:
+            novedad = Novedades.objects.get(id=id)
+        except:
+            return redirect('menu:panel-novedades')
+        novedad.estado = 'Cerrada'
+        novedad.save()
+        return redirect('menu:panel-novedades')
+
+@login_required
+def abrirNovedad(request, id):
+    if request.method == 'GET':
+        try:
+            novedad = Novedades.objects.get(id=id)
+        except:
+            return redirect('menu:panel-novedades')
+        novedad.estado = 'Activa'
+        novedad.save()
+        return redirect('menu:panel-novedades')
+
+@login_required
+def eliminarNovedad(request, id):
+    if request.method == 'GET':
+        try:
+            novedad = Novedades.objects.get(id=id)
+        except:
+            return redirect('menu:panel-novedades')
+        novedad.delete()
+        return redirect('menu:panel-novedades')
+
+
+@staff_member_required
+def agregarNovedad(request):
+    if request.method == 'POST':
+        form = agregarNovedadForm(request.POST)
+        if form.is_valid():
+            nueva_novedad = Novedades(
+                titulo=form.cleaned_data['titulo'],
+                descripcion=form.cleaned_data['descripcion'],
+            )
+            Novedades.save(nueva_novedad)
+            form = agregarNovedadForm()
+            return render(request, 'menu/alta-novedad.html', {'form': form, 'alumno': nueva_novedad, 'success': True, 'nbar': 'administrador'})
+    else:
+        form = agregarNovedadForm()
+        return render(request, 'menu/alta-novedad.html', {'form': form, 'nbar': 'administrador'})
+
+
+@staff_member_required
+def editarNovedad(request, id):
+    try:
+        novedad = Novedades.objects.get(id=id)
+    except:
+        return render(request, 'menu/editar-novedad.html', {'not_found': True, 'nbar': 'administrador'})
+    form = editarNovedadForm(instance=novedad)
+    if request.method == 'POST':
+        form = editarNovedadForm(request.POST, instance=novedad)
+        if form.is_valid():
+            form.save()
+            return render(request, 'menu/editar-novedad.html', {'form': form, 'success': True, 'novedad_inst': novedad, 'nbar': 'administrador'})
+        else:
+            form = editarNovedadForm(instance=novedad)
+    return render(request, 'menu/editar-novedad.html', {'form': form, 'nbar': 'administrador'})

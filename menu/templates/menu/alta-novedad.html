@@ -1,0 +1,36 @@
+{% extends "menu/index.html" %}
+
+{% block title %}<title>Tutorías: Agregar novedad al inicio</title>{% endblock %}
+
+{% block content %}
+    {% block warning %}
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    {% if not_found %}
+                        <div id="separador" class="alert alert-danger" role="alert">
+                            Error al agregar novedad.
+                        </div>
+                    {% endif %}
+                    {% if success %}
+                        <div id="separador" class="alert alert-success" role="alert">
+                            La novedad {{ novedad.titulo }} fue agregada correctamente.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+    <div class="container">
+    <h2>Agregar nueva novedad</h2>
+        <div class="row">
+            <div class="col">
+                <form method="post">
+                    {% csrf_token %}
+                    {% include 'common/form_template.html' with form=form %}
+                    <button type="submit" class="btn btn-primary">Añadir</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

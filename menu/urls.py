@@ -5,7 +5,7 @@ app_name = 'menu'
 
 # el name es el nombre al cual debemos referenciar desde los templates o el codigo html.
 urlpatterns = [
-    path('', views.index, name = 'index'),
+    path('', views.verNovedades, name = 'index'),
     path('nuevo/alumno', views.agregarAlumno, name = 'alta-alumno'),
     path('editar/alumno/<int:dni>/', views.editarAlumno, name='editar-alumno'),
     path('buscar/alumno', views.buscarAlumno, name = 'buscar-alumno'),
@@ -20,4 +20,10 @@ urlpatterns = [
     path('intervenciones/abrir/<int:id>/', views.abrirIntervencion, name = 'abrir-intervencion'),
     path('buscar/alumno/cerrar/<int:id>/', views.cerrarIntervencionB, name = 'cerrar-intervencion-b'),
     path('buscar/alumno/abrir/<int:id>/', views.abrirIntervencionB, name = 'abrir-intervencion-b'),
+    path('novedades/panel', views.panelNovedades, name = 'panel-novedades'),
+    path('novedades/panel/cerrar/<int:id>/', views.cerrarNovedad, name = 'cerrar-novedad'),
+    path('novedades/panel/abrir/<int:id>/', views.abrirNovedad, name = 'abrir-novedad'),
+    path('novedades/panel/eliminar/<int:id>/', views.eliminarNovedad, name = 'eliminar-novedad'),
+    path('nueva/novedad', views.agregarNovedad, name = 'alta-novedad'),
+    path('editar/novedad/<int:id>/', views.editarNovedad, name = 'editar-novedad'),
 ]
