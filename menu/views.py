@@ -7,6 +7,7 @@ from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agre
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarNovedadForm)
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.http import HttpResponseNotAllowed, HttpResponse
 
 @login_required
 def editarAlumno(request, dni):
@@ -395,6 +396,7 @@ def abrirIntervencionB(request, id):
         intervencion.save()
         return redirect('menu:buscar-alumno-id', id=intervencion.alumno.legajo)
 
+# NOVEDADES
 
 @login_required
 def verNovedades(request):
@@ -440,7 +442,6 @@ def eliminarNovedad(request, id):
         novedad.delete()
         return redirect('menu:panel-novedades')
 
-
 @staff_member_required
 def agregarNovedad(request):
     if request.method == 'POST':
@@ -457,7 +458,6 @@ def agregarNovedad(request):
         form = agregarNovedadForm()
         return render(request, 'menu/alta-novedad.html', {'form': form, 'nbar': 'administrador'})
 
-
 @staff_member_required
 def editarNovedad(request, id):
     try:
@@ -466,6 +466,7 @@ def editarNovedad(request, id):
         return render(request, 'menu/editar-novedad.html', {'not_found': True, 'nbar': 'administrador'})
     form = editarNovedadForm(instance=novedad)
     if request.method == 'POST':
+        novedad.fecha_alta = datetime.now()
         form = editarNovedadForm(request.POST, instance=novedad)
         if form.is_valid():
             form.save()
@@ -473,3 +474,13 @@ def editarNovedad(request, id):
         else:
             form = editarNovedadForm(instance=novedad)
     return render(request, 'menu/editar-novedad.html', {'form': form, 'nbar': 'administrador'})
+
+
+# Para poder setear sesion y mantener el estado anterior del collapse
+
+
+def update_session(request, collapse):
+    # if not request.is_ajax() or not request.method == 'POST':
+    #     return HttpResponseNotAllowed(['POST'])
+    request.session['collapse'] = collapse
+    return HttpResponse('ok')

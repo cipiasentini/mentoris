@@ -1,11 +1,27 @@
 {% block title %}<title>Tutorías: Novedades</title>{% endblock %}
 
 {% block content %}
-    <div class="jumbotron">
-        {% for n in novedades %}
-            <h1 class="display-4">{{ n.titulo }}</h1>
-            <hr class="my-4">
-            <p>{{ n.descripcion|linebreaks }}</p>
-        {% endfor %}
-    </div>
+    {#    <div class="jumbotron">#}
+    {#        {% for n in novedades %}#}
+    {#            <h1 class="display-4">{{ n.titulo }}</h1>#}
+    {#            <hr class="my-4">#}
+    {#            <p>{{ n.descripcion|linebreaks }}</p>#}
+    {#        {% endfor %}#}
+    {#    </div>#}
+    {% for n in novedades %}
+        <div class="card text-center">
+            <div class="card-header">
+               <h2>{{ n.titulo }}</h2>
+            </div>
+            <div class="card-body text-left">
+                <h5 class="card-text">{{ n.descripcion|linebreaks }}</h5>
+            </div>
+            <div class="card-footer text-muted text-right">
+                {{ n.fecha_alta }}
+            </div>
+        </div>
+        {% if not forloop.last %}
+            </br>
+        {% endif %}
+    {% endfor %}
 {% endblock %}

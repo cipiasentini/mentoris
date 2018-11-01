@@ -26,13 +26,14 @@
             <div class="row">
                 <div class="col">
                     <h2>Agregar tutor manualmente</h2>
-                        <a class="btn btn-secondary" href="{% url 'menu:alta-tutor' %}">Atras</a>
-                        <a class="btn btn-primary" href="{% url 'menu:alta-tutor-personalizada' %}">Añadir Manualmente</a>
+                    <a class="btn btn-secondary" href="{% url 'menu:alta-tutor' %}">Atras</a>
+                    <a class="btn btn-primary" href="{% url 'menu:alta-tutor-personalizada' %}">Añadir Manualmente</a>
                 </div>
             </div>
         </div>
     {% else %}
         <div class="container">
+            <h2>Alta Tutor</h2>
             <div class="row">
                 <div class="col">
                     <form method="post">{% csrf_token %}

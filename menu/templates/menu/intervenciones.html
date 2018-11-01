@@ -8,6 +8,7 @@
           $('[data-toggle="popover"]').popover()
         })
     </script>
+
     {% if user.is_staff %}
         <h2>Estado de las intervenciones</h2>
     {% else %}
@@ -15,14 +16,14 @@
     {% endif %}
     <div id="accordion">
         <div class="card">
-            <div class="card-header" id="headingOne">
+            <div class="card-header" id="headingOne" onclick="$.get('{% url "menu:update-session" collapse=1 %}');">
                 <h5 class="mb-0">
                     <button class="btn btn-link btn-block" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                         <h3><span class="pull-left">Abiertas</span></h3>
                     </button>
                 </h5>
             </div>
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+            <div id="collapseOne" class="collapse  {% if request.session.collapse == 1 %}show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <table class="table table-hover">
@@ -76,14 +77,14 @@
             </div>
         </div>
         <div class="card">
-            <div class="card-header" id="headingTwo">
+            <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
                 <h5 class="mb-0">
                     <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                         <h3><span class="pull-left">Cerradas</span></h3>
                     </button>
                 </h5>
             </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div id="collapseTwo" class="collapse {% if request.session.collapse == 2 %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordion">
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
                         <table class="table table-hover">

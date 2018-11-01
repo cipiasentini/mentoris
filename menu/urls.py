@@ -26,4 +26,5 @@ urlpatterns = [
     path('novedades/panel/eliminar/<int:id>/', views.eliminarNovedad, name = 'eliminar-novedad'),
     path('nueva/novedad', views.agregarNovedad, name = 'alta-novedad'),
     path('editar/novedad/<int:id>/', views.editarNovedad, name = 'editar-novedad'),
+    path('update_session/<int:collapse>/', views.update_session, name = 'update-session'),
 ]
