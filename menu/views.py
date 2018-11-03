@@ -271,7 +271,7 @@ def agregarIntervencion(request):
                         alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
                     )
                 Intervencion.save(nueva_intervencion)
-                form = agregarIntervencionForm()
+                form = agregarIntervencionForm(user=request.user)
                 return render(request, 'menu/alta-intervencion.html', {'form': form, 'intervencion': nueva_intervencion,
                                                                        'success': True, 'nbar': 'intervencion'})
             if request.user.is_staff:
@@ -484,3 +484,17 @@ def update_session(request, collapse):
     #     return HttpResponseNotAllowed(['POST'])
     request.session['collapse'] = collapse
     return HttpResponse('ok')
+
+
+def estadisticas(request):
+    alumnos = Alumno.objects.all()
+    anios = Alumno.objects.datetimes('fecha_alta', 'year')
+    alumnos_anios = {}
+    for a in anios:
+        alumnos_anios.update({str(a.year): Alumno.objects.filter(fecha_alta__year=a.year).count()})
+    pop = dict(alumnos_anios)
+    ult_anio = pop.popitem()[0]
+    total = alumnos.filter(fecha_alta__year=ult_anio).count()
+    riesgo = alumnos.filter(situacion_riesgo='Si').filter(fecha_alta__year=ult_anio).count()
+    no_riesgo = total - riesgo
+    return render(request, 'menu/estadisticas.html', {'alumnos_anios': alumnos_anios, 'ult_anio': ult_anio, 'alumnos_riesgo': riesgo, 'alumnos_no_riesgo': no_riesgo})

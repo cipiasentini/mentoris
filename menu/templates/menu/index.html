@@ -11,15 +11,17 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
-{#    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Play|Exo|Ubuntu">#}
+    {#    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Play|Exo|Ubuntu">#}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
 
-{#    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>#}
+    {#    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>#}
 
     {#  Para las busquedas seleccionables  #}
     {{ form.media.css }}
+
+    {% block head %}{% endblock %}
 
     {% block title %}<title>Tutorías: Inicio</title>{% endblock %}
 </head>
@@ -60,7 +62,6 @@
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'menu:alta-alumno' %}">Nuevo alumno</a>
                                     <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Editar alumno</a>
-                                    {#                                    <a class="dropdown-item" href="{% url 'menu:alta-alumno' %}">Eliminar alumno</a>#}
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -78,38 +79,57 @@
                                     {% endif %}
                                 </div>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle {% if nbar == 'tutores' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Tutor
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{% url 'menu:buscar-tutor' %}">Buscar tutor</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Nuevo tutor</a>
-                                    <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Editar tutor</a>
-                                    <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Baja tutor</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Registrar actividad</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Asignar tutor a grupo</a>
-                                    <a class="dropdown-item" href="#">Ver alumnos a cargo</a>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle {% if nbar == 'informes' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Informes
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="">Obtener ranking de consultas por tema</a>
-                                    <a class="dropdown-item" href="">Obtener resumen de rendimiento por colegio</a>
-                                    <a class="dropdown-item" href="">Obtener resumen de categorización de alumnos</a>
-                                </div>
-                            </li>
                             {% if user.is_staff %}
-                                <li class="nav-item {% if nbar == 'tareas' %}active{% endif %}">
-                                    <a class="nav-link" href="#">Agenda de tareas</a>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle {% if nbar == 'tutores' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Tutor
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{% url 'menu:buscar-tutor' %}">Buscar/Baja tutor</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Nuevo tutor</a>
+                                        <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Editar tutor</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Asignar tutor a grupo</a>
+                                        <a class="dropdown-item" href="#">Ver alumnos a cargo</a>
+                                    </div>
                                 </li>
                             {% endif %}
+                            {% if user.is_staff %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle {% if nbar == 'informes' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Informes
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="">Obtener ranking de consultas por tema</a>
+                                        <a class="dropdown-item" href="">Obtener resumen de rendimiento por colegio</a>
+                                        <a class="dropdown-item" href="">Obtener resumen de categorización de alumnos</a>
+                                    </div>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle {% if nbar == 'grupos' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Grupos
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="">Crear grupo</a>
+                                    <a class="dropdown-item" href="">Asignar tutor a grupo</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle {% if nbar == 'grupos' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Tareas
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="">Nueva tarea</a>
+                                    <a class="dropdown-item" href="">Agenda de tareas</a>
+                                </div>
+                            </li>
+{#                            {% if user.is_staff %}#}
+{#                                <li class="nav-item {% if nbar == 'tareas' %}active{% endif %}">#}
+{#                                    <a class="nav-link" href="#">Agenda de tareas</a>#}
+{#                                </li>#}
+{#                            {% endif %}#}
                             {% if user.is_staff %}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle {% if nbar == 'administrador' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

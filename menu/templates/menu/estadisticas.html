@@ -1,0 +1,59 @@
+{% extends "menu/index.html" %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/morris.css' %}">
+    <script src="{% static 'js/raphael.min.js' %}"></script>
+    <script src="{% static 'js/morris.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card-deck">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Cantidad de alumos por año</h5>
+                            <div class="card-text" id="alumnos_anuales"></div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Alumnos con situacion de riesgo en {{ ult_anio }}</h5>
+                            <div class="card-text" id="alumnos_riesgo"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        new Morris.Line({
+            // ID of the element in which to draw the chart.
+            element: 'alumnos_anuales',
+            // Chart data records -- each entry in this array corresponds to a point on
+            // the chart.
+            data: [
+                {% for key, value in alumnos_anios.items %}
+                    { anio: '{{ key }}', riesgo: '{{ value }}'},
+                {% endfor %}
+            ],
+            // The name of the data record attribute that contains x-values.
+            xkey: 'anio',
+            // A list of names of data record attributes that contain y-values.
+            ykeys: ['riesgo'],
+            // Labels for the ykeys -- will be displayed when you hover over the
+            // chart.
+            labels: ['Cantidad']
+        });
+        new Morris.Donut({
+            element: 'alumnos_riesgo',
+            data: [
+                {label: "Situacion de riesgo", value: '{{ alumnos_riesgo }}'},
+                {label: "Sin inconvenientes", value: '{{ alumnos_no_riesgo }}'}
+            ]
+        });
+    </script>
+{% endblock %}

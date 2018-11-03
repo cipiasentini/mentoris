@@ -41,7 +41,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for int in intervenciones %}
+                            {% for int in intervenciones|dictsortreversed:"fecha_alta" %}
                                 {% if int.estado == 'Abierta' %}
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
                                         data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
@@ -102,7 +102,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for int in intervenciones %}
+                            {% for int in intervenciones|dictsortreversed:"fecha_alta" %}
                                 {% if int.estado == 'Cerrada' %}
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
                                         data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
