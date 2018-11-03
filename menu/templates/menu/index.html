@@ -155,8 +155,7 @@
                                     <div class="dropdown-menu" aria-labelledby="dropdown-right-menu-link-auth">
                                         <span class="dropdown-header">Iniciaste sesión como <b>{{ user.first_name }} {{ user.last_name }}</b></span>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="/users/profile/johnthereaper">Mi perfil</a>
-                                        <a class="dropdown-item" href="/users/settings">Configuración</a>
+                                        <a class="dropdown-item" href="{% url 'menu:change_password' %}">Cambiar contraseña</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{% url 'logout' %}?next={% url 'menu:index' %}">Cerrar sesión</a>
                                     </div>
@@ -205,12 +204,12 @@
                 {% if user.is_authenticated %}
                     <div class="collapse navbar-collapse">
                         <ul class="navbar-nav ml-auto">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/users/profile/johnthereaper">Mi perfil</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/users/settings">Configuración</a>
-                            </li>
+{#                            <li class="nav-item">#}
+{#                                <a class="nav-link" href="/users/profile/johnthereaper">Mi perfil</a>#}
+{#                            </li>#}
+{#                            <li class="nav-item">#}
+{#                                <a class="nav-link" href="/users/settings">Configuración</a>#}
+{#                            </li>#}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'logout' %}?next={{request.path}}">Cerrar sesión</a>
                             </li>

@@ -7,7 +7,10 @@ from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agre
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarNovedadForm)
 from django.contrib.auth.models import User
 from datetime import datetime
-from django.http import HttpResponseNotAllowed, HttpResponse
+from django.http import HttpResponse
+from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 @login_required
 def editarAlumno(request, dni):
@@ -485,7 +488,7 @@ def update_session(request, collapse):
     request.session['collapse'] = collapse
     return HttpResponse('ok')
 
-
+@login_required
 def estadisticas(request):
     alumnos = Alumno.objects.all()
     anios = Alumno.objects.datetimes('fecha_alta', 'year')
@@ -498,3 +501,25 @@ def estadisticas(request):
     riesgo = alumnos.filter(situacion_riesgo='Si').filter(fecha_alta__year=ult_anio).count()
     no_riesgo = total - riesgo
     return render(request, 'menu/estadisticas.html', {'alumnos_anios': alumnos_anios, 'ult_anio': ult_anio, 'alumnos_riesgo': riesgo, 'alumnos_no_riesgo': no_riesgo})
+
+# @login_required
+# def cambiar_contrasenia(request):
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            return render(request, 'menu/change_password.html', {
+                'form': form, 'success': True, 'user': request.user
+            })
+        else:
+            return render(request, 'menu/change_password.html', {
+                'form': form, 'not_found': True
+            })
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'menu/change_password.html', {
+        'form': form
+    })

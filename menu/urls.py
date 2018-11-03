@@ -28,4 +28,5 @@ urlpatterns = [
     path('editar/novedad/<int:id>/', views.editarNovedad, name = 'editar-novedad'),
     path('update_session/<int:collapse>/', views.update_session, name = 'update-session'),
     path('estadisticas', views.estadisticas, name = 'estadisticas'),
+    path('password', views.change_password, name='change_password'),
 ]
