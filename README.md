@@ -12,6 +12,8 @@ Por hacer:
 5. Agregar Editar intervenciones
 6. Poner modales a todos los eliminar/dar de baja que existan (solamente le puse al del panel de novedades por el momento)
 7. Fixear el problema de display en pantallas chicas (celulares)
+8. Ver como funcionan las tablas de matcom y eso para poder determinar las notas y si regularizo/aprobo una determinada materia, (y parciales) en base a eso despues autoactualizar el "Estado de riesgo" de los ingresantes.
+Eso deberia ser una vez al dia un proceso que checkee si hay algun nuevo parcial que salio mal (y asi actualizar el "Estado de riesgo")
 
 
 
