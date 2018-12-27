@@ -1,6 +1,6 @@
 {% extends "menu/index.html" %}
 
-{% block title %}<title>Tutorias: Editar alumno</title>{% endblock %}
+{% block title %}<title>Tutorias: Editar tutor</title>{% endblock %}
 
 {% block content %}
     {% block warning %}
@@ -9,12 +9,12 @@
                 <div class="col">
                     {% if not_found %}
                         <div id="separador" class="alert alert-danger" role="alert">
-                            No existe ningun alumno con ese legajo o nombre.
+                            No existe ningun tutor con ese legajo o nombre.
                         </div>
                     {% endif %}
                     {% if success %}
                         <div id="separador" class="alert alert-success" role="alert">
-                            El alumno {{ alumno.nombre }} fue editado correctamente.
+                            El tutor {{ tutor.nombre }} fue editado correctamente.
                         </div>
                     {% endif %}
                 </div>

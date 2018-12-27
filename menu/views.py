@@ -1,16 +1,21 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
-from .models import Alumno, Tutor, Intervencion, Tipo, Novedades
+from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea
 from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria, Alumcom as MateriaAlumno)
 from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agregarIntervencionForm, agregarIntervencionTipoForm)
-from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarNovedadForm)
+from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm,
+                    editarNovedadForm, agregarTareaForm, editarTutorForm)
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+# calendario
+from django.shortcuts import render_to_response
+from django.contrib import messages
+from apps_externas.bcal import get_bcal
 
 @login_required
 def editarAlumno(request, dni):
@@ -28,42 +33,34 @@ def editarAlumno(request, dni):
             form = editarAlumnoForm(instance=alumno)
     return render(request, 'menu/editar-alumno.html', {'form': form, 'nbar': 'alumno'})
 
+@staff_member_required
+def editarTutor(request, legajo):
+    try:
+        tutor = Tutor.objects.get(legajo=legajo)
+    except:
+        return render(request, 'menu/editar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
+    form = editarTutorForm(instance=tutor)
+    if request.method == 'POST':
+        form = editarTutorForm(request.POST, instance=tutor)
+        if form.is_valid():
+            form.save()
+            return render(request, 'menu/editar-tutor.html', {'form': form, 'success': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
+        else:
+            form = editarTutorForm(instance=tutor)
+    return render(request, 'menu/editar-tutor.html', {'form': form, 'nbar': 'tutor'})
 
-# def index(request):
-#     # # Contador de numero de visitas de la sesion
-#     # num_visits = request.session.get('num_visits', 0)
-#     # request.session['num_visits'] = num_visits + 1
-#     #
-#     # # Lista de alumnos
-#     # alumnos = Alumno.objects.order_by('-fecha_alta')
-#     #
-#     # context = {'alumnos': alumnos, 'num_visits': num_visits, 'nbar': 'index'}
-#     # return render(request, 'menu/index.html', context)
-#     if request.method == 'POST':
-#         form = buscarAlumnoForm(request.POST)
-#         if form.is_valid():
-#             # form.id
-#             id = form.cleaned_data['id']
-#             if (int(id) < 999999):
-#                 try:
-#                     alumno = Alumno.objects.get(legajo=id)
-#                 except:
-#                     return render(request, 'menu/buscar-alumno.html', {'form': form, 'not_found': True, 'nbar': 'index'})
-#             else:
-#                 try:
-#                     alumno = Alumno.objects.get(dni=id)
-#                 except:
-#                     return render(request, 'menu/buscar-alumno.html',
-#                                   {'form': form, 'not_found': True, 'nbar': 'alumnos'})
-#             return render(request, 'menu/buscar-alumno.html', {'form': form, 'alumno_inst': alumno, 'nbar': 'index'})
-#         else:
-#             return render(request, 'menu/buscar-alumno.html', {'form': form,  'nbar': 'index'})
-#     else:
-#         form = buscarAlumnoForm()
-#         return render(request, 'menu/buscar-alumno.html', {'form': form, 'nbar': 'index'})
-# def index(request):
-#     if request.method == 'GET':
-#         return render(request, 'menu/index.html', {'nbar': 'index'})
+@staff_member_required
+def bajaTutor(request, legajo):
+    try:
+        tutor = Tutor.objects.get(legajo=legajo)
+    except:
+        return render(request, 'menu/buscar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
+    tutor.fecha_desvinculacion = datetime.today()
+    tutor.save()
+    # return redirect('menu:buscar-tutor')
+    # form = buscarTutorForm()
+    return render(request, 'menu/buscar-tutor.html', {'baja': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
+
 
 def buscarAlumnoId(request, id):
     form = buscarAlumnoForm()
@@ -193,7 +190,10 @@ def agregarTutor(request):
                 alumno_sysacad = SysacadAlumno.objects.get(pk=dni)
             except SysacadPersona.DoesNotExist:
                 # return agregarTutorPersonalizado(request)
-                return redirect('menu:alta-tutor-personalizada')
+                # return render(request, 'menu/alta-tutor-personalizada.html', {'not_found': True, 'nbar': 'tutores', 'dni': dni})
+                return render(request, 'menu/alta-tutor.html',
+                              {'alta_manual': True, 'not_found': True, 'nbar': 'tutores', 'dni': dni})
+                # return redirect('menu:alta-tutor-personalizada', {'not_found': True, 'nbar': 'tutores', 'dni': dni})
                 # return render(request, 'menu/alta-tutor-personalizada.html',
                 #               {'form': agregarTutorPersonalizadoForm(request.POST),
                 #                'alta_manual': True, 'nbar': 'tutores'})
@@ -332,6 +332,8 @@ def buscarTutor(request):
             except:
                 return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
             return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'nbar': 'tutores'})
+        form = buscarTutorForm()
+        return render(request, 'menu/buscar-tutor.html', {'form': form,'bad': True,'nbar': 'tutores'})
     else:
         form = buscarTutorForm()
         return render(request, 'menu/buscar-tutor.html', {'form': form, 'nbar': 'tutores'})
@@ -523,3 +525,61 @@ def change_password(request):
     return render(request, 'menu/change_password.html', {
         'form': form
     })
+
+@login_required
+def agregarTarea(request):
+    if request.method == 'POST':
+        form = agregarTareaForm(request.POST, user=request.user)
+        if form.is_valid():
+            if request.user.is_staff:
+                nueva_tarea = Tarea(
+                    titulo=form.cleaned_data['titulo'],
+                    descripcion=form.cleaned_data['descripcion'],
+                    fecha_alta=form.cleaned_data['fecha_alta'],
+                    tutor_asignado=form.cleaned_data['tutor_asignado'],
+                )
+            else:
+                nueva_tarea = Tarea(
+                    titulo=form.cleaned_data['titulo'],
+                    descripcion=form.cleaned_data['descripcion'],
+                    fecha_alta=form.cleaned_data['fecha_alta'],
+                    tutor_asignado=Tutor.objects.get(usuario=request.user.username),
+                )
+            Tarea.save(nueva_tarea)
+            form = agregarTareaForm(user=request.user)
+            return render(request, 'menu/alta-tarea.html', {'form': form, 'tarea': nueva_tarea, 'tutor': request.user.username, 'success': True, 'nbar': 'tareas'})
+    else:
+        form = agregarTareaForm(user=request.user)
+        return render(request, 'menu/alta-tarea.html', {'form': form, 'nbar': 'tareas'})
+
+@login_required
+def bcal(request, year, month, day):
+    today = datetime.today()
+    today_events = Tarea.objects.filter(fecha_alta__year=year).filter(fecha_alta__month=month).filter(fecha_alta__day=day)
+    if int(month) > 12:
+        y = str(today.year)
+        m = str(today.month)
+        messages.add_message(request, messages.WARNING, 'Error de mes')
+    else:
+        y = year
+        m = month
+
+    return render(
+        request,
+        'menu/agenda-tareas.html',
+        {
+            'calendar': get_bcal(y, m, day),
+            'today': today_events,
+        },
+        content_type='html')
+
+
+@login_required
+def mostrarTareaId(request, id):
+    if request.method == 'GET':
+        try:
+            tarea = Tarea.objects.get(id=id)
+        except:
+            return render(request, 'menu/index.html')
+        return render(request, 'menu/tarea.html', {'nbar': 'tareas', 'tarea': tarea})
+

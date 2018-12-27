@@ -71,3 +71,15 @@ class Novedades(models.Model):
     descripcion = models.TextField()
     fecha_alta = models.DateTimeField(default=timezone.now)
     estado = models.CharField(max_length=40, default='Activa')
+
+class Tarea(models.Model):
+    titulo = models.CharField(max_length=60, null=True, blank=True)
+    descripcion = models.TextField()
+    fecha_alta = models.DateTimeField(default=timezone.now, verbose_name='Fecha programada')
+    fecha_baja = models.DateTimeField(null=True, blank=True)
+    tutor_asignado = models.ForeignKey('Tutor', on_delete=models.DO_NOTHING)
+    estado = models.CharField(max_length=40, default='Activa')
+
+    def get_absolute_url(self):
+        return "/tarea/%d" % self.id
+

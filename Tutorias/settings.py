@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'compositefk',
     'django_select2',
+    'bootstrap_datepicker_plus',
     'sysacad',
     'menu',
 ]

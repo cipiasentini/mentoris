@@ -1,11 +1,13 @@
 from django import forms
 # from django.forms import (ModelForm, ModelChoiceField, TextInput)
 from django.forms import ModelForm
-from .models import Alumno, Tutor, Intervencion, Tipo, Novedades
+from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea
 # from sysacad.models import Persona
 from django.core.exceptions import ValidationError
 from django_select2.forms import Select2Widget
 from sysacad.models import Materia
+# date picker
+from bootstrap_datepicker_plus import DatePickerInput
 
 
 # class ModelTextInput(TextInput):
@@ -114,6 +116,10 @@ class buscarTutorForm(forms.Form):
         else:
             raise ValidationError('Por favor ingrese un DNI valido')
 
+class editarTutorForm(ModelForm):
+    class Meta:
+        model = Tutor
+        exclude = ['']
 
 # class agregarTutorForm(forms.Form):
 #     dni = forms.ModelChoiceField(queryset=Persona.objects.none())
@@ -136,3 +142,31 @@ class editarNovedadForm(ModelForm):
     class Meta:
         model = Novedades
         exclude = ['fecha_alta', 'estado']
+#
+# class agregarTareaForm(forms.Form):
+#     titulo = forms.DecimalField(help_text="Ingrese el titulo de la tarea.")
+#     descripcion = forms.CharField(help_text='Ingrese la descripción de la tarea.')
+#     fecha_alta = forms.DateTimeField(help_text='Ingrese la fecha de la tarea.')
+#     tutor_asignado = forms.ModelChoiceField(help_text="Ingrese el tutor designado de la tarea.", queryset=Tutor.objects.all(), widget=Select2Widget)
+#
+#     def __init__(self, *args, **kwargs):
+#         user = kwargs.pop('user', None)
+#         super(agregarTareaForm, self).__init__(*args, **kwargs)
+#         if not user.is_staff:
+#             del self.fields['tutor_asignado']
+
+class agregarTareaForm(ModelForm):
+    class Meta:
+        model = Tarea
+        exclude = ['fecha_baja', 'estado']
+        widgets = {
+            'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
+            'tutor_asignado': Select2Widget
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(agregarTareaForm, self).__init__(*args, **kwargs)
+        if not user.is_staff:
+            del self.fields['tutor_asignado']
+

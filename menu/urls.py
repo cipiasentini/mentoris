@@ -13,6 +13,8 @@ urlpatterns = [
     path('nuevo/tutor', views.agregarTutor, name = 'alta-tutor'),
     path('nuevo/tutor-manual', views.agregarTutorPersonalizado, name = 'alta-tutor-personalizada'),
     path('buscar/tutor', views.buscarTutor, name = 'buscar-tutor'),
+    path('editar/tutor/<int:legajo>/', views.editarTutor, name='editar-tutor'),
+    path('editar/tutor/baja/<int:legajo>/', views.bajaTutor, name='baja-tutor'),
     path('nueva/intervencion', views.agregarIntervencion, name = 'alta-intervencion'),
     path('nueva/intervencion/tipo', views.agregarIntervencionTipo, name = 'alta-tipo-intervencion'),
     path('intervenciones', views.listarIntervenciones, name = 'intervenciones'),
@@ -29,4 +31,7 @@ urlpatterns = [
     path('update_session/<int:collapse>/', views.update_session, name = 'update-session'),
     path('estadisticas', views.estadisticas, name = 'estadisticas'),
     path('password', views.change_password, name='change_password'),
+    path('nueva/tarea', views.agregarTarea, name='alta-tarea'),
+    path('agenda/<int:year>/<int:month>/<int:day>/', views.bcal, name='agenda-tareas'),
+    path('tarea/<int:id>/', views.mostrarTareaId, name='tarea'),
 ]

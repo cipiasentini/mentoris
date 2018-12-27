@@ -1,0 +1,15 @@
+{% extends "menu/index.html" %}
+
+{% block title %}<title>Tutorias: Agenda de tareas de tutores</title>{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        <div class="messages">
+            {% for msg in messages %}
+                <div class="alert alert-{{msg.level_tag}}" role="alert">{{msg.message}}</div>
+                </li>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {{ calendar|safe }}
+{% endblock %}
