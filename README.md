@@ -11,6 +11,7 @@ To-Do:
 7. Fixear el problema de display en pantallas chicas (celulares)
 8. Ver como funcionan las tablas de matcom y eso para poder determinar las notas y si regularizo/aprobo una determinada materia, (y parciales) en base a eso despues autoactualizar el "Estado de riesgo" de los ingresantes.
 Eso deberia ser una vez al dia un proceso que checkee si hay algun nuevo parcial que salio mal (y asi actualizar el "Estado de riesgo")
+9. Ver que hacer con lo de HORARIO DISPONIBLE si dejarle como texto plano o como hacerle. Y tambien todos los estados (activa/inactiva) de los modelos (ejemplo tarea, tutor, etc). Y situacion de riesgo del alumno.
 
 Work in progress:
 3. Management completo de tareas de tutores: falta editar tarea y verificar formato.
@@ -21,5 +22,8 @@ Entonces posible solucion: hay que ver como hacer para que al setear "fecha_desv
 Done:
 4. Pantalla de "buscar/editar tutor" agregar funcionalidad a editar y dar de baja tutor
 
+SI SOBRA TIEMPO:
+-  El calendario, ver como limitar los elementos, que los tutores solo vean lo suyo. Y Bianca todo.
+
 Preguntar a Bianca:
-1. Si le gustaria mas buscar el tutor por nombre que por DNI (seguramente si)
+1. Si le gustaria mas buscar el tutor por nombre que por DNI/Legajo (seguramente si)

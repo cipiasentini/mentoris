@@ -33,7 +33,42 @@ def get_bcal(year, month, day):
      day_link will be linked to a ListView that filters on the requested day. """
     for event in month_events:
         event_url = event.get_absolute_url()
-        client = '<a class="badge badge-pill badge-info" href="%s">%s - %s</a><br />' % (event_url, event.titulo, event.tutor_asignado.nombre)
+        client = '<a class="badge badge-pill badge-info" href="%s">%s</a><br />' % (event_url, event.titulo)
+        # client = '<button class="badge badge-pill badge-info" data-toggle="modal" data-target="#exampleModalCenter">%s</button><br />' \
+        #             '<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">' \
+        #                 '<div class="modal-dialog modal-dialog-centered" role="document">' \
+        #                     '<div class="modal-content">' \
+        #                         '<div class="modal-header">' \
+        #                             '<h5 class="modal-title" id="exampleModalLongTitle">Tarea: %s</h5>' \
+        #                             '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' \
+        #                             '<span aria-hidden="true">&times;</span>' \
+        #                             '</button>' \
+        #                         '</div>' \
+        #                         '<div class="modal-body">' \
+        #                             '<div class="container">' \
+        #                                 '<div class="row">' \
+        #                                     '<div class="col">' \
+        #                                         '<div class="card-body">' \
+        #                                             '<ul class="list-group list-group-flush">' \
+        #                                                 '<li class="list-group-item">Tarea: %s</li>' \
+        #                                                 '<li class="list-group-item">Descripción: %s</li>' \
+        #                                                 '<li class="list-group-item">Fecha programada: %s</li>' \
+        #                                                 '<li class="list-group-item">Estado: %s</li>' \
+        #                                                 '<li class="list-group-item">Tutor asignado: %s</li>' \
+        #                                             '</ul>' \
+        #                                         '</div>' \
+        #                                     '</div>' \
+        #                                 '</div>' \
+        #                             '</div>' \
+        #                         '</div>' \
+        #                         '<div class="modal-footer">' \
+        #                             '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>' \
+        #                             '<button type="button" class="btn btn-primary">Editar tarea</button>' \
+        #                         '</div>' \
+        #                     '</div>' \
+        #                 '</div>' \
+        #             '</div>' \
+        #          % (event.titulo, event.titulo, event.titulo, event.descripcion, event.fecha_alta.date(), event.estado, event.tutor_asignado)
         day = event.fecha_alta.day
         for key, value in date_range.items():
             if key == day:
@@ -497,7 +532,14 @@ def get_bcal(year, month, day):
         ch2 = left_chevron
         prev_month_link = nav % (year, prev_month, ch2)
 
-    links = "<h3>%s %s %s %s%s</h3>" % (
+    links = "<div class='row'>" \
+            "<div class='col-auto mr-auto'>" \
+            "<h3>%s %s, %s</h3>" \
+            "</div>" \
+            "<div class='col-auto'>" \
+            "<h3>%s %s</h3>" \
+            "</div>" \
+            "</div>" % (
         month_name, request_day, year, prev_month_link, next_month_link
     )
     sun = "<div class=\"col cal-header\">Domingo</div>\n"

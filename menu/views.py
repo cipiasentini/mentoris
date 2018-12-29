@@ -4,8 +4,8 @@ from django.shortcuts import render, redirect
 from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea
 from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria, Alumcom as MateriaAlumno)
 from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agregarIntervencionForm, agregarIntervencionTipoForm)
-from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm,
-                    editarNovedadForm, agregarTareaForm, editarTutorForm)
+from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarIntervencionForm,
+                    editarNovedadForm, agregarTareaForm, editarTutorForm, editarTareaForm)
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.http import HttpResponse
@@ -61,7 +61,7 @@ def bajaTutor(request, legajo):
     # form = buscarTutorForm()
     return render(request, 'menu/buscar-tutor.html', {'baja': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
 
-
+@login_required
 def buscarAlumnoId(request, id):
     form = buscarAlumnoForm()
     if request.method == 'GET':
@@ -119,7 +119,7 @@ def buscarAlumnoId(request, id):
             form = buscarAlumnoForm()
             return render(request, 'menu/buscar-alumno.html', {'form': form, 'nbar': 'alumnos'})
 
-
+@login_required
 def buscarAlumno(request):
     if request.method == 'POST':
         form = buscarAlumnoForm(request.POST)
@@ -322,18 +322,26 @@ def agregarIntervencionTipo(request):
         return render(request, 'menu/alta-tipo-intervencion.html', {'form': form, 'nbar': 'intervencion'})
 
 
-@login_required
+@staff_member_required
 def buscarTutor(request):
     if request.method == 'POST':
         form = buscarTutorForm(request.POST)
         if form.is_valid():
-            try:
-                tutor = Tutor.objects.get(dni=form.cleaned_data['dni'])
-            except:
-                return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
+            id = form.cleaned_data['id']
+            if (int(id) < 999999):
+                try:
+                    tutor = Tutor.objects.get(legajo=id)
+                except:
+                    return render(request, 'menu/buscar-tutor.html',
+                                  {'form': form, 'not_found': True, 'nbar': 'tutores'})
+            else:
+                try:
+                    tutor = Tutor.objects.get(dni=id)
+                except:
+                    return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
             return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'nbar': 'tutores'})
         form = buscarTutorForm()
-        return render(request, 'menu/buscar-tutor.html', {'form': form,'bad': True,'nbar': 'tutores'})
+        return render(request, 'menu/buscar-tutor.html', {'form': form,'bad': True, 'nbar': 'tutores'})
     else:
         form = buscarTutorForm()
         return render(request, 'menu/buscar-tutor.html', {'form': form, 'nbar': 'tutores'})
@@ -350,6 +358,21 @@ def listarIntervenciones(request):
                 intervenciones = Intervencion.objects.all()
             return render(request, 'menu/intervenciones.html', {'intervenciones': intervenciones, 'nbar': 'intervencion'})
 
+@login_required
+def editarIntervencion(request, id):
+    try:
+        intervencion = Intervencion.objects.get(id=id)
+    except:
+        return render(request, 'menu/editar-intervencion.html', {'not_found': True, 'nbar': 'intervencion'})
+    form = editarIntervencionForm(user=request.user, instance=intervencion)
+    if request.method == 'POST':
+        form = editarIntervencionForm(request.POST, user=request.user, instance=intervencion)
+        if form.is_valid():
+            form.save()
+            return render(request, 'menu/editar-intervencion.html', {'form': form, 'success': True, 'nbar': 'intervencion'})
+        else:
+            form = editarIntervencionForm(user=request.user, instance=intervencion)
+    return render(request, 'menu/editar-intervencion.html', {'form': form, 'nbar': 'intervencion'})
 
 # Estos son para los del template intervenciones.html
 @login_required
@@ -401,6 +424,16 @@ def abrirIntervencionB(request, id):
         intervencion.save()
         return redirect('menu:buscar-alumno-id', id=intervencion.alumno.legajo)
 
+@staff_member_required
+def eliminarIntervencion(request, id):
+    if request.method == 'GET':
+        try:
+            intervencion = Intervencion.objects.get(id=id)
+        except:
+            return redirect('menu:intervenciones')
+        intervencion.delete()
+        return redirect('menu:intervenciones')
+
 # NOVEDADES
 
 @login_required
@@ -415,7 +448,7 @@ def panelNovedades(request):
         novedades = Novedades.objects.all()
         return render(request, 'menu/panel-novedades.html', {'novedades': novedades, 'nbar': 'administrador'})
 
-@login_required
+@staff_member_required
 def cerrarNovedad(request, id):
     if request.method == 'GET':
         try:
@@ -426,7 +459,7 @@ def cerrarNovedad(request, id):
         novedad.save()
         return redirect('menu:panel-novedades')
 
-@login_required
+@staff_member_required
 def abrirNovedad(request, id):
     if request.method == 'GET':
         try:
@@ -437,7 +470,7 @@ def abrirNovedad(request, id):
         novedad.save()
         return redirect('menu:panel-novedades')
 
-@login_required
+@staff_member_required
 def eliminarNovedad(request, id):
     if request.method == 'GET':
         try:
@@ -482,8 +515,6 @@ def editarNovedad(request, id):
 
 
 # Para poder setear sesion y mantener el estado anterior del collapse
-
-
 def update_session(request, collapse):
     # if not request.is_ajax() or not request.method == 'POST':
     #     return HttpResponseNotAllowed(['POST'])
@@ -504,8 +535,7 @@ def estadisticas(request):
     no_riesgo = total - riesgo
     return render(request, 'menu/estadisticas.html', {'alumnos_anios': alumnos_anios, 'ult_anio': ult_anio, 'alumnos_riesgo': riesgo, 'alumnos_no_riesgo': no_riesgo})
 
-# @login_required
-# def cambiar_contrasenia(request):
+
 @login_required
 def change_password(request):
     if request.method == 'POST':
@@ -552,7 +582,7 @@ def agregarTarea(request):
         form = agregarTareaForm(user=request.user)
         return render(request, 'menu/alta-tarea.html', {'form': form, 'nbar': 'tareas'})
 
-@login_required
+@staff_member_required
 def bcal(request, year, month, day):
     today = datetime.today()
     today_events = Tarea.objects.filter(fecha_alta__year=year).filter(fecha_alta__month=month).filter(fecha_alta__day=day)
@@ -583,3 +613,18 @@ def mostrarTareaId(request, id):
             return render(request, 'menu/index.html')
         return render(request, 'menu/tarea.html', {'nbar': 'tareas', 'tarea': tarea})
 
+@login_required
+def editarTarea(request, id):
+    try:
+        tarea = Tarea.objects.get(id=id)
+    except:
+        return render(request, 'menu/editar-tarea.html', {'not_found': True, 'nbar': 'tareas'})
+    form = editarTareaForm(instance=tarea)
+    if request.method == 'POST':
+        form = editarTareaForm(request.POST, instance=tarea)
+        if form.is_valid():
+            form.save()
+            return render(request, 'menu/editar-tarea.html', {'form': form, 'success': True, 'tarea': tarea, 'nbar': 'tareas'})
+        else:
+            form = editarTareaForm(instance=tarea)
+    return render(request, 'menu/editar-tarea.html', {'form': form, 'nbar': 'tareas'})

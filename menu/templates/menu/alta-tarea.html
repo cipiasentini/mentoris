@@ -4,17 +4,12 @@
 
 {% block content %}
     {% block warning %}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    {% if success %}
-                        <div id="separador" class="alert alert-success" role="alert">
-                            La tarea {{ tarea.titulo }} fue asignada correctamente al tutor {{ tutor }}.
-                        </div>
-                    {% endif %}
-                </div>
+        {% if success %}
+            <div id="separador" class="alert alert-success" role="alert">
+                La tarea {{ tarea.titulo }} fue asignada correctamente al tutor {{ tutor }}.
             </div>
-        </div>
+        {% endif %}
+
     {% endblock %}
 
     <div class="container">
@@ -24,7 +19,7 @@
                 <form method="post">{% csrf_token %}
                     {% include 'common/form_template.html' with form=form %}
                     {{ form.media }}
-                    <button type="submit" class="btn btn-primary">Añadir</button>
+                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
                 </form>
             </div>
         </div>

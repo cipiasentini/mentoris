@@ -1,15 +1,9 @@
 {% block warning %}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                {% if not_found %}
-                    <div id="separador" class="alert alert-danger" role="alert">
-                        No existe ningun alumno con ese legajo o nombre.
-                    </div>
-                {% endif %}
-            </div>
+    {% if not_found %}
+        <div id="separador" class="alert alert-danger" role="alert">
+            No existe ningun alumno con ese legajo o nombre.
         </div>
-    </div>
+    {% endif %}
 {% endblock %}
 
 <script>
@@ -19,173 +13,66 @@
 </script>
 
 {#<div class="py-3">#}
-    <h2>Buscar Alumno</h2>
-    <form class="mt-3" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {% include 'common/form_template.html' with form=form %}
+<h2>Buscar Alumno</h2>
+<form class="mt-3" method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        {% include 'common/form_template.html' with form=form %}
+    </div>
+    <div class="clearfix mb-3">
+        <div class="float-right">
+            <button type="submit" class="btn btn-secondary"  value="login" tabindex="3">Buscar</button>
         </div>
-        <div class="clearfix mb-3">
-            <div class="float-right">
-                <button type="submit" class="btn btn-secondary"  value="login" tabindex="3">Buscar</button>
+    </div>
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% if alumno_inst %}
+    <div id="accordion">
+    <div class="card">
+        <div class="card-header" id="headingOne" onclick="$.get('{% url "menu:update-session" collapse=1 %}');">
+            <h5 class="mb-0">
+                <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseTwo">
+                    <h3><span class="pull-left">Datos Personales de {{ alumno_inst.nombre }}</span></h3>
+                </button>
+            </h5>
+        </div>
+        <div id="collapseOne" class="collapse  {% if request.session.collapse == 1 %}show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">Nombre: {{ alumno_inst.nombre }}</li>
+                    <li class="list-group-item">DNI: {{ alumno_inst.dni }}</li>
+                    <li class="list-group-item">Legajo: {{ alumno_inst.legajo }}</li>
+                    <li class="list-group-item">Email: {{ alumno_inst.mail }}</li>
+                    <li class="list-group-item">Observaciones: {{ alumno_inst.observaciones }}</li>
+                    {% if alumno_inst.situacion_riesgo == 'Ninguna' %}
+                        <li class="list-group-item">Situacion de riesgo: <span class="badge badge-success">NO</span></li>
+                    {% else %}
+                        <li class="list-group-item">Situacion de riesgo: <span class="badge badge-danger">SI</span></li>
+                    {% endif %}
+                    <li class="list-group-item">Fecha de alta: {{ alumno_inst.fecha_alta }}</li>
+                    <li class="list-group-item"><a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a></li>
+                </ul>
             </div>
         </div>
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
-
-    {% if alumno_inst %}
-        <div id="accordion">
-            <div class="card">
-                <div class="card-header" id="headingOne" onclick="$.get('{% url "menu:update-session" collapse=1 %}');">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseTwo">
-                            <h3><span class="pull-left">Datos Personales de {{ alumno_inst.nombre }}</span></h3>
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapseOne" class="collapse  {% if request.session.collapse == 1 %}show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Nombre: {{ alumno_inst.nombre }}</li>
-                            <li class="list-group-item">DNI: {{ alumno_inst.dni }}</li>
-                            <li class="list-group-item">Legajo: {{ alumno_inst.legajo }}</li>
-                            <li class="list-group-item">Email: {{ alumno_inst.mail }}</li>
-                            <li class="list-group-item">Observaciones: {{ alumno_inst.observaciones }}</li>
-                            {% if alumno_inst.situacion_riesgo == 'Ninguna' %}
-                                <li class="list-group-item">Situacion de riesgo: <span class="badge badge-success">NO</span></li>
-                            {% else %}
-                                <li class="list-group-item">Situacion de riesgo: <span class="badge badge-danger">SI</span></li>
-                            {% endif %}
-                            <li class="list-group-item">Fecha de alta: {{ alumno_inst.fecha_alta }}</li>
-                            <li class="list-group-item"><a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            <h3><span class="pull-left">Intervenciones de {{ alumno_inst.nombre }}</span></h3>
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapseTwo" class="collapse {% if request.session.collapse == 2 %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordion">
-                    <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Abiertas</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cerradas</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    <table class="table table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">Fecha creación</th>
-                                            <th scope="col">Tutor Asignado</th>
-                                            <th scope="col">Tipo</th>
-                                            {#                                <th scope="col">Descripción</th>#}
-                                            <th scope="col">Materia</th>
-                                            <th scope="col">Estado</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for int in intervenciones|dictsort:"estado" %}
-                                            {% if int.estado == 'Abierta' %}
-                                                <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                                    data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                                    <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
-                                                    <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
-                                                    <td style="border-width: thick" >{{ int.tipo }}</td>
-                                                    {#                                        <td>{{ int.descripcion }}</td>#}
-                                                    <td style="border-width: thick">{{ int.materia.nombre }}</td>
-                                                    <td style="border-width: thick">{{ int.estado }}</td>
-                                                </tr>
-                                                <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                                    data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                                    <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
-                                                </tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                                    <table class="table table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th scope="col">Fecha creación</th>
-                                            <th scope="col">Tutor Asignado</th>
-                                            <th scope="col">Tipo</th>
-                                            {#                                <th scope="col">Descripción</th>#}
-                                            <th scope="col">Materia</th>
-                                            <th scope="col">Estado</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for int in intervenciones|dictsort:"estado" %}
-                                            {% if int.estado == 'Cerrada' %}
-                                                <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                                    data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                                    <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
-                                                    <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
-                                                    <td style="border-width: thick" >{{ int.tipo }}</td>
-                                                    {#                                        <td>{{ int.descripcion }}</td>#}
-                                                    <td style="border-width: thick">{{ int.materia.nombre }}</td>
-                                                    <td style="border-width: thick">{{ int.estado }}</td>
-                                                </tr>
-                                                <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                                    data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                                    <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
-                                                </tr>
-                                            {% endif %}
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-
-                            {#                            {% for int in intervenciones %}#}
-                            {#                                <li class="list-group-item">Tipo: {{ int.tipo }} || Descripción: {{ int.descripcion }}  || {{ int.estado }}  <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li>#}
-                            {#                            {% endfor %}#}
-                            {#                            <li class="list-group-item">#}
-                            {#                                <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>#}
-                            {#                            </li>#}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header" id="headingThree" onclick="$.get('{% url "menu:update-session" collapse=3 %}');">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
-                            <h3><span class="pull-left">Materias de {{ alumno_inst.nombre }}</span></h3>
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapseThree" class="collapse {% if request.session.collapse == 3 %}show{% endif %}" aria-labelledby="headingThree" data-parent="#accordion">
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
+            <h5 class="mb-0">
+                <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <h3><span class="pull-left">Intervenciones de {{ alumno_inst.nombre }}</span></h3>
+                </button>
+            </h5>
+        </div>
+        <div id="collapseTwo" class="collapse {% if request.session.collapse == 2 %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cursando</a>
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Abiertas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Regularizadas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Aprobadas</a>
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cerradas</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
@@ -193,33 +80,140 @@
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
+                                    <th scope="col">Fecha creación</th>
+                                    <th scope="col">Tutor Asignado</th>
+                                    <th scope="col">Tipo</th>
+                                    {#                                <th scope="col">Descripción</th>#}
                                     <th scope="col">Materia</th>
-                                    <th scope="col">Nota 1</th>
-                                    <th scope="col">Nota 2</th>
-                                    <th scope="col">Nota final</th>
+                                    <th scope="col">Estado</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for matAlu in materiasAlumno %}
-                                    {% for mat in materias %}
-                                        {% if mat.materia == matAlu.materia %}
-                                            <tr>
-                                                <th scope="row">{{ mat.nombre }}</th>
-                                                <td>{{ matAlu.nota1 }}</td>
-                                                <td>{{ matAlu.nota2 }}</td>
-                                                <td>{{ matAlu.notafinal }}</td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
+                                {% for int in intervenciones|dictsort:"estado" %}
+                                    {% if int.estado == 'Abierta' %}
+                                        <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                            data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                            <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
+                                            <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
+                                            <td style="border-width: thick" >{{ int.tipo }}</td>
+                                            {#                                        <td>{{ int.descripcion }}</td>#}
+                                            <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                            <td style="border-width: thick">{{ int.estado }}</td>
+                                        </tr>
+                                        <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                            data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                            <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                        </tr>
+                                    {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                        <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Fecha creación</th>
+                                    <th scope="col">Tutor Asignado</th>
+                                    <th scope="col">Tipo</th>
+                                    {#                                <th scope="col">Descripción</th>#}
+                                    <th scope="col">Materia</th>
+                                    <th scope="col">Estado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for int in intervenciones|dictsort:"estado" %}
+                                    {% if int.estado == 'Cerrada' %}
+                                        <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                            data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                            <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
+                                            <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
+                                            <td style="border-width: thick" >{{ int.tipo }}</td>
+                                            {#                                        <td>{{ int.descripcion }}</td>#}
+                                            <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                            <td style="border-width: thick">{{ int.estado }}</td>
+                                        </tr>
+                                        <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                            data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                            <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+
+                    {#                            {% for int in intervenciones %}#}
+                    {#                                <li class="list-group-item">Tipo: {{ int.tipo }} || Descripción: {{ int.descripcion }}  || {{ int.estado }}  <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li>#}
+                    {#                            {% endfor %}#}
+                    {#                            <li class="list-group-item">#}
+                    {#                                <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>#}
+                    {#                            </li>#}
+                </ul>
             </div>
-{#        </div>#}
-    {% endif %}
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header" id="headingThree" onclick="$.get('{% url "menu:update-session" collapse=3 %}');">
+            <h5 class="mb-0">
+                <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
+                    <h3><span class="pull-left">Materias de {{ alumno_inst.nombre }}</span></h3>
+                </button>
+            </h5>
+        </div>
+        <div id="collapseThree" class="collapse {% if request.session.collapse == 3 %}show{% endif %}" aria-labelledby="headingThree" data-parent="#accordion">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cursando</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Regularizadas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Aprobadas</a>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            <th scope="col">Nota 1</th>
+                            <th scope="col">Nota 2</th>
+                            <th scope="col">Nota final</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for matAlu in materiasAlumno %}
+                            {% for mat in materias %}
+                                {% if mat.materia == matAlu.materia %}
+                                    <tr>
+                                        <th scope="row">{{ mat.nombre }}</th>
+                                        <td>{{ matAlu.nota1 }}</td>
+                                        <td>{{ matAlu.nota2 }}</td>
+                                        <td>{{ matAlu.notafinal }}</td>
+                                    </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+            </div>
+        </div>
+    </div>
+    {#        </div>#}
+{% endif %}
 </div>

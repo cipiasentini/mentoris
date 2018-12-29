@@ -7,14 +7,17 @@
         <div class="row">
             <div class="col">
                 <div class="card-body">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">Tarea: {{tarea.titulo }}</li>
-                            <li class="list-group-item">Descripción: {{ tarea.descripcion}}</li>
-                            <li class="list-group-item">Fecha programada: {{ tarea.fecha_alta }}</li>
-                            <li class="list-group-item">Estado: {{ tarea.estado }}</li>
-                            <li class="list-group-item"><a class="btn btn-primary" style="margin-top: 10px; float: right;" href="">Editar tarea</a></li>
-                        </ul>
-                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Tarea: {{tarea.titulo }}</li>
+                        <li class="list-group-item">Descripción: {{ tarea.descripcion}}</li>
+                        <li class="list-group-item">Fecha programada: {{ tarea.fecha_alta }}</li>
+                        <li class="list-group-item">Estado: {{ tarea.estado }}</li>
+                        <li class="list-group-item">
+                            <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:editar-tarea' id=tarea.id %}">Editar tarea</a>
+                            <button class="btn btn-secondary" style="margin-top: 10px; margin-right: 10px; float: right;" onClick="javascript:history.go(-1);">Atras</button>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

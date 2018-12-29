@@ -3,17 +3,11 @@
 {% block content %}
 
     {% block warning %}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    {% if not_found %}
-                        <div id="separador" class="alert alert-danger" role="alert">
-                            Error con novedad
-                        </div>
-                    {% endif %}
-                </div>
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Error con novedad
             </div>
-        </div>
+        {% endif %}
     {% endblock %}
 
     <script>
@@ -105,7 +99,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                                    <a class='btn btn-primary' href='{% url 'menu:eliminar-novedad' id=nov.id %}'>Eliminar novedad</a>
+                                                    <a class='btn btn-danger' href='{% url 'menu:eliminar-novedad' id=nov.id %}'>Eliminar novedad</a>
                                                 </div>
                                             </div>
                                         </div>

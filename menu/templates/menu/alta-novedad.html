@@ -4,25 +4,19 @@
 
 {% block content %}
     {% block warning %}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    {% if not_found %}
-                        <div id="separador" class="alert alert-danger" role="alert">
-                            Error al agregar novedad.
-                        </div>
-                    {% endif %}
-                    {% if success %}
-                        <div id="separador" class="alert alert-success" role="alert">
-                            La novedad {{ novedad.titulo }} fue agregada correctamente.
-                        </div>
-                    {% endif %}
-                </div>
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Error al agregar novedad.
             </div>
-        </div>
+        {% endif %}
+        {% if success %}
+            <div id="separador" class="alert alert-success" role="alert">
+                La novedad {{ novedad.titulo }} fue agregada correctamente.
+            </div>
+        {% endif %}
     {% endblock %}
     <div class="container">
-    <h2>Nueva novedad</h2>
+        <h2>Nueva novedad</h2>
         <div class="row">
             <div class="col">
                 <form method="post">

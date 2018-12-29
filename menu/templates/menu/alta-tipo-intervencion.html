@@ -4,31 +4,25 @@
 
 {% block content %}
     {% block warning %}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    {% if not_found %}
-                        <div id="separador" class="alert alert-danger" role="alert">
-                            Tipo de intervencion invalida o existente.
-                        </div>
-                    {% endif %}
-                    {% if success %}
-                        <div id="separador" class="alert alert-success" role="alert">
-                            El tipo de intervencion {{ tipo_intervencion.descripcion }} fue agregada correctamente.
-                        </div>
-                    {% endif %}
-                </div>
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Tipo de intervencion invalida o existente.
             </div>
-        </div>
+        {% endif %}
+        {% if success %}
+            <div id="separador" class="alert alert-success" role="alert">
+                El tipo de intervencion {{ tipo_intervencion.descripcion }} fue agregada correctamente.
+            </div>
+        {% endif %}
     {% endblock %}
     <div class="container">
-    <h2>Agregar nuevo tipo de Intervención</h2>
+        <h2>Agregar nuevo tipo de Intervención</h2>
         <div class="row">
             <div class="col">
                 <form method="post">
                     {% csrf_token %}
                     {% include 'common/form_template.html' with form=form %}
-                    <button type="submit" class="btn btn-primary">Añadir</button>
+                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
                 </form>
             </div>
         </div>

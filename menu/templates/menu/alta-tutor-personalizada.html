@@ -3,37 +3,31 @@
 {% block title %}<title>Tutorías: Agregar tutor</title>{% endblock %}
 
 {% block content %}
-        {% block warning %}
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        {% if not_found %}
-                            <div id="separador" class="alert alert-danger" role="alert">
-                                No existe ningún registro en el SYSACAD para el DNI: {{ dni }}. Por favor cargue los datos del tutor manualmente.
-                            </div>
-                        {% endif %}
-                        {% if success %}
-                        <div class="alert alert-success" role="alert">
-                            El tutor {{ tutor.nombre }} fue agregado correctamente.
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
+    {% block warning %}
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                No existe ningún registro en el SYSACAD para el DNI: {{ dni }}. Por favor cargue los datos del tutor manualmente.
             </div>
-        {% endblock %}
-{#    {% if mal_form %}#}
-{#        {% block warning %}#}
-{#            <div class="container">#}
-{#                <div class="row">#}
-{#                    <div class="col">#}
-{#                        <div id="separador" class="alert alert-danger" role="alert">#}
-{#                            Verifique la validez de los datos ingresados.#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{#        {% endblock %}#}
-{#    {% endif %}#}
+        {% endif %}
+        {% if success %}
+            <div class="alert alert-success" role="alert">
+                El tutor {{ tutor.nombre }} fue agregado correctamente.
+            </div>
+        {% endif %}
+    {% endblock %}
+    {#    {% if mal_form %}#}
+    {#        {% block warning %}#}
+    {#            <div class="container">#}
+    {#                <div class="row">#}
+    {#                    <div class="col">#}
+    {#                        <div id="separador" class="alert alert-danger" role="alert">#}
+    {#                            Verifique la validez de los datos ingresados.#}
+    {#                        </div>#}
+    {#                    </div>#}
+    {#                </div>#}
+    {#            </div>#}
+    {#        {% endblock %}#}
+    {#    {% endif %}#}
     <div class="container">
         <div class="row">
             <div class="col">

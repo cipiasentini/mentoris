@@ -13,7 +13,6 @@
 {#    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">#}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-
     <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
 
     {#  Para las busquedas seleccionables  #}
@@ -25,7 +24,7 @@
 </head>
 
 <body class="bg-dark">
-<div class="container-fluid px-0">
+<div class="container-fluid px-0" style="min-width: 630px">
     {% block full-navbar %}
         <header>
             <div class="d-none d-lg-block p-3 bg-light border-top border-dark">
@@ -58,7 +57,6 @@
                                     <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Buscar alumno</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'menu:alta-alumno' %}">Nuevo alumno</a>
-                                    <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Editar alumno</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
@@ -66,7 +64,7 @@
                                     Intervención
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{% url 'menu:intervenciones' %}">Listar intervenciones</a>
+                                    <a class="dropdown-item" href="{% url 'menu:intervenciones' %}">Panel de gestión de intervenciones</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'menu:alta-intervencion' %}">Nueva intervención</a>
 {#                                    <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Editar intervención</a>#}
@@ -99,7 +97,9 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="">Obtener ranking de consultas por tema</a>
+                                        <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="">Obtener resumen de rendimiento por colegio</a>
+                                        <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="">Obtener resumen de categorización de alumnos</a>
                                     </div>
                                 </li>
@@ -109,7 +109,8 @@
                                     Grupos
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="">Crear grupo</a>
+                                    <a class="dropdown-item" href="">Nuevo grupo</a>
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="">Asignar tutor a grupo</a>
                                 </div>
                             </li>
@@ -122,8 +123,7 @@
                                     {% now "Y" as c_year %}
                                     {% now "m" as c_month %}
                                     {% now "d" as c_day %}
-{#                                    {% now "SHORT_DATE_FORMAT" as cn %}#}
-{#                                     <a class="dropdown-item" href="{% url 'menu:agenda-tareas' cn %}">Agenda de tareas</a>#}
+                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'menu:agenda-tareas' year=c_year month=c_month day=c_day %}">Agenda de tareas</a>
                                 </div>
                             </li>
@@ -138,7 +138,11 @@
                                         Administrador
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="{% url 'menu:panel-novedades' %}">Panel de novedades</a>
+                                        <a class="dropdown-item" href="{% url 'menu:alta-novedad' %}">Nueva novedad</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'menu:panel-novedades' %}">Panel de gestión de novedades</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'menu:estadisticas' %}">Estadisticas</a>
                                     </div>
                                 </li>
                             {% endif %}

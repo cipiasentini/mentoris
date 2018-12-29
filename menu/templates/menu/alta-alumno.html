@@ -4,32 +4,26 @@
 
 {% block content %}
     {% block warning %}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    {% if not_found %}
-                        <div id="separador" class="alert alert-danger" role="alert">
-                            No existe ningun alumno con ese legajo o nombre.
-                        </div>
-                    {% endif %}
-                    {% if success %}
-                        <div id="separador" class="alert alert-success" role="alert">
-                            El alumno {{ alumno.nombre }} fue agregado correctamente.
-                        </div>
-                    {% endif %}
-                </div>
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                No existe ningun alumno con ese legajo o nombre.
             </div>
-        </div>
+        {% endif %}
+        {% if success %}
+            <div id="separador" class="alert alert-success" role="alert">
+                El alumno {{ alumno.nombre }} fue agregado correctamente.
+            </div>
+        {% endif %}
     {% endblock %}
 
     <div class="container">
-    <h2>Nuevo Alumno</h2>
+        <h2>Nuevo Alumno</h2>
         <div class="row">
             <div class="col">
                 <form method="post">
                     {% csrf_token %}
                     {% include 'common/form_template.html' with form=form %}
-                    <button type="submit" class="btn btn-primary">Añadir</button>
+                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
                 </form>
             </div>
         </div>

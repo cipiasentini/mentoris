@@ -1,28 +1,27 @@
 {% extends "menu/index.html" %}
 
-{% block title %}<title>Tutorías: Editar novedad del panel de novedades</title>{% endblock %}
+{% block title %}<title>Tutorias: Editar tarea</title>{% endblock %}
 
 {% block content %}
     {% block warning %}
         {% if not_found %}
             <div id="separador" class="alert alert-danger" role="alert">
-                Tipo de intervencion invalida o existente.
+                Error al editar la tarea.
             </div>
         {% endif %}
         {% if success %}
             <div id="separador" class="alert alert-success" role="alert">
-                El tipo de intervencion {{ tipo_intervencion.descripcion }} fue agregada correctamente.
+                La tarea {{ tarea.titulo }} fue editada correctamente.
             </div>
         {% endif %}
     {% endblock %}
     <div class="container">
-        <h2>Agregar nuevo tipo de Intervención</h2>
         <div class="row">
             <div class="col">
                 <form method="post">
                     {% csrf_token %}
                     {% include 'common/form_template.html' with form=form %}
-                    <button type="submit" class="btn btn-primary">Editar</button>
+                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Aceptar</button>
                 </form>
             </div>
         </div>

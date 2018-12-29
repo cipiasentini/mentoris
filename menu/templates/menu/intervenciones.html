@@ -5,7 +5,7 @@
 {% block content %}
     <script>
         $(function () {
-          $('[data-toggle="popover"]').popover()
+            $('[data-toggle="popover"]').popover()
         })
     </script>
 
@@ -28,17 +28,17 @@
                     <ul class="list-group list-group-flush">
                         <table class="table table-hover">
                             <thead>
-                                <tr>
-                                    <th scope="col">Fecha creación</th>
-                                    <th scope="col">Alumno</th>
-                                    {% if user.is_staff %}
-                                        <th scope="col">Tutor Asignado</th>
-                                    {% endif %}
-                                    <th scope="col">Tipo</th>
-    {#                                <th scope="col">Descripción</th>#}
-                                    <th scope="col">Materia</th>
-{#                                    <th scope="col">Estado</th>#}
-                                </tr>
+                            <tr>
+                                <th scope="col">Fecha creación</th>
+                                <th scope="col">Alumno</th>
+                                {% if user.is_staff %}
+                                    <th scope="col">Tutor Asignado</th>
+                                {% endif %}
+                                <th scope="col">Tipo</th>
+                                {#                                <th scope="col">Descripción</th>#}
+                                <th scope="col">Materia</th>
+                                {#                                    <th scope="col">Estado</th>#}
+                            </tr>
                             </thead>
                             <tbody>
                             {% for int in intervenciones|dictsortreversed:"fecha_alta" %}
@@ -53,9 +53,9 @@
                                             <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
                                         {% endif %}
                                         <td style="border-width: thick" >{{ int.tipo }}</td>
-{#                                        <td>{{ int.descripcion }}</td>#}
+                                        {#                                        <td>{{ int.descripcion }}</td>#}
                                         <td style="border-width: thick">{{ int.materia.nombre }}</td>
-{#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
+                                        {#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
                                     </tr>
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
                                         data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
@@ -76,6 +76,27 @@
                 </div>
             </div>
         </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Eliminar intervención</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        ¿Está seguro que desa eliminar la intervención?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <a class='btn btn-danger' href='{% url 'menu:eliminar-intervencion' id=intervenciones.id %}'>Eliminar intervención</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
         <div class="card">
             <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
                 <h5 class="mb-0">
@@ -89,17 +110,17 @@
                     <ul class="list-group list-group-flush">
                         <table class="table table-hover">
                             <thead>
-                                <tr>
-                                    <th scope="col">Fecha creación</th>
-                                    <th scope="col">Alumno</th>
-                                    {% if user.is_staff %}
-                                        <th scope="col">Tutor Asignado</th>
-                                    {% endif %}
-                                    <th scope="col">Tipo</th>
-    {#                                <th scope="col">Descripción</th>#}
-                                    <th scope="col">Materia</th>
-{#                                    <th scope="col">Estado</th>#}
-                                </tr>
+                            <tr>
+                                <th scope="col">Fecha creación</th>
+                                <th scope="col">Alumno</th>
+                                {% if user.is_staff %}
+                                    <th scope="col">Tutor Asignado</th>
+                                {% endif %}
+                                <th scope="col">Tipo</th>
+                                {#                                <th scope="col">Descripción</th>#}
+                                <th scope="col">Materia</th>
+                                {#                                    <th scope="col">Estado</th>#}
+                            </tr>
                             </thead>
                             <tbody>
                             {% for int in intervenciones|dictsortreversed:"fecha_alta" %}
@@ -114,9 +135,9 @@
                                             <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
                                         {% endif %}
                                         <td style="border-width: thick" >{{ int.tipo }}</td>
-{#                                        <td>{{ int.descripcion }}</td>#}
+                                        {#                                        <td>{{ int.descripcion }}</td>#}
                                         <td style="border-width: thick">{{ int.materia.nombre }}</td>
-{#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
+                                        {#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
                                     </tr>
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
                                         data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
@@ -132,7 +153,7 @@
                             {% endfor %}
                             </tbody>
                         </table>
-{#                        <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>#}
+                        {#                        <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>#}
                     </ul>
                 </div>
             </div>

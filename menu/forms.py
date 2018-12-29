@@ -107,14 +107,15 @@ class agregarTutorPersonalizadoForm(forms.Form):
     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
 
 class buscarTutorForm(forms.Form):
-    dni = forms.CharField(help_text="Ingrese el DNI del tutor.")
-    def clean_dni(self):
-        data = self.cleaned_data['dni']
+    id = forms.CharField(help_text="Ingrese el legajo o dni del tutor.")
+
+    def clean_id(self):
+        data = self.cleaned_data['id']
         # Check dni numerico
         if data.isnumeric():
             return data
         else:
-            raise ValidationError('Por favor ingrese un DNI valido')
+            raise ValidationError('Por favor ingrese un DNI o Legajo valido')
 
 class editarTutorForm(ModelForm):
     class Meta:
@@ -132,6 +133,9 @@ class editarAlumnoForm(ModelForm):
     class Meta:
         model = Alumno
         exclude = ['fecha_desvinculacion']
+        widgets = {
+            'situacion_riesgo': Select2Widget(choices=(('Si', 'Si'), ('No', 'No')))
+        }
 
 class agregarNovedadForm(ModelForm):
     class Meta:
@@ -170,3 +174,37 @@ class agregarTareaForm(ModelForm):
         if not user.is_staff:
             del self.fields['tutor_asignado']
 
+
+class editarTareaForm(ModelForm):
+    class Meta:
+        model = Tarea
+        exclude = ['fecha_baja']
+        widgets = {
+            'tutor_asignado': Select2Widget,
+            'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
+        }
+
+class editarIntervencionForm(ModelForm):
+    class Meta:
+        model = Intervencion
+        exclude = ['']
+        widgets = {
+            'tipo': Select2Widget(choices=Tipo.objects.all()),
+            'estado': Select2Widget(choices=(('Abierta', 'Abierta'), ('Cerrada', 'Cerrada'))),
+            'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
+            'materia': Select2Widget(choices=Materia.objects.all()),
+            'tutor_asignado': Select2Widget(choices=Tutor.objects.all()),
+            'alumno': Select2Widget(choices=Alumno.objects.all()),
+            'fecha_baja': DatePickerInput(format='%Y-%m-%d')
+
+        }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(editarIntervencionForm, self).__init__(*args, **kwargs)
+        if not user.is_staff:
+            del self.fields['tutor_asignado']
+            del self.fields['fecha_baja']
+            del self.fields['alumno']
+            del self.fields['materia']
+            del self.fields['fecha_alta']
