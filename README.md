@@ -22,6 +22,15 @@ Entonces posible solucion: hay que ver como hacer para que al setear "fecha_desv
 Done:
 4. Pantalla de "buscar/editar tutor" agregar funcionalidad a editar y dar de baja tutor
 
+
+__
+
+BUGSASOS A ARREGLAR SI O SI:
+- Los modals hacen que se elimine la ultima cosa cargada (novedades, intervenciones), no la seleccionada. VER COMO SOLUCIONAR ESO.
+
+
+__
+
 SI SOBRA TIEMPO:
 -  El calendario, ver como limitar los elementos, que los tutores solo vean lo suyo. Y Bianca todo.
 

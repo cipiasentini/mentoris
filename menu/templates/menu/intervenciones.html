@@ -6,7 +6,7 @@
     <script>
         $(function () {
             $('[data-toggle="popover"]').popover()
-        })
+        });
     </script>
 
     {% if user.is_staff %}
@@ -44,9 +44,8 @@
                             {% for int in intervenciones|dictsortreversed:"fecha_alta" %}
                                 {% if int.estado == 'Abierta' %}
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                        data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                        data-html="true" data-content="<a class='btn btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a></br></br>
+                                            <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>">
                                         <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
                                         <td style="border-width: thick">{{ int.alumno.nombre }}</td>
                                         {% if user.is_staff %}
@@ -58,9 +57,9 @@
                                         {#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
                                     </tr>
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                        data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                        data-html="true" data-content="<a class='btn btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a></br></br>
+                                            <a class='btn btn-primary'
+                                            href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>">
                                         {% if user.is_staff %}
                                             <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
                                         {% else %}
@@ -76,27 +75,6 @@
                 </div>
             </div>
         </div>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Eliminar intervención</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        ¿Está seguro que desa eliminar la intervención?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                        <a class='btn btn-danger' href='{% url 'menu:eliminar-intervencion' id=intervenciones.id %}'>Eliminar intervención</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Modal -->
         <div class="card">
             <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
                 <h5 class="mb-0">
@@ -126,9 +104,10 @@
                             {% for int in intervenciones|dictsortreversed:"fecha_alta" %}
                                 {% if int.estado == 'Cerrada' %}
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                        data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                        data-html="true" data-content="<a class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a></br></br>
+                                            <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>{% if user.is_staff %}</br></br>
+                                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModalCenter{{ int.id }}'>
+                                            Eliminar Intervención </button>{% endif %}">
                                         <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
                                         <td style="border-width: thick">{{ int.alumno.nombre }}</td>
                                         {% if user.is_staff %}
@@ -140,15 +119,37 @@
                                         {#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
                                     </tr>
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                        data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                        data-html="true" data-content="<a class='btn btn-primary' href='{% url 'menu:abrir-intervencion' id=int.id %}'>Abrir Intervencion</a></br></br>
+                                            <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a></br></br>
+                                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModalCenter{{ int.id }}'>
+                                            Eliminar Intervención </button>">
                                         {% if user.is_staff %}
                                             <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
                                         {% else %}
                                             <td colspan="3"><b>Descripción:</b> {{ int.descripcion }}</td>
                                         {% endif %}
                                     </tr>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModalCenter{{ int.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLongTitle">Eliminar intervención {{ int.fecha_alta }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    ¿Está seguro que desa eliminar la intervención?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                    <a class='btn btn-danger' href='{% url 'menu:eliminar-intervencion' id=int.id %}'>Eliminar intervención</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal -->
                                 {% endif %}
                             {% endfor %}
                             </tbody>

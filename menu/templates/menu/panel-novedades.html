@@ -85,7 +85,7 @@
                             {% for nov in novedades %}
                                 {% if nov.estado == 'Cerrada' %}
                                     <!-- Modal -->
-                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal fade" id="exampleModalCenter{{ nov.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -109,7 +109,7 @@
                                             href='{% url 'menu:abrir-novedad' id=nov.id %}'>Abrir novedad</a></br></br>
                                             <a class='btn btn-primary'
                                             href='{% url 'menu:editar-novedad' id=nov.id %}'>Editar novedad</a></br></br>
-                                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModalCenter'>
+                                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModalCenter{{ nov.id }}'>
                                             Eliminar novedad
                                             </button>">
                                         <td style="border-width: thick">{{ nov.fecha_alta }}</td>
