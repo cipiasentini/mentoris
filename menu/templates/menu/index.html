@@ -64,9 +64,8 @@
                                     Intervención
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="{% url 'menu:intervenciones' %}">Panel de gestión de intervenciones</a>
-                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'menu:alta-intervencion' %}">Nueva intervención</a>
+                                    <a class="dropdown-item" href="{% url 'menu:intervenciones' %}">Panel de gestión de intervenciones</a>
 {#                                    <a class="dropdown-item" href="{% url 'menu:buscar-alumno' %}">Editar intervención</a>#}
                                     {% if user.is_staff %}
                                         <div class="dropdown-divider"></div>
@@ -139,10 +138,11 @@
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <a class="dropdown-item" href="{% url 'menu:alta-novedad' %}">Nueva novedad</a>
-                                        <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{% url 'menu:panel-novedades' %}">Panel de gestión de novedades</a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{% url 'menu:estadisticas' %}">Estadisticas</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'menu:alta-tipo-intervencion' %}">Nuevo tipo de intervención</a>
                                     </div>
                                 </li>
                             {% endif %}
