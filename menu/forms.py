@@ -123,7 +123,7 @@ class buscarTutorForm(forms.Form):
 class editarTutorForm(ModelForm):
     class Meta:
         model = Tutor
-        exclude = ['']
+        exclude = ['fecha_desvinculacion', 'fecha_alta']
         widgets = {
             'tipo': Select2Widget(choices=(('Motivacional', 'Motivacional'),
                                            ('Academico', 'Académico'),

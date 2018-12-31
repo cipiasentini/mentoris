@@ -33,34 +33,6 @@ def editarAlumno(request, dni):
             form = editarAlumnoForm(instance=alumno)
     return render(request, 'menu/editar-alumno.html', {'form': form, 'nbar': 'alumno'})
 
-@staff_member_required
-def editarTutor(request, legajo):
-    try:
-        tutor = Tutor.objects.get(legajo=legajo)
-    except:
-        return render(request, 'menu/editar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
-    form = editarTutorForm(instance=tutor)
-    if request.method == 'POST':
-        form = editarTutorForm(request.POST, instance=tutor)
-        if form.is_valid():
-            form.save()
-            return render(request, 'menu/editar-tutor.html', {'form': form, 'success': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
-        else:
-            form = editarTutorForm(instance=tutor)
-    return render(request, 'menu/editar-tutor.html', {'form': form, 'nbar': 'tutor'})
-
-@staff_member_required
-def bajaTutor(request, legajo):
-    try:
-        tutor = Tutor.objects.get(legajo=legajo)
-    except:
-        return render(request, 'menu/buscar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
-    tutor.fecha_desvinculacion = datetime.today()
-    tutor.save()
-    # return redirect('menu:buscar-tutor')
-    # form = buscarTutorForm()
-    return render(request, 'menu/buscar-tutor.html', {'baja': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
-
 @login_required
 def buscarAlumnoId(request, id):
     form = buscarAlumnoForm()
@@ -251,6 +223,78 @@ def agregarTutorPersonalizado(request):
         form = agregarTutorPersonalizadoForm()
         return render(request, 'menu/alta-tutor-personalizada.html', {'form': form, 'nbar': 'tutores'})
 
+@staff_member_required
+def editarTutor(request, legajo):
+    try:
+        tutor = Tutor.objects.get(legajo=legajo)
+    except:
+        return render(request, 'menu/editar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
+    form = editarTutorForm(instance=tutor)
+    if request.method == 'POST':
+        form = editarTutorForm(request.POST, instance=tutor)
+        if form.is_valid():
+            form.save()
+            return render(request, 'menu/editar-tutor.html', {'form': form, 'success': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
+        else:
+            form = editarTutorForm(instance=tutor)
+    return render(request, 'menu/editar-tutor.html', {'form': form, 'nbar': 'tutor'})
+
+@staff_member_required
+def bajaTutor(request, legajo):
+    try:
+        tutor = Tutor.objects.get(legajo=legajo)
+    except:
+        return render(request, 'menu/buscar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
+    tutor.fecha_desvinculacion = datetime.today()
+    tutor.save()
+    u = User.objects.get(username=tutor.dni)
+    u.set_password('passwordOf@tutorWhichIsNoLongerAvailable')
+    u.save()
+    # return redirect('menu:buscar-tutor')
+    # form = buscarTutorForm()
+    return render(request, 'menu/buscar-tutor.html', {'baja': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
+
+@staff_member_required
+def altaTutor(request, legajo):
+    try:
+        tutor = Tutor.objects.get(legajo=legajo)
+    except:
+        return render(request, 'menu/buscar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
+    tutor.fecha_alta = datetime.today()
+    tutor.fecha_desvinculacion = None
+    tutor.save()
+    u = User.objects.get(username=tutor.dni)
+    contrasena = 'dni' + str(tutor.dni)[0:5]
+    u.set_password(contrasena)
+    u.save()
+    # return redirect('menu:buscar-tutor')
+    # form = buscarTutorForm()
+    return render(request, 'menu/buscar-tutor.html', {'alta': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
+
+@staff_member_required
+def buscarTutor(request):
+    if request.method == 'POST':
+        form = buscarTutorForm(request.POST)
+        if form.is_valid():
+            id = form.cleaned_data['id']
+            if (int(id) < 999999):
+                try:
+                    tutor = Tutor.objects.get(legajo=id)
+                except:
+                    return render(request, 'menu/buscar-tutor.html',
+                                  {'form': form, 'not_found': True, 'nbar': 'tutores'})
+            else:
+                try:
+                    tutor = Tutor.objects.get(dni=id)
+                except:
+                    return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
+            return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'nbar': 'tutores'})
+        form = buscarTutorForm()
+        return render(request, 'menu/buscar-tutor.html', {'form': form, 'bad': True, 'nbar': 'tutores'})
+    else:
+        form = buscarTutorForm()
+        return render(request, 'menu/buscar-tutor.html', {'form': form, 'nbar': 'tutores'})
+
 @login_required
 def agregarIntervencion(request):
     if request.method == 'POST':
@@ -321,30 +365,6 @@ def agregarIntervencionTipo(request):
         form = agregarIntervencionTipoForm()
         return render(request, 'menu/alta-tipo-intervencion.html', {'form': form, 'nbar': 'intervencion'})
 
-
-@staff_member_required
-def buscarTutor(request):
-    if request.method == 'POST':
-        form = buscarTutorForm(request.POST)
-        if form.is_valid():
-            id = form.cleaned_data['id']
-            if (int(id) < 999999):
-                try:
-                    tutor = Tutor.objects.get(legajo=id)
-                except:
-                    return render(request, 'menu/buscar-tutor.html',
-                                  {'form': form, 'not_found': True, 'nbar': 'tutores'})
-            else:
-                try:
-                    tutor = Tutor.objects.get(dni=id)
-                except:
-                    return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
-            return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'nbar': 'tutores'})
-        form = buscarTutorForm()
-        return render(request, 'menu/buscar-tutor.html', {'form': form,'bad': True, 'nbar': 'tutores'})
-    else:
-        form = buscarTutorForm()
-        return render(request, 'menu/buscar-tutor.html', {'form': form, 'nbar': 'tutores'})
 
 @login_required
 def listarIntervenciones(request):

@@ -15,6 +15,7 @@ urlpatterns = [
     path('buscar/tutor', views.buscarTutor, name = 'buscar-tutor'),
     path('editar/tutor/<int:legajo>/', views.editarTutor, name='editar-tutor'),
     path('editar/tutor/baja/<int:legajo>/', views.bajaTutor, name='baja-tutor'),
+    path('editar/tutor/alta/<int:legajo>/', views.altaTutor, name='alta-tutor'),
     path('nueva/intervencion', views.agregarIntervencion, name = 'alta-intervencion'),
     path('nueva/intervencion/tipo', views.agregarIntervencionTipo, name = 'alta-tipo-intervencion'),
     path('editar/intervencion/<int:id>/', views.editarIntervencion, name='editar-intervencion'),
