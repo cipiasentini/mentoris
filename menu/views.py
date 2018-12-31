@@ -624,7 +624,7 @@ def editarTarea(request, id):
         form = editarTareaForm(request.POST, instance=tarea)
         if form.is_valid():
             form.save()
-            return render(request, 'menu/editar-tarea.html', {'form': form, 'success': True, 'tarea': tarea, 'nbar': 'tareas'})
+            return render(request, 'menu/tarea.html', {'form': form, 'success': True, 'tarea': tarea, 'nbar': 'tareas'})
         else:
             form = editarTareaForm(instance=tarea)
     return render(request, 'menu/editar-tarea.html', {'form': form, 'nbar': 'tareas'})

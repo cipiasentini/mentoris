@@ -3,6 +3,18 @@
 {% block title %}<title>Tutorías: Tarea</title>{% endblock %}
 
 {% block content %}
+    {% block warning %}
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Error al editar la tarea.
+            </div>
+        {% endif %}
+        {% if success %}
+            <div id="separador" class="alert alert-success" role="alert">
+                La tarea {{ tarea.titulo }} fue editada correctamente.
+            </div>
+        {% endif %}
+    {% endblock %}
     <div class="container">
         <div class="row">
             <div class="col">

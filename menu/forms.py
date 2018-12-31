@@ -85,7 +85,9 @@ class agregarIntervencionTipoForm(forms.Form):
 class agregarTutorForm(forms.Form):
     TIPOS = (
         ('Motivacional', 'Motivacional'),
-        ('Académico', 'Academico')
+        ('Academico', 'Académico'),
+        ('Psicologo', 'Psicologo'),
+        ('Otro', 'Otro')
     )
     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
     tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
@@ -96,8 +98,9 @@ class agregarTutorForm(forms.Form):
 class agregarTutorPersonalizadoForm(forms.Form):
     TIPOS = (
         ('Motivacional', 'Motivacional'),
-        ('Académico', 'Academico'),
-        ('Psicologo', 'Psicologo')
+        ('Academico', 'Académico'),
+        ('Psicologo', 'Psicologo'),
+        ('Otro', 'Otro')
     )
     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
     nombre = forms.CharField(help_text='Ingrese el nombre y apellido completo del nuevo tutor.')
@@ -121,6 +124,14 @@ class editarTutorForm(ModelForm):
     class Meta:
         model = Tutor
         exclude = ['']
+        widgets = {
+            'tipo': Select2Widget(choices=(('Motivacional', 'Motivacional'),
+                                           ('Academico', 'Académico'),
+                                           ('Psicologo', 'Psicologo'),
+                                           ('Otro', 'Otro'))),
+            'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
+            'fecha_desvinculacion': DatePickerInput(format='%Y-%m-%d')
+        }
 
 # class agregarTutorForm(forms.Form):
 #     dni = forms.ModelChoiceField(queryset=Persona.objects.none())
@@ -134,7 +145,8 @@ class editarAlumnoForm(ModelForm):
         model = Alumno
         exclude = ['fecha_desvinculacion']
         widgets = {
-            'situacion_riesgo': Select2Widget(choices=(('Si', 'Si'), ('No', 'No')))
+            'situacion_riesgo': Select2Widget(choices=(('Si', 'Si'), ('No', 'No'))),
+            'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
         }
 
 class agregarNovedadForm(ModelForm):

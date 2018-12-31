@@ -4,6 +4,11 @@
             No existe ningun alumno con ese legajo o nombre.
         </div>
     {% endif %}
+    {% if success %}
+        <div id="separador" class="alert alert-success" role="alert">
+            El alumno {{ alumno_inst.nombre }} fue editado correctamente.
+        </div>
+    {% endif %}
 {% endblock %}
 
 <script>
