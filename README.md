@@ -4,6 +4,12 @@
 - Monzón, German;
 - Piasentini, Carlos Ivan;
 
+# Preguntar a Bianca:
+1. Si le gustaria mas buscar el tutor por nombre que por DNI/Legajo (seguramente si)?
+2. Cuando alguien esta en "situacion de riesgo"?
+
+---
+
 ## To-Do:
 ##### Funcionalidades
 1. Management completo de grupos
@@ -29,7 +35,3 @@ Entonces posible solucion: hay que ver como hacer para que al setear "fecha_desv
 
 ## SI SOBRA TIEMPO:
 -  El calendario, ver como limitar los elementos, que los tutores solo vean lo suyo. Y Bianca todo.
-
-# Preguntar a Bianca:
-1. Si le gustaria mas buscar el tutor por nombre que por DNI/Legajo (seguramente si)?
-2. Cuando alguien esta en "situacion de riesgo"?
