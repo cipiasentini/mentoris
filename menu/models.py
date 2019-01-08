@@ -32,7 +32,7 @@ class Tutor(Persona):
 class Alumno(Persona):
     # legajo = models.IntegerField(unique=True, blank=True)
     legajo = models.IntegerField(unique=True, blank=True, null=True)
-    situacion_riesgo = models.CharField(max_length=60, null=True, blank=True, default='Ninguna')
+    situacion_riesgo = models.CharField(max_length=60, null=True, blank=True, default='No')
     observaciones = models.TextField(null=True, blank=True)
 
     def __str__(self):

@@ -1,28 +1,29 @@
 {% extends "menu/index.html" %}
 
-{% block title %}<title>Tutorías: Editar novedad del panel de novedades</title>{% endblock %}
+{% block title %}<title>Tutorías: Editar novedad</title>{% endblock %}
 
 {% block content %}
     {% block warning %}
         {% if not_found %}
             <div id="separador" class="alert alert-danger" role="alert">
-                Tipo de intervencion invalida o existente.
+                Error durante la edición de la novedad.
             </div>
         {% endif %}
         {% if success %}
             <div id="separador" class="alert alert-success" role="alert">
-                El tipo de intervencion {{ tipo_intervencion.descripcion }} fue agregada correctamente.
+                La novedad <b>{{ novedad.titulo }}</b> fue editada correctamente.
             </div>
         {% endif %}
     {% endblock %}
     <div class="container">
-        <h2>Agregar nuevo tipo de Intervención</h2>
+        <h2>Editar novedad</h2>
         <div class="row">
             <div class="col">
                 <form method="post">
                     {% csrf_token %}
                     {% include 'common/form_template.html' with form=form %}
-                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Editar</button>
+                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Aceptar</button>
+                    <a class="btn btn-secondary pull-right mr-2" style="margin-top: 10px!important;" href="{% url 'menu:panel-novedades' %}">Atras</a>
                 </form>
             </div>
         </div>

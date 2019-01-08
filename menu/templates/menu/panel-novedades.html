@@ -5,12 +5,12 @@
     {% block warning %}
         {% if not_found %}
             <div id="separador" class="alert alert-danger" role="alert">
-                Error con novedad
+                Error durante el alta de la novedad.
             </div>
         {% endif %}
         {% if success %}
             <div id="separador" class="alert alert-success" role="alert">
-                El tipo de intervencion {{ tipo_intervencion.descripcion }} fue agregada correctamente.
+                La novedad {{ novedad.titulo }} fue agregada correctamente.
             </div>
         {% endif %}
     {% endblock %}

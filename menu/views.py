@@ -511,7 +511,7 @@ def agregarNovedad(request):
             )
             Novedades.save(nueva_novedad)
             form = agregarNovedadForm()
-            return render(request, 'menu/alta-novedad.html', {'form': form, 'alumno': nueva_novedad, 'success': True, 'nbar': 'administrador'})
+            return render(request, 'menu/alta-novedad.html', {'form': form, 'novedad': nueva_novedad, 'success': True, 'nbar': 'administrador'})
     else:
         form = agregarNovedadForm()
         return render(request, 'menu/alta-novedad.html', {'form': form, 'nbar': 'administrador'})
@@ -528,7 +528,7 @@ def editarNovedad(request, id):
         form = editarNovedadForm(request.POST, instance=novedad)
         if form.is_valid():
             form.save()
-            return render(request, 'menu/editar-novedad.html', {'form': form, 'success': True, 'novedad_inst': novedad, 'nbar': 'administrador'})
+            return render(request, 'menu/editar-novedad.html', {'form': form, 'success': True, 'novedad': novedad, 'nbar': 'administrador'})
         else:
             form = editarNovedadForm(instance=novedad)
     return render(request, 'menu/editar-novedad.html', {'form': form, 'nbar': 'administrador'})
@@ -647,4 +647,4 @@ def editarTarea(request, id):
             return render(request, 'menu/tarea.html', {'form': form, 'success': True, 'tarea': tarea, 'nbar': 'tareas'})
         else:
             form = editarTareaForm(instance=tarea)
-    return render(request, 'menu/editar-tarea.html', {'form': form, 'nbar': 'tareas'})
+    return render(request, 'menu/editar-tarea.html', {'form': form, 'tarea': tarea, 'nbar': 'tareas'})

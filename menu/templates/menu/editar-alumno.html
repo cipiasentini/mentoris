@@ -11,7 +11,7 @@
         {% endif %}
         {% if success %}
             <div id="separador" class="alert alert-success" role="alert">
-                El alumno {{ alumno.nombre }} fue editado correctamente.
+                El alumno {{ alumno_inst.nombre }} fue editado correctamente.
             </div>
         {% endif %}
     {% endblock %}
@@ -20,6 +20,7 @@
         {% csrf_token %}
         {% include 'common/form_template.html' with form=form %}
         <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Aceptar</button>
+        <a class="btn btn-secondary pull-right mr-2" style="margin-top: 10px!important;" href="{% url 'menu:buscar-alumno' %}">Atras</a>
     </form>
 
 {% endblock %}

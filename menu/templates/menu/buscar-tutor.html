@@ -42,18 +42,18 @@
     {% endif %}
 
     {% if tutor %}
-        <div class="card-body">
+        <div class="card-body" style="margin: -30px -20px -20px -20px;">
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Nombre: {{ tutor.nombre }}</li>
-                <li class="list-group-item">DNI: {{ tutor.dni }}</li>
-                <li class="list-group-item">Legajo: {{ tutor.legajo }}</li>
-                <li class="list-group-item">Telefono: {{ tutor.telefono }}</li>
-                <li class="list-group-item">Tipo: {{ tutor.tipo }}</li>
-                <li class="list-group-item">Mail: {{ tutor.mail }}</li>
-                <li class="list-group-item">Horario de atención: {{ tutor.horario }}</li>
-                <li class="list-group-item">Fecha de alta: {{ tutor.fecha_alta }}</li>
+                <li class="list-group-item"><b>Nombre:</b> {{ tutor.nombre }}</li>
+                <li class="list-group-item"><b>DNI:</b> {{ tutor.dni }}</li>
+                <li class="list-group-item"><b>Legajo:</b> {{ tutor.legajo }}</li>
+                <li class="list-group-item"><b>Telefono:</b> {{ tutor.telefono }}</li>
+                <li class="list-group-item"><b>Tipo:</b> {{ tutor.tipo }}</li>
+                <li class="list-group-item"><b>Mail:</b> {{ tutor.mail }}</li>
+                <li class="list-group-item"><b>Horario de atención:</b> {{ tutor.horario }}</li>
+                <li class="list-group-item"><b>Fecha de alta:</b> {{ tutor.fecha_alta }}</li>
                 {% if tutor.fecha_desvinculacion %}
-                    <li class="list-group-item">Fecha de desvinculación: <span class="badge badge-danger">{{ tutor.fecha_desvinculacion }}</span></li>
+                    <li class="list-group-item"><b>Fecha de desvinculación:</b> <span class="badge badge-danger">{{ tutor.fecha_desvinculacion }}</span></li>
                 {% endif %}
             </ul>
         </div>

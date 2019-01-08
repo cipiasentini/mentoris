@@ -194,6 +194,7 @@ class editarTareaForm(ModelForm):
         widgets = {
             'tutor_asignado': Select2Widget,
             'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
+            'estado': Select2Widget(choices=(('Abierta', 'Abierta'), ('Cerrada', 'Cerrada'))),
         }
 
 class editarIntervencionForm(ModelForm):
