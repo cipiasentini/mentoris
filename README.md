@@ -1,9 +1,3 @@
-## Integrantes:
-- Alarcón, Facundo;
-- Bravo, Noelia;
-- Monzón, German;
-- Piasentini, Carlos Ivan;
-
 # Preguntar a Bianca:
 1. Si le gustaria mas buscar el tutor por nombre que por DNI/Legajo (seguramente si)?
 2. Cuando alguien esta en "situacion de riesgo"?
