@@ -10,8 +10,6 @@ django-select2==6.3.1
 django-widget-tweaks==1.4.2
 djangoajax==3.0.2
 icalendar==4.0.3
-idna==2.7
-idna-ssl==1.1.0
 Jinja2==2.10
 MarkupSafe==1.1.0
 multidict==4.5.2
