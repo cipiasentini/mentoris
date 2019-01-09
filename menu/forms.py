@@ -186,7 +186,6 @@ class agregarTareaForm(ModelForm):
         if not user.is_staff:
             del self.fields['tutor_asignado']
 
-
 class editarTareaForm(ModelForm):
     class Meta:
         model = Tarea

@@ -207,6 +207,7 @@ def agregarTutorPersonalizado(request):
                 mail=form.cleaned_data['mail'],
                 tipo=form.cleaned_data['tipo'],
                 horario=form.cleaned_data['horario'],
+                usuario=form.cleaned_data['dni'],
             )
             Tutor.save(nuevo_tutor)
             # agregarlo como usuario
@@ -602,7 +603,8 @@ def agregarTarea(request):
         form = agregarTareaForm(user=request.user)
         return render(request, 'menu/alta-tarea.html', {'form': form, 'nbar': 'tareas'})
 
-@staff_member_required
+
+@login_required
 def bcal(request, year, month, day):
     today = datetime.today()
     today_events = Tarea.objects.filter(fecha_alta__year=year).filter(fecha_alta__month=month).filter(fecha_alta__day=day)
@@ -618,7 +620,7 @@ def bcal(request, year, month, day):
         request,
         'menu/agenda-tareas.html',
         {
-            'calendar': get_bcal(y, m, day),
+            'calendar': get_bcal(y, m, day, user=request.user),
             'today': today_events,
         },
         content_type='html')

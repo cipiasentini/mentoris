@@ -1,3 +1,5 @@
+{% load app_filters %}
+
 {% block warning %}
     {% if not_found %}
         <div id="separador" class="alert alert-danger" role="alert">
@@ -14,6 +16,18 @@
 <script>
     $(function () {
         $('[data-toggle="popover"]').popover()
+    });
+    $('#regularizadas a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    });
+    $('#cursando a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    });
+    $('#promocionadas a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
     });
 </script>
 
@@ -178,44 +192,115 @@
         <div id="collapseThree" class="collapse {% if request.session.collapse == 3 %}show{% endif %}" aria-labelledby="headingThree" data-parent="#accordion">
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Cursando</a>
+                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#cursando" role="tab" aria-controls="cursando" aria-selected="true">Cursando</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Regularizadas</a>
+                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#regularizadas" role="tab" aria-controls="regularizadas" aria-selected="false">Regularizadas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Aprobadas</a>
+                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#promocionadas" role="tab" aria-controls="promocionadas" aria-selected="false">Promociono TP</a>
                 </li>
             </ul>
             <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show active" id="cursando" role="tabpanel" aria-labelledby="home-tab">
                     <table class="table table-hover">
                         <thead>
                         <tr>
                             <th scope="col">Materia</th>
-                            <th scope="col">Nota 1</th>
-                            <th scope="col">Nota 2</th>
-                            <th scope="col">Nota final</th>
+                            {% for i in "xxxxxxxx" %}
+                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>
+                            {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
                         {% for matAlu in materiasAlumno %}
                             {% for mat in materias %}
                                 {% if mat.materia == matAlu.materia %}
-                                    <tr>
-                                        <th scope="row">{{ mat.nombre }}</th>
-                                        <td>{{ matAlu.nota1 }}</td>
-                                        <td>{{ matAlu.nota2 }}</td>
-                                        <td>{{ matAlu.notafinal }}</td>
-                                    </tr>
+                                    {% if matAlu.acadestado == 0 %}
+                                        <tr>
+                                            <th scope="row">{{ mat.nombre }}</th>
+                                            <td>{{ matAlu.nota1 }}</td>
+                                            <td>{{ matAlu.nota2 }}</td>
+                                            <td>{{ matAlu.nota3 }}</td>
+                                            <td>{{ matAlu.nota4 }}</td>
+                                            <td>{{ matAlu.nota5 }}</td>
+                                            <td>{{ matAlu.nota6 }}</td>
+                                            <td>{{ matAlu.nota7 }}</td>
+                                            <td>{{ matAlu.nota8 }}</td>
+                                        </tr>
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         {% endfor %}
                         </tbody>
                     </table>
                 </div>
-                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
+                <div class="tab-pane fade" id="regularizadas" role="tabpanel" aria-labelledby="profile-tab">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            {% for i in "xxxxxxxx" %}
+                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for matAlu in materiasAlumno %}
+                            {% for mat in materias %}
+                                {% if mat.materia == matAlu.materia %}
+                                    {% if matAlu.acadestado == 2 %}
+                                        <tr>
+                                            <th scope="row">{{ mat.nombre }}</th>
+                                            <td>{{ matAlu.nota1 }}</td>
+                                            <td>{{ matAlu.nota2 }}</td>
+                                            <td>{{ matAlu.nota3 }}</td>
+                                            <td>{{ matAlu.nota4 }}</td>
+                                            <td>{{ matAlu.nota5 }}</td>
+                                            <td>{{ matAlu.nota6 }}</td>
+                                            <td>{{ matAlu.nota7 }}</td>
+                                            <td>{{ matAlu.nota8 }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane fade" id="promocionadas" role="tabpanel" aria-labelledby="contact-tab">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Materia</th>
+                            {% for i in "xxxxxxxx" %}
+                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>
+                            {% endfor %}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for matAlu in materiasAlumno %}
+                            {% for mat in materias %}
+                                {% if mat.materia == matAlu.materia %}
+                                    {% if matAlu.acadestado == 3 %}
+                                        <tr>
+                                            <th scope="row">{{ mat.nombre }}</th>
+                                            <td>{{ matAlu.nota1 }}</td>
+                                            <td>{{ matAlu.nota2 }}</td>
+                                            <td>{{ matAlu.nota3 }}</td>
+                                            <td>{{ matAlu.nota4 }}</td>
+                                            <td>{{ matAlu.nota5 }}</td>
+                                            <td>{{ matAlu.nota6 }}</td>
+                                            <td>{{ matAlu.nota7 }}</td>
+                                            <td>{{ matAlu.nota8 }}</td>
+                                        </tr>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

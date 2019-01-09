@@ -78,7 +78,7 @@ class Tarea(models.Model):
     fecha_alta = models.DateTimeField(default=timezone.now, verbose_name='Fecha programada')
     fecha_baja = models.DateTimeField(null=True, blank=True)
     tutor_asignado = models.ForeignKey('Tutor', on_delete=models.DO_NOTHING)
-    estado = models.CharField(max_length=40, default='Activa')
+    estado = models.CharField(max_length=40, default='Abierta')
 
     def get_absolute_url(self):
         return "/tarea/%d" % self.id

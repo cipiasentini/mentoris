@@ -4,7 +4,7 @@ import itertools
 from menu.models import Tarea
 
 
-def get_bcal(year, month, day):
+def get_bcal(year, month, day, user):
     request_day = day
     today = datetime.datetime.today()
     current_month = str(today.month)
@@ -33,7 +33,18 @@ def get_bcal(year, month, day):
      day_link will be linked to a ListView that filters on the requested day. """
     for event in month_events:
         event_url = event.get_absolute_url()
-        client = '<a class="badge badge-pill badge-info" href="%s">%s</a><br />' % (event_url, event.titulo)
+        client = ''
+        if user.is_staff:
+            if event.estado == 'Abierta':
+                client = '<a class="badge badge-pill badge-info" href="%s">%s</a><br />' % (event_url, event.titulo)
+            else:
+                client = '<a class="badge badge-pill badge-warning" href="%s">%s</a><br />' % (event_url, event.titulo)
+        else:
+            if str(event.tutor_asignado.dni) == str(user):
+                if event.estado == 'Abierta':
+                    client = '<a class="badge badge-pill badge-info" href="%s">%s</a><br />' % (event_url, event.titulo)
+                else:
+                    client = '<a class="badge badge-pill badge-warning" href="%s">%s</a><br />' % (event_url, event.titulo)
         # client = '<button class="badge badge-pill badge-info" data-toggle="modal" data-target="#exampleModalCenter">%s</button><br />' \
         #             '<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">' \
         #                 '<div class="modal-dialog modal-dialog-centered" role="document">' \
