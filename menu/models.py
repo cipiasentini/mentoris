@@ -34,6 +34,7 @@ class Alumno(Persona):
     legajo = models.IntegerField(unique=True, blank=True, null=True)
     situacion_riesgo = models.CharField(max_length=60, null=True, blank=True, default='No')
     observaciones = models.TextField(null=True, blank=True)
+    # discapac = models.CharField(max_length=20, null=True, blank=True, default='No')
 
     def __str__(self):
         return ' Legajo: {}, Nombre: {}'.format(self.legajo, self.nombre)

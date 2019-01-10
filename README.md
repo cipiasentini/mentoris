@@ -8,11 +8,14 @@
 ##### Funcionalidades
 1. Management completo de grupos
 2. Generacion de reportes y formato para impresion/exportacion PDF
+3. Pedir a la mendez tabla de escuela y seminario con datos.
 
 ##### Bugs:
 7. Fixear el problema de display en pantallas chicas (celulares)
+8. Refactorizar buscarAlumnoId (creo que hay que borrar nomas esa funcion, esta de mas me parece..)
 
 ## Work in progress:
+12. Agregar datos del alumno faltantes segun el mail.
 9. Ver que hacer con situacion de riesgo del alumno: para mi un schedule que cada dia corra una funcion para checkear las notas. Pero tendria que preguntar a Bianca esto, cuando alguien esta en "situacion de riesgo".
 
 ## Done:

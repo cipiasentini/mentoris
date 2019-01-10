@@ -29,6 +29,18 @@
         e.preventDefault()
         $(this).tab('show')
     });
+    $('#datos a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    });
+    $('#seminario a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    });
+    $('#secundaria a').on('click', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+    });
 </script>
 
 {#<div class="py-3">#}
@@ -48,262 +60,307 @@
 
 {% if alumno_inst %}
     <div id="accordion">
-    <div class="card">
-        <div class="card-header" id="headingOne" onclick="$.get('{% url "menu:update-session" collapse=1 %}');">
-            <h5 class="mb-0">
-                <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseTwo">
-                    <h3><span class="pull-left">Datos Personales de {{ alumno_inst.nombre }}</span></h3>
-                </button>
-            </h5>
-        </div>
-        <div id="collapseOne" class="collapse  {% if request.session.collapse == 1 %}show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Nombre: {{ alumno_inst.nombre }}</li>
-                    <li class="list-group-item">DNI: {{ alumno_inst.dni }}</li>
-                    <li class="list-group-item">Legajo: {{ alumno_inst.legajo }}</li>
-                    <li class="list-group-item">Email: {{ alumno_inst.mail }}</li>
-                    <li class="list-group-item">Observaciones: {{ alumno_inst.observaciones }}</li>
-                    {% if alumno_inst.situacion_riesgo == 'Ninguna' %}
-                        <li class="list-group-item">Situacion de riesgo: <span class="badge badge-success">NO</span></li>
-                    {% else %}
-                        <li class="list-group-item">Situacion de riesgo: <span class="badge badge-danger">SI</span></li>
-                    {% endif %}
-                    <li class="list-group-item">Fecha de alta: {{ alumno_inst.fecha_alta }}</li>
-                    <li class="list-group-item"><a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a></li>
-                </ul>
+        <div class="card">
+            <div class="card-header" id="headingOne" onclick="$.get('{% url "menu:update-session" collapse=1 %}');">
+                <h5 class="mb-0">
+                    <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseTwo">
+                        <h3><span class="pull-left">Datos Personales de {{ alumno_inst.nombre }}</span></h3>
+                    </button>
+                </h5>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
-            <h5 class="mb-0">
-                <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                    <h3><span class="pull-left">Intervenciones de {{ alumno_inst.nombre }}</span></h3>
-                </button>
-            </h5>
-        </div>
-        <div id="collapseTwo" class="collapse {% if request.session.collapse == 2 %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordion">
-            <div class="card-body">
-                <ul class="list-group list-group-flush">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Abiertas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cerradas</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Fecha creación</th>
-                                    <th scope="col">Tutor Asignado</th>
-                                    <th scope="col">Tipo</th>
-                                    {#                                <th scope="col">Descripción</th>#}
-                                    <th scope="col">Materia</th>
-                                    <th scope="col">Estado</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for int in intervenciones|dictsort:"estado" %}
-                                    {% if int.estado == 'Abierta' %}
-                                        <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                            data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                            <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
-                                            <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
-                                            <td style="border-width: thick" >{{ int.tipo }}</td>
-                                            {#                                        <td>{{ int.descripcion }}</td>#}
-                                            <td style="border-width: thick">{{ int.materia.nombre }}</td>
-                                            <td style="border-width: thick">{{ int.estado }}</td>
-                                        </tr>
-                                        <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                            data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                            <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
+            <div id="collapseOne" class="collapse  {% if request.session.collapse == 1 %}show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
+                <ul class="nav nav-tabs" style="margin: 20px 20px -10px 20px!important;" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#datos" role="tab" aria-controls="home" aria-selected="true">Datos personales</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#secundaria" role="tab" aria-controls="profile" aria-selected="false">Escuela secundaria</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#seminario" role="tab" aria-controls="seminario" aria-selected="false">Seminario universitario</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="datos" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="card-body col-7 pull-left">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Nombre:</b> {{ alumno_inst.nombre }}</li>
+                                <li class="list-group-item"><b>DNI:</b> {{ alumno_inst.dni }}</li>
+                                <li class="list-group-item"><b>Legajo:</b> {{ alumno_inst.legajo }}</li>
+                                <li class="list-group-item"><b>Email:</b> {{ alumno_inst.mail }}</li>
+                                {% if alumno_inst.situacion_riesgo == 'Ninguna' %}
+                                    <li class="list-group-item"><b>Situacion de riesgo:</b> <span class="badge badge-success">NO</span></li>
+                                {% else %}
+                                    <li class="list-group-item"><b>Situacion de riesgo:</b> <span class="badge badge-danger">SI</span></li>
+                                {% endif %}
+                                <li class="list-group-item"><b>Fecha de alta:</b> {{ alumno_inst.fecha_alta }}</li>
+                                <li class="list-group-item"><b>Observaciones:</b> {{ alumno_inst.observaciones }}</li>
+                            </ul>
                         </div>
-                        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Fecha creación</th>
-                                    <th scope="col">Tutor Asignado</th>
-                                    <th scope="col">Tipo</th>
-                                    {#                                <th scope="col">Descripción</th>#}
-                                    <th scope="col">Materia</th>
-                                    <th scope="col">Estado</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for int in intervenciones|dictsort:"estado" %}
-                                    {% if int.estado == 'Cerrada' %}
-                                        <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                            data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                            <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
-                                            <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
-                                            <td style="border-width: thick" >{{ int.tipo }}</td>
-                                            {#                                        <td>{{ int.descripcion }}</td>#}
-                                            <td style="border-width: thick">{{ int.materia.nombre }}</td>
-                                            <td style="border-width: thick">{{ int.estado }}</td>
-                                        </tr>
-                                        <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                            data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                            <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
-                                        </tr>
-                                    {% endif %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="card-body col-5 pull-right">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Carrera:</b> {{ sys_esp.nombre }}</li>
+                                <li class="list-group-item"><b>Año de ingreso:</b> {{ sys_al.anoingreso }}</li>
+                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>
+                                <li class="list-group-item"><b>Trabajo:</b> {{ sys_per.trabaja }}</li>
+                                <li class="list-group-item"><b>Hijos:</b> {{ sys_per.tenenciahi }}</li>
+                                <li class="list-group-item"><b>Codigo postal de ciudad de originaria:</b> {{ sys_per.codigopost }}</li>
+                                <li class="list-group-item"><b>Codigo postal de ciudad de residencia:</b> {{ sys_per.resicodigo }}</li>
+                            </ul>
                         </div>
                     </div>
+                    {# <li class="list-group-item"><a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a></li>#}
+                    <div class="tab-pane fade" id="secundaria" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="card-body col pull-left">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Test:</b> {{ alumno_inst.carrera }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="seminario" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="card-body col pull-left">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Test:</b> {{ alumno_inst.carrera }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <a class="btn btn-primary" style="float: right; margin: -25px 20px 20px 0px;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                    {#                            {% for int in intervenciones %}#}
-                    {#                                <li class="list-group-item">Tipo: {{ int.tipo }} || Descripción: {{ int.descripcion }}  || {{ int.estado }}  <button type="button" class="btn btn-secondary" style="float: right;">Editar</button></li>#}
-                    {#                            {% endfor %}#}
-                    {#                            <li class="list-group-item">#}
-                    {#                                <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>#}
-                    {#                            </li>#}
-                </ul>
+        <div class="card">
+            <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
+                <h5 class="mb-0">
+                    <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <h3><span class="pull-left">Intervenciones de {{ alumno_inst.nombre }}</span></h3>
+                    </button>
+                </h5>
             </div>
-        </div>
-    </div>
-    <div class="card">
-        <div class="card-header" id="headingThree" onclick="$.get('{% url "menu:update-session" collapse=3 %}');">
-            <h5 class="mb-0">
-                <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">
-                    <h3><span class="pull-left">Materias de {{ alumno_inst.nombre }}</span></h3>
-                </button>
-            </h5>
-        </div>
-        <div id="collapseThree" class="collapse {% if request.session.collapse == 3 %}show{% endif %}" aria-labelledby="headingThree" data-parent="#accordion">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#cursando" role="tab" aria-controls="cursando" aria-selected="true">Cursando</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#regularizadas" role="tab" aria-controls="regularizadas" aria-selected="false">Regularizadas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#promocionadas" role="tab" aria-controls="promocionadas" aria-selected="false">Promociono TP</a>
-                </li>
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="cursando" role="tabpanel" aria-labelledby="home-tab">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">Materia</th>
-                            {% for i in "xxxxxxxx" %}
-                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>
-                            {% endfor %}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for matAlu in materiasAlumno %}
-                            {% for mat in materias %}
-                                {% if mat.materia == matAlu.materia %}
-                                    {% if matAlu.acadestado == 0 %}
-                                        <tr>
-                                            <th scope="row">{{ mat.nombre }}</th>
-                                            <td>{{ matAlu.nota1 }}</td>
-                                            <td>{{ matAlu.nota2 }}</td>
-                                            <td>{{ matAlu.nota3 }}</td>
-                                            <td>{{ matAlu.nota4 }}</td>
-                                            <td>{{ matAlu.nota5 }}</td>
-                                            <td>{{ matAlu.nota6 }}</td>
-                                            <td>{{ matAlu.nota7 }}</td>
-                                            <td>{{ matAlu.nota8 }}</td>
-                                        </tr>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="regularizadas" role="tabpanel" aria-labelledby="profile-tab">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">Materia</th>
-                            {% for i in "xxxxxxxx" %}
-                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>
-                            {% endfor %}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for matAlu in materiasAlumno %}
-                            {% for mat in materias %}
-                                {% if mat.materia == matAlu.materia %}
-                                    {% if matAlu.acadestado == 2 %}
-                                        <tr>
-                                            <th scope="row">{{ mat.nombre }}</th>
-                                            <td>{{ matAlu.nota1 }}</td>
-                                            <td>{{ matAlu.nota2 }}</td>
-                                            <td>{{ matAlu.nota3 }}</td>
-                                            <td>{{ matAlu.nota4 }}</td>
-                                            <td>{{ matAlu.nota5 }}</td>
-                                            <td>{{ matAlu.nota6 }}</td>
-                                            <td>{{ matAlu.nota7 }}</td>
-                                            <td>{{ matAlu.nota8 }}</td>
-                                        </tr>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <div class="tab-pane fade" id="promocionadas" role="tabpanel" aria-labelledby="contact-tab">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col">Materia</th>
-                            {% for i in "xxxxxxxx" %}
-                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>
-                            {% endfor %}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for matAlu in materiasAlumno %}
-                            {% for mat in materias %}
-                                {% if mat.materia == matAlu.materia %}
-                                    {% if matAlu.acadestado == 3 %}
-                                        <tr>
-                                            <th scope="row">{{ mat.nombre }}</th>
-                                            <td>{{ matAlu.nota1 }}</td>
-                                            <td>{{ matAlu.nota2 }}</td>
-                                            <td>{{ matAlu.nota3 }}</td>
-                                            <td>{{ matAlu.nota4 }}</td>
-                                            <td>{{ matAlu.nota5 }}</td>
-                                            <td>{{ matAlu.nota6 }}</td>
-                                            <td>{{ matAlu.nota7 }}</td>
-                                            <td>{{ matAlu.nota8 }}</td>
-                                        </tr>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
+            <div id="collapseTwo" class="collapse {% if request.session.collapse == 2 %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordion">
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Abiertas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Cerradas</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Fecha creación</th>
+                                        <th scope="col">Tutor Asignado</th>
+                                        <th scope="col">Tipo</th>
+                                        {#                                <th scope="col">Descripción</th>#}
+                                        <th scope="col">Materia</th>
+                                        <th scope="col">Estado</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for int in intervenciones|dictsort:"estado" %}
+                                        {% if int.estado == 'Abierta' %}
+                                            <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                                data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                                <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
+                                                <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
+                                                <td style="border-width: thick" >{{ int.tipo }}</td>
+                                                {#                                        <td>{{ int.descripcion }}</td>#}
+                                                <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                                <td style="border-width: thick">{{ int.estado }}</td>
+                                            </tr>
+                                            <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                                data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                                <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Fecha creación</th>
+                                        <th scope="col">Tutor Asignado</th>
+                                        <th scope="col">Tipo</th>
+                                        {#                                <th scope="col">Descripción</th>#}
+                                        <th scope="col">Materia</th>
+                                        <th scope="col">Estado</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for int in intervenciones|dictsort:"estado" %}
+                                        {% if int.estado == 'Cerrada' %}
+                                            <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                                data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                                <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
+                                                <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
+                                                <td style="border-width: thick" >{{ int.tipo }}</td>
+                                                {#                                        <td>{{ int.descripcion }}</td>#}
+                                                <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                                <td style="border-width: thick">{{ int.estado }}</td>
+                                            </tr>
+                                            <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                                data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
+                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
+                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                                <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </ul>
                 </div>
             </div>
         </div>
+
+
+        {#  ESTO ES PARA LO DE LAS MATERIAS PERO CAPAZ LE SACO NOMAS ESTA RE MAL HECHO, MUY INOPTIMO...  #}
+
+
+
+        {#    <div class="card">#}
+        {#        <div class="card-header" id="headingThree" onclick="$.get('{% url "menu:update-session" collapse=3 %}');">#}
+        {#            <h5 class="mb-0">#}
+        {#                <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">#}
+        {#                    <h3><span class="pull-left">Materias de {{ alumno_inst.nombre }}</span></h3>#}
+        {#                </button>#}
+        {#            </h5>#}
+        {#        </div>#}
+        {#        <div id="collapseThree" class="collapse {% if request.session.collapse == 3 %}show{% endif %}" aria-labelledby="headingThree" data-parent="#accordion">#}
+        {#            <ul class="nav nav-tabs" id="myTab" role="tablist">#}
+        {#                <li class="nav-item">#}
+        {#                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#cursando" role="tab" aria-controls="cursando" aria-selected="true">Cursando</a>#}
+        {#                </li>#}
+        {#                <li class="nav-item">#}
+        {#                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#regularizadas" role="tab" aria-controls="regularizadas" aria-selected="false">Regularizadas</a>#}
+        {#                </li>#}
+        {#                <li class="nav-item">#}
+        {#                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#promocionadas" role="tab" aria-controls="promocionadas" aria-selected="false">Promociono TP</a>#}
+        {#                </li>#}
+        {#            </ul>#}
+        {#            <div class="tab-content" id="myTabContent">#}
+        {#                <div class="tab-pane fade show active" id="cursando" role="tabpanel" aria-labelledby="home-tab">#}
+        {#                    <table class="table table-hover">#}
+        {#                        <thead>#}
+        {#                        <tr>#}
+        {#                            <th scope="col">Materia</th>#}
+        {#                            {% for i in "xxxxxxxx" %}#}
+        {#                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>#}
+        {#                            {% endfor %}#}
+        {#                        </tr>#}
+        {#                        </thead>#}
+        {#                        <tbody>#}
+        {#                        {% for matAlu in materiasAlumno %}#}
+        {#                            {% for mat in materias %}#}
+        {#                                {% if mat.materia == matAlu.materia %}#}
+        {#                                    {% if matAlu.acadestado == 0 %}#}
+        {#                                        <tr>#}
+        {#                                            <th scope="row">{{ mat.nombre }}</th>#}
+        {#                                            <td>{{ matAlu.nota1 }}</td>#}
+        {#                                            <td>{{ matAlu.nota2 }}</td>#}
+        {#                                            <td>{{ matAlu.nota3 }}</td>#}
+        {#                                            <td>{{ matAlu.nota4 }}</td>#}
+        {#                                            <td>{{ matAlu.nota5 }}</td>#}
+        {#                                            <td>{{ matAlu.nota6 }}</td>#}
+        {#                                            <td>{{ matAlu.nota7 }}</td>#}
+        {#                                            <td>{{ matAlu.nota8 }}</td>#}
+        {#                                        </tr>#}
+        {#                                    {% endif %}#}
+        {#                                {% endif %}#}
+        {#                            {% endfor %}#}
+        {#                        {% endfor %}#}
+        {#                        </tbody>#}
+        {#                    </table>#}
+        {#                </div>#}
+        {#                <div class="tab-pane fade" id="regularizadas" role="tabpanel" aria-labelledby="profile-tab">#}
+        {#                    <table class="table table-hover">#}
+        {#                        <thead>#}
+        {#                        <tr>#}
+        {#                            <th scope="col">Materia</th>#}
+        {#                            {% for i in "xxxxxxxx" %}#}
+        {#                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>#}
+        {#                            {% endfor %}#}
+        {#                        </tr>#}
+        {#                        </thead>#}
+        {#                        <tbody>#}
+        {#                        {% for matAlu in materiasAlumno %}#}
+        {#                            {% for mat in materias %}#}
+        {#                                {% if mat.materia == matAlu.materia %}#}
+        {#                                    {% if matAlu.acadestado == 2 %}#}
+        {#                                        <tr>#}
+        {#                                            <th scope="row">{{ mat.nombre }}</th>#}
+        {#                                            <td>{{ matAlu.nota1 }}</td>#}
+        {#                                            <td>{{ matAlu.nota2 }}</td>#}
+        {#                                            <td>{{ matAlu.nota3 }}</td>#}
+        {#                                            <td>{{ matAlu.nota4 }}</td>#}
+        {#                                            <td>{{ matAlu.nota5 }}</td>#}
+        {#                                            <td>{{ matAlu.nota6 }}</td>#}
+        {#                                            <td>{{ matAlu.nota7 }}</td>#}
+        {#                                            <td>{{ matAlu.nota8 }}</td>#}
+        {#                                        </tr>#}
+        {#                                    {% endif %}#}
+        {#                                {% endif %}#}
+        {#                            {% endfor %}#}
+        {#                        {% endfor %}#}
+        {#                        </tbody>#}
+        {#                    </table>#}
+        {#                </div>#}
+        {#                <div class="tab-pane fade" id="promocionadas" role="tabpanel" aria-labelledby="contact-tab">#}
+        {#                    <table class="table table-hover">#}
+        {#                        <thead>#}
+        {#                        <tr>#}
+        {#                            <th scope="col">Materia</th>#}
+        {#                            {% for i in "xxxxxxxx" %}#}
+        {#                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>#}
+        {#                            {% endfor %}#}
+        {#                        </tr>#}
+        {#                        </thead>#}
+        {#                        <tbody>#}
+        {#                        {% for matAlu in materiasAlumno %}#}
+        {#                            {% for mat in materias %}#}
+        {#                                {% if mat.materia == matAlu.materia %}#}
+        {#                                    {% if matAlu.acadestado == 3 %}#}
+        {#                                        <tr>#}
+        {#                                            <th scope="row">{{ mat.nombre }}</th>#}
+        {#                                            <td>{{ matAlu.nota1 }}</td>#}
+        {#                                            <td>{{ matAlu.nota2 }}</td>#}
+        {#                                            <td>{{ matAlu.nota3 }}</td>#}
+        {#                                            <td>{{ matAlu.nota4 }}</td>#}
+        {#                                            <td>{{ matAlu.nota5 }}</td>#}
+        {#                                            <td>{{ matAlu.nota6 }}</td>#}
+        {#                                            <td>{{ matAlu.nota7 }}</td>#}
+        {#                                            <td>{{ matAlu.nota8 }}</td>#}
+        {#                                        </tr>#}
+        {#                                    {% endif %}#}
+        {#                                {% endif %}#}
+        {#                            {% endfor %}#}
+        {#                        {% endfor %}#}
+        {#                        </tbody>#}
+        {#                    </table>#}
+        {#                </div>#}
+        {#            </div>#}
+        {#        </div>#}
+        {#    </div>#}
     </div>
-    {#        </div>#}
 {% endif %}
-</div>
+
