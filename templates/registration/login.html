@@ -35,13 +35,13 @@
             <div class="form-group clearfix">
                 {{ form.password.label_tag }}
                 <small class="form-text float-right text-muted">
-                    <a href="{% url 'password_reset' %}" tabindex="4">Olvidaste la contraseña?</a>
+                    <a href="mailto:tutoria@frre.utn.edu.ar?Subject=[TUTORIAS APP]%20Resetear%20contrasenia" tabindex="4">Olvidaste la contraseña?</a>
                 </small>
                 {{ form.password|add_class:"form-control bg-light input-lg" }}
             </div>
             <div class="clearfix mb-3">
                 <div class="float-left py-1">
-                    <a href="/users/sign-up" tabindex="5">Sos tutor y no tenes cuenta?</a>
+                    <a href="mailto:tutoria@frre.utn.edu.ar?Subject=[TUTORIAS APP]%20No%20tengo%20usuario" tabindex="5">Sos tutor y no tenes cuenta?</a>
                 </div>
                 <div class="float-right">
                     <button type="submit" class="btn btn-secondary"  value="login" tabindex="3">Acceder</button>
