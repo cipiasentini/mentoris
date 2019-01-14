@@ -101,11 +101,16 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><b>Carrera:</b> {{ sys_esp.nombre }}</li>
                                 <li class="list-group-item"><b>Año de ingreso:</b> {{ sys_al.anoingreso }}</li>
-                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>
+                                {% if alumno_inst.discapacidad %}
+                                    <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.tipo_discapacidad }}</li>
+                                {% else %}
+                                    <li class="list-group-item"><b>Discapacidad:</b> No </li>
+                                {% endif %}
+{#                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>#}
                                 <li class="list-group-item"><b>Trabajo:</b> {{ sys_per.trabaja }}</li>
                                 <li class="list-group-item"><b>Hijos:</b> {{ sys_per.tenenciahi }}</li>
-                                <li class="list-group-item"><b>Codigo postal de ciudad de originaria:</b> {{ sys_per.codigopost }}</li>
-                                <li class="list-group-item"><b>Codigo postal de ciudad de residencia:</b> {{ sys_per.resicodigo }}</li>
+                                <li class="list-group-item"><b>Código postal de ciudad originaria:</b> {{ sys_per.codigopost }}</li>
+                                <li class="list-group-item"><b>Código postal de ciudad de residencia:</b> {{ sys_per.resicodigo }}</li>
                             </ul>
                         </div>
                     </div>
@@ -126,7 +131,7 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <a class="btn btn-primary" style="float: right; margin: -25px 20px 20px 0px;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a>
+                            <a class="btn btn-primary" style="float: right; margin: -20px 20px 20px 0px;" href="{% url 'menu:editar-alumno' dni=alumno_inst.dni %}">Editar alumno</a>
                         </div>
                     </div>
                 </div>

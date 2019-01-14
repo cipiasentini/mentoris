@@ -160,10 +160,13 @@ def agregarAlumno(request):
             nuevo_alumno = Alumno(
                 nombre=persona_sysacad.nombre,
                 dni=dni,
-                # dni=persona_sysacad,
+                discapacidad=form.cleaned_data['discapacidad'],
+                tipo_discapacidad=form.cleaned_data['tipo_discapacidad'],
+                telefono=persona_sysacad.telefono,
+                mail=persona_sysacad.mail,
                 legajo=alumno_sysacad.legajo,
                 situacion_riesgo='Ninguna',
-                observaciones=observaciones
+                observaciones=observaciones,
             )
             Alumno.save(nuevo_alumno)
             form = agregarAlumnoForm()

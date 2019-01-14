@@ -3,6 +3,22 @@
 {% block title %}<title>Tutorías: Nuevo alumno</title>{% endblock %}
 
 {% block content %}
+
+    <script>
+        $(function() {
+            var checkbox = $("#id_discapacidad");
+            var hidden = $("#id_tipo_discapacidad");
+            hidden.parent().hide();
+            checkbox.change(function() {
+                if (checkbox.is(':checked')) {
+                    hidden.parent().show();
+                } else {
+                    hidden.parent().hide();
+                }
+            });
+        });
+    </script>
+
     {% block warning %}
         {% if not_found %}
             <div id="separador" class="alert alert-danger" role="alert">

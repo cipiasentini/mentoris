@@ -2,6 +2,12 @@ from django.db import models
 from django.utils import timezone
 # from compositefk.fields import CompositeForeignKey
 
+class Tipo(models.Model):
+    descripcion = models.CharField(max_length=40)
+
+    def __str__(self):
+        return '{}'.format(self.descripcion)
+
 class Persona(models.Model):
     dni = models.DecimalField(max_digits=12, decimal_places=0, primary_key=True)
     nombre = models.CharField(max_length=60, blank=True)
@@ -34,11 +40,11 @@ class Alumno(Persona):
     legajo = models.IntegerField(unique=True, blank=True, null=True)
     situacion_riesgo = models.CharField(max_length=60, null=True, blank=True, default='No')
     observaciones = models.TextField(null=True, blank=True)
-    # discapac = models.CharField(max_length=20, null=True, blank=True, default='No')
+    discapacidad = models.BooleanField(default=False)
+    tipo_discapacidad = models.CharField(max_length=40, null=True, blank=True, default=None)
 
     def __str__(self):
         return ' Legajo: {}, Nombre: {}'.format(self.legajo, self.nombre)
-
 
 class Intervencion(models.Model):
     # tipo = models.CharField(max_length=40, blank= True, null=True)
@@ -59,14 +65,6 @@ class Intervencion(models.Model):
     # class Meta:
     #     app_label = 'menu'
 
-
-class Tipo(models.Model):
-    descripcion = models.TextField(max_length=40)
-
-    def __str__(self):
-        return '{}'.format(self.descripcion)
-
-
 class Novedades(models.Model):
     titulo = models.CharField(max_length=60, null=True, blank=True)
     descripcion = models.TextField()
@@ -83,4 +81,3 @@ class Tarea(models.Model):
 
     def get_absolute_url(self):
         return "/tarea/%d" % self.id
-

@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
-    'compositefk',
     'django_select2',
     'bootstrap_datepicker_plus',
     'sysacad',
