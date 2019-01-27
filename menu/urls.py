@@ -38,4 +38,8 @@ urlpatterns = [
     path('agenda/<int:year>/<int:month>/<int:day>/', views.bcal, name='agenda-tareas'),
     path('tarea/<int:id>/', views.mostrarTareaId, name='tarea'),
     path('editar/tarea/<int:id>/', views.editarTarea, name='editar-tarea'),
+    path('nuevo/grupo', views.agregarGrupo, name = 'alta-grupo'),
+    path('grupos', views.listarGrupos, name = 'listar-grupos'),
+    path('editar/grupo/<int:id>/', views.editarGrupo, name='editar-grupo'),
+    path('grupo/eliminar/<int:id>/', views.eliminarGrupo, name = 'eliminar-grupo'),
 ]

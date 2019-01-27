@@ -85,7 +85,6 @@
                                             <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Nuevo tutor</a>
                                             {#                                        <a class="dropdown-item" href="{% url 'menu:alta-tutor' %}">Editar tutor</a>#}
                                             <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="#">Asignar tutor a grupo</a>
                                             <a class="dropdown-item" href="#">Ver alumnos a cargo</a>
                                         </div>
                                     </li>
@@ -109,9 +108,11 @@
                                         Grupos
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="">Nuevo grupo</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="">Asignar tutor a grupo</a>
+                                        {% if user.is_staff %}
+                                            <a class="dropdown-item" href="{% url 'menu:alta-grupo' %}">Nuevo grupo</a>
+                                            <div class="dropdown-divider"></div>
+                                        {% endif %}
+                                        <a class="dropdown-item" href="{% url 'menu:listar-grupos' %}">Listar grupos</a>
                                     </div>
                                 </li>
                                 <li class="nav-item dropdown">

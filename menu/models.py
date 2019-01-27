@@ -28,6 +28,7 @@ class Tutor(Persona):
     # legajo = models.IntegerField(unique=True, blank=True, null=True)
     legajo = models.IntegerField(blank=True, null=True)
     tipo = models.CharField(max_length=30)
+    materia = models.CharField(max_length=100, blank=True, null=True)
     horario = models.CharField(max_length=50, blank=True, null=True)
     usuario = models.CharField(max_length=20, blank=True, null=True)
     # fecha_desvinculacion = models.DateTimeField(null=True, blank=True)
@@ -81,3 +82,24 @@ class Tarea(models.Model):
 
     def get_absolute_url(self):
         return "/tarea/%d" % self.id
+
+class Grupo(models.Model):
+    titulo = models.CharField(max_length=60, null=True, blank=True)
+    descripcion = models.TextField(null=True, blank=True)
+    fecha_alta = models.DateTimeField(default=timezone.now)
+    fecha_baja = models.DateTimeField(null=True, blank=True)
+    horario = models.CharField(max_length=50, blank=True, null=True)
+    alumnos = models.ManyToManyField(Alumno)
+    tutores = models.ManyToManyField(Tutor)
+
+    def __str__(self):
+        return ' Grupo: {}, Horario: {}'.format(self.titulo, self.horario)
+
+#
+# class Tutor_x_grupo(models.Model):
+#     grupo = models.ForeignKey('Grupo', on_delete=models.DO_NOTHING)
+#     tutor = models.ForeignKey('Tutor', on_delete=models.DO_NOTHING)
+#
+# class Alumno_x_grupo(models.Model):
+#     grupo = models.ForeignKey('Grupo', on_delete=models.DO_NOTHING)
+#     alumno = models.ForeignKey('Alumno', on_delete=models.DO_NOTHING)

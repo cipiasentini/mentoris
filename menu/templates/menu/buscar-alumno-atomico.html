@@ -106,7 +106,7 @@
                                 {% else %}
                                     <li class="list-group-item"><b>Discapacidad:</b> No </li>
                                 {% endif %}
-{#                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>#}
+                                {#                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>#}
                                 <li class="list-group-item"><b>Trabajo:</b> {{ sys_per.trabaja }}</li>
                                 <li class="list-group-item"><b>Hijos:</b> {{ sys_per.tenenciahi }}</li>
                                 <li class="list-group-item"><b>Código postal de ciudad originaria:</b> {{ sys_per.codigopost }}</li>
@@ -233,6 +233,7 @@
                                 </table>
                             </div>
                         </div>
+                                                    <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>
                     </ul>
                 </div>
             </div>

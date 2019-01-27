@@ -1,0 +1,57 @@
+{% extends "menu/index.html" %}
+
+{% block title %}<title>Tutorías: Editar grupo</title>{% endblock %}
+
+{% block content %}
+    {% block warning %}
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Error durante la edición del grupo.
+            </div>
+        {% endif %}
+        {% if success %}
+            <div id="separador" class="alert alert-success" role="alert">
+                El grupo <b>{{ grupo.titulo }}</b> fue editado correctamente.
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    {#    MODAL     #}
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Eliminar grupo: {{ grupo.titulo }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Está seguro que desa eliminar el grupo?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a class='btn btn-danger' href='{% url 'menu:eliminar-grupo' id=grupo.id %}'>Eliminar grupo</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#    END MODAL     #}
+
+    <div class="container">
+        <h2>Editar grupo</h2>
+        <div class="row">
+            <div class="col">
+                <form method="post">
+                    {% csrf_token %}
+                    {% include 'common/form_template.html' with form=form %}
+                    <button type='button' class='btn btn-danger pull-left' data-toggle='modal' data-target='#exampleModalCenter'>
+                        Eliminar grupo
+                    </button>
+                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Aceptar</button>
+                    <a class="btn btn-secondary pull-right mr-2" style="margin-top: 10px!important;" href="{% url 'menu:listar-grupos' %}">Atras</a>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

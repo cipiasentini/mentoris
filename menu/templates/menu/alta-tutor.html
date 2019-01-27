@@ -3,6 +3,22 @@
 {% block title %}<title>Tutorías: Agregar tutor</title>{% endblock %}
 
 {% block content %}
+
+    <script>
+        $(function() {
+            var tipo = $("#id_tipo");
+            var hidden = $("#id_materia");
+            hidden.parent().hide();
+            tipo.change(function() {
+                if (tipo.val() == 'Academico') {
+                    hidden.parent().show();
+                } else {
+                    hidden.parent().hide();
+                };
+            });
+        });
+    </script>
+
     {% block warning %}
         {% if not_found %}
             <div id="separador" class="alert alert-danger" role="alert">
@@ -11,10 +27,11 @@
         {% endif %}
         {% if success %}
             <div id="separador" class="alert alert-success" role="alert">
-                El tutor {{ tutor.nombre }} fue agregado correctamente.
+                El tutor <b>{{ tutor.nombre }}</b> fue agregado correctamente.
             </div>
         {% endif %}
     {% endblock %}
+
     {% if alta_manual %}
         <div class="container">
             <div class="row">

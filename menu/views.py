@@ -1,11 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
-from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea
+from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo
 from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria, Alumcom as MateriaAlumno, Especial as SysacadEspecial)
 from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agregarIntervencionForm, agregarIntervencionTipoForm)
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarIntervencionForm,
-                    editarNovedadForm, agregarTareaForm, editarTutorForm, editarTareaForm)
+                    editarNovedadForm, agregarTareaForm, editarTutorForm, editarTareaForm, agregarGrupoForm, editarGrupoForm)
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.http import HttpResponse
@@ -199,10 +199,9 @@ def agregarTutor(request):
                 legajo=alumno_sysacad.legajo,
                 telefono=persona_sysacad.telefono.rstrip(),
                 mail=persona_sysacad.mail.rstrip(),
-                # carrera=alumno_sysacad.especialid,
                 tipo=form.cleaned_data['tipo'],
                 horario=form.cleaned_data['horario'],
-                # usuario=persona_sysacad.nombre.rsplit(None, 1)[-1],
+                materia=form.cleaned_data['materia'],
                 usuario=dni,
             )
             Tutor.save(nuevo_tutor)
@@ -228,6 +227,7 @@ def agregarTutorPersonalizado(request):
                 nombre=form.cleaned_data['nombre'],
                 dni=form.cleaned_data['dni'],
                 telefono=form.cleaned_data['telefono'],
+                materia=form.cleaned_data['materia'],
                 mail=form.cleaned_data['mail'],
                 tipo=form.cleaned_data['tipo'],
                 horario=form.cleaned_data['horario'],
@@ -674,3 +674,87 @@ def editarTarea(request, id):
         else:
             form = editarTareaForm(instance=tarea)
     return render(request, 'menu/editar-tarea.html', {'form': form, 'tarea': tarea, 'nbar': 'tareas'})
+
+@staff_member_required
+def agregarGrupo(request):
+    if request.method == 'POST':
+        form = agregarGrupoForm(request.POST)
+        if form.is_valid():
+            tutores = form.cleaned_data['tutores']
+            alumnos = form.cleaned_data['alumnos']
+
+            grupo = Grupo.objects.create(
+                titulo=form.cleaned_data['titulo'],
+                descripcion=form.cleaned_data['descripcion'],
+                horario=form.cleaned_data['horario'],
+                fecha_alta=form.cleaned_data['fecha_alta'],
+            )
+
+            for tut in tutores:
+                grupo.tutores.add(tut)
+            for alu in alumnos:
+                try:
+                    alumno_existente = Alumno.objects.get(dni=alu.numerodocu)
+                    grupo.alumnos.add(alumno_existente)
+                except:
+                    try:
+                        persona_sysacad = SysacadPersona.objects.get(numerodocu=alu.numerodocu)
+                    except:
+                        return render(request, 'menu/alta-grupo.html', {'form': form, 'nbar': 'grupos'})
+                    nuevo_alumno = Alumno(
+                        nombre=persona_sysacad.nombre,
+                        dni=alu.numerodocu,
+                        telefono=persona_sysacad.telefono,
+                        mail=persona_sysacad.mail,
+                        legajo=alu.legajo,
+                        situacion_riesgo='Ninguna'
+                    )
+                    Alumno.save(nuevo_alumno)
+                    grupo.alumnos.add(nuevo_alumno)
+
+            Grupo.save(grupo)
+            return render(request, 'menu/alta-grupo.html', {'form': form, 'grupo': grupo, 'success': True, 'nbar': 'grupos'})
+    else:
+        form = agregarGrupoForm()
+        return render(request, 'menu/alta-grupo.html', {'form': form, 'nbar': 'grupos'})
+
+@login_required
+def listarGrupos(request):
+    if request.method == 'GET':
+        if request.user.is_staff:
+            try:
+                grupos = Grupo.objects.all()
+            except:
+                return render(request, 'menu/listar-grupos-activos.html', {'nbar': 'grupos', 'not_found': True})
+        else:
+            try:
+                grupos = Grupo.objects.filter(tutores__dni=request.user.username)
+            except:
+                return render(request, 'menu/listar-grupos-activos.html', {'nbar': 'grupos', 'not_found': True})
+        return render(request, 'menu/listar-grupos-activos.html', {'nbar': 'grupos', 'grupos': grupos})
+
+@login_required
+def editarGrupo(request, id):
+    try:
+        grupo = Grupo.objects.get(id=id)
+    except:
+        return render(request, 'menu/editar-grupo.html', {'not_found': True, 'nbar': 'grupos'})
+    form = editarGrupoForm(instance=grupo)
+    if request.method == 'POST':
+        form = editarGrupoForm(request.POST, instance=grupo)
+        if form.is_valid():
+            form.save()
+            return render(request, 'menu/editar-grupo.html', {'form': form, 'success': True, 'grupo': grupo, 'nbar': 'grupos'})
+        else:
+            form = editarGrupoForm(instance=grupo)
+    return render(request, 'menu/editar-grupo.html', {'form': form, 'grupo': grupo, 'nbar': 'grupos'})
+
+@staff_member_required
+def eliminarGrupo(request, id):
+    if request.method == 'GET':
+        try:
+            grupo = Grupo.objects.get(id=id)
+        except:
+            return redirect('menu:listar-grupos')
+        grupo.delete()
+        return redirect('menu:listar-grupos')

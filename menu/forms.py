@@ -1,10 +1,10 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea
+from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo
 # from sysacad.models import Persona
 from django.core.exceptions import ValidationError
-from django_select2.forms import Select2Widget
-from sysacad.models import Materia
+from django_select2.forms import Select2Widget, Select2MultipleWidget
+from sysacad.models import Materia, Alumno as SysacadAlumno
 # date picker
 from bootstrap_datepicker_plus import DatePickerInput
 
@@ -48,7 +48,7 @@ class agregarTutorForm(forms.Form):
     )
     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
     tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
-    # tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.")
+    materia = forms.CharField(help_text="Ingrese el materias de las cuales es tutor.")
     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
 
 class agregarTutorPersonalizadoForm(forms.Form):
@@ -58,6 +58,7 @@ class agregarTutorPersonalizadoForm(forms.Form):
         ('Psicologo', 'Psicologo'),
         ('Otro', 'Otro')
     )
+    materia = forms.CharField(help_text="Ingrese el materias de las cuales es tutor.")
     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
     nombre = forms.CharField(help_text='Ingrese el nombre y apellido completo del nuevo tutor.')
     tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
@@ -156,6 +157,29 @@ class editarIntervencionForm(forms.Form):
             del self.fields['alumno']
             del self.fields['materia']
             del self.fields['fecha_alta']
+
+class agregarGrupoForm(ModelForm):
+    tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
+    alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=SysacadAlumno.objects.all())
+    titulo = forms.CharField(help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
+    class Meta:
+        model = Grupo
+        exclude = ['fecha_baja']
+        widgets = {
+            'fecha_alta': DatePickerInput(format='%Y-%m-%d')
+        }
+
+class editarGrupoForm(ModelForm):
+    tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
+    alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Alumno.objects.all())
+    titulo = forms.CharField(
+        help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
+    class Meta:
+        model = Grupo
+        exclude = ['fecha_baja']
+        widgets = {
+            'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
+        }
 
 # class editarIntervencionForm(ModelForm):
 #     class Meta:

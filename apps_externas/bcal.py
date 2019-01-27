@@ -84,9 +84,9 @@ def get_bcal(year, month, day, user):
         for key, value in date_range.items():
             if key == day:
                 date_range[day] += client
-    row_today = "<div id=\"cal-today\" class=\"col cal-day\"><a href=\"/menu/agenda/%s/%s/%s\">%s</a><br />%s</div>"
+    row_today = "<div id=\"cal-today\" class=\"col cal-day\"><a href=\"/agenda/%s/%s/%s\">%s</a><br />%s</div>"
     row_request_day = "<div id=\"cal-req-day\" class=\"col cal-day\">%s<br />%s</div>"
-    row_day = "<div class=\"col cal-day\"><a href=\"/menu/agenda/%s/%s/%s\">%s</a><br />%s</div>"
+    row_day = "<div class=\"col cal-day\"><a href=\"/agenda/%s/%s/%s\">%s</a><br />%s</div>"
     empty_day = "<div class =\"col cal-day\">&nbsp;</div>"
     sixth_row = False
 
@@ -520,7 +520,7 @@ def get_bcal(year, month, day, user):
                 row5 += row_day % (year, month, key, key, str(value))
         row5 = "%s%s" % (row5, remainder)
     # Create Next Month and Previous Month Links
-    nav = '<a class="btn btn-default" href="/menu/agenda/%s/%s/1">%s</a>'
+    nav = '<a class="btn btn-default" href="/agenda/%s/%s/1">%s</a>'
     right_chevron = '<i class="push-right fa fa-chevron-right" aria-hidden="true"></i>'
     left_chevron = '<i class="push-right fa fa-chevron-left" aria-hidden="true"></i>'
     if int(month) == 12:

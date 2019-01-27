@@ -1,0 +1,67 @@
+{% extends "menu/index.html" %}
+
+{% block title %}<title>Tutorías: Lista de grupos activos</title>{% endblock %}
+
+{% block content %}
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+    </script>
+
+    {% if user.is_staff %}
+        <h1>Grupos activos</h1>
+    {% else %}
+        <h1>Grupos de {{ user.first_name }}</h1>
+    {% endif %}
+
+    <div class="row mt-4">
+        {% for g in grupos %}
+            <div class="modal fade" id="exampleModalCenter{{ g.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Detalles del grupo: {{ g.titulo }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><b>Descripción: </b>{{ g.descripcion }}</p>
+                            <p><b>Fecha de creación: </b>{{ g.fecha_alta }}</p>
+                            <p><b>Horario: </b>{{ g.horario }}</p>
+                            <p><b>Tutores encargados: </b></p>
+                            {% for t in g.tutores.all %}
+                                <p class="card-text ml-5">{{ t.nombre }}<br></p>
+                            {% endfor %}
+                            <p><b>Alumnos: </b></p>
+                            {% for a in g.alumnos.all %}
+                                <p class="card-text ml-5">{{ a.nombre }}<br></p>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                            <a class='btn btn-warning' href='{% url 'menu:editar-grupo' id=g.id %}'>Editar grupo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card bg-light mb-3" style="max-width: 18rem;">
+                    <div class="card-header"><button type="button" class="btn btn-link" data-toggle='modal' data-target='#exampleModalCenter{{ g.id }}'>
+                        {{ g.titulo }}
+                    </button></div>
+                    <div class="card-body">
+                        <p class="card-text">{{ g.descripcion }}</p>
+                        {% for t in g.tutores.all %}
+                            <p class="card-text"><b>Tutor/es: </b>{{ t.nombre }}<br></p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter0|add:1|divisibleby:3 %}
+                </div>
+                <div class="row">
+            {% endif %}
+        {% endfor %}
+{% endblock %}
