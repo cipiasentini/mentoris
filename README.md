@@ -7,18 +7,15 @@
 ## To-Do:
 ##### Funcionalidades
 1. Ver como hacer para que los grupos se borren automaticamente al iniciar un nuevo ciclo lectivo.
-2. Generacion de reportes y formato para impresion/exportacion PDF
-3. Pedir a la mendez tabla de escuela y seminario con datos.
 4. Agregar datos faltantes del alumno segun el mail: creo que falta lo de la escuela y el seminario universitario.
-5. Agregar a "buscar tutor" estilo solapas donde muestre info personal y grupos a su cargo.
 
 
 ##### Bugs:
 7. Fixear el problema de display en pantallas chicas (celulares)
-8. Refactorizar buscarAlumnoId (creo que esta demas, la borre por el momento y parece no afectar nada...)
 
 ## Work in progress:
-6. Ver alumnos a cargo de un tutuor, que liste nomas los vagos y que le deje seleccionar como para ver sus datos.
+2. Informes de escuela y el otro. El de consulta por tema ya esta.
+3. Pedir a la mendez tabla de escuela y seminario con datos.
 
 ## Done:
 4. Pantalla de "buscar/editar tutor" agregar funcionalidad a editar y dar de baja tutor
@@ -32,6 +29,7 @@ Entonces posible solucion: hay que ver como hacer para que al setear "fecha_desv
 8. Ver como funcionan las tablas de matcom y eso para poder determinar las notas y si regularizo/aprobo una determinada materia, (y parciales).
 12. Creacion de grupos.
 1. Management completo de grupos: falta busqueda y edicion.
+5. Agregar a "buscar tutor" estilo solapas donde muestre info personal y grupos a su cargo.
 
 --- 
 

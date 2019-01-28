@@ -12,3 +12,7 @@ def concat_pers(arg1, arg2):
 def concat(arg1, arg2):
     """concatenate arg1 & arg2"""
     return str(arg1) + str(arg2)
+
+@register.filter(name='get_item')
+def get_item(dictionary, key):
+    return dictionary.get(key)

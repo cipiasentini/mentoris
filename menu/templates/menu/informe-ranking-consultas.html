@@ -1,0 +1,13 @@
+{% extends "menu/index.html" %}
+{% load app_filters %}
+
+{% block title %}<title>Tutorías: Ranking de consultas por tema</title>{% endblock %}
+
+{% block content %}
+    <h1>Ranking de consultas por tema del {{ anio }} </h1>
+    <div class="card-body" style="margin: -10px -20px -20px -20px;">
+        {% for i in intervenciones %}
+            <p>{{ i }}: {{ intervenciones|get_item:i }} </p>
+        {% endfor %}
+    </div>
+{% endblock %}

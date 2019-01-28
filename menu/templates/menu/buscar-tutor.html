@@ -3,6 +3,11 @@
 {% block title %}<title>Tutorias: Buscar tutor</title>{% endblock %}
 
 {% block content %}
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+    </script>
     {% block warning %}
         {% if not_found %}
             <div class="alert alert-danger" role="alert">
@@ -42,21 +47,6 @@
     {% endif %}
 
     {% if tutor %}
-        <div class="card-body" style="margin: -30px -20px -20px -20px;">
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><b>Nombre:</b> {{ tutor.nombre }}</li>
-                <li class="list-group-item"><b>DNI:</b> {{ tutor.dni }}</li>
-                <li class="list-group-item"><b>Legajo:</b> {{ tutor.legajo }}</li>
-                <li class="list-group-item"><b>Telefono:</b> {{ tutor.telefono }}</li>
-                <li class="list-group-item"><b>Tipo:</b> {{ tutor.tipo }}</li>
-                <li class="list-group-item"><b>Mail:</b> {{ tutor.mail }}</li>
-                <li class="list-group-item"><b>Horario de atención:</b> {{ tutor.horario }}</li>
-                <li class="list-group-item"><b>Fecha de alta:</b> {{ tutor.fecha_alta }}</li>
-                {% if tutor.fecha_desvinculacion %}
-                    <li class="list-group-item"><b>Fecha de desvinculación:</b> <span class="badge badge-danger">{{ tutor.fecha_desvinculacion }}</span></li>
-                {% endif %}
-            </ul>
-        </div>
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -81,12 +71,106 @@
                 </div>
             </div>
         </div>
-        {% if tutor.fecha_desvinculacion %}
-            <button type="button" class="btn btn-success pull-right" data-toggle="modal" data-target="#exampleModal">Dar de alta</button>
-        {% else %}
-            <button type="button" class="btn btn-danger pull-right" data-toggle="modal" data-target="#exampleModal">Dar de baja</button>
-        {% endif %}
-        <a class="btn btn-primary pull-right mr-2" href="{% url 'menu:editar-tutor' legajo=tutor.legajo %}">Editar</a>
+
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne" onclick="$.get('{% url "menu:update-session" collapse=1 %}');">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseTwo">
+                            <h3><span class="pull-left">Datos Personales de {{ tutor.nombre }}</span></h3>
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseOne" class="collapse  {% if request.session.collapse == 1 %}show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body" style="margin: -10px -20px -20px -20px;">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><b>Nombre:</b> {{ tutor.nombre }}</li>
+                            <li class="list-group-item"><b>DNI:</b> {{ tutor.dni }}</li>
+                            <li class="list-group-item"><b>Legajo:</b> {{ tutor.legajo }}</li>
+                            <li class="list-group-item"><b>Telefono:</b> {{ tutor.telefono }}</li>
+                            <li class="list-group-item"><b>Tipo:</b> {{ tutor.tipo }}</li>
+                            <li class="list-group-item"><b>Mail:</b> {{ tutor.mail }}</li>
+                            <li class="list-group-item"><b>Horario de atención:</b> {{ tutor.horario }}</li>
+                            <li class="list-group-item"><b>Fecha de alta:</b> {{ tutor.fecha_alta }}</li>
+                            {% if tutor.fecha_desvinculacion %}
+                                <li class="list-group-item"><b>Fecha de desvinculación:</b> <span class="badge badge-danger">{{ tutor.fecha_desvinculacion }}</span></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% if tutor.fecha_desvinculacion %}
+                        <button type="button" class="btn btn-success pull-right mb-3 mr-3" data-toggle="modal" data-target="#exampleModal">Dar de alta</button>
+                    {% else %}
+                        <button type="button" class="btn btn-danger pull-right mb-3 mr-3" data-toggle="modal" data-target="#exampleModal">Dar de baja</button>
+                    {% endif %}
+                    <a class="btn btn-primary pull-right mr-2 mb-3" href="{% url 'menu:editar-tutor' legajo=tutor.legajo %}">Editar</a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <h3><span class="pull-left">Grupos que involucran a {{ tutor.nombre }}</span></h3>
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse  {% if request.session.collapse == 2 %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordion">
+
+                    <div class="row mt-4">
+                        {% for g in grupos %}
+                            <div class="modal fade" id="exampleModalCenter{{ g.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Detalles del grupo: {{ g.titulo }}</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><b>Descripción: </b>{{ g.descripcion }}</p>
+                                            <p><b>Fecha de creación: </b>{{ g.fecha_alta }}</p>
+                                            <p><b>Horario: </b>{{ g.horario }}</p>
+                                            <p><b>Tutores encargados: </b></p>
+                                            {% for t in g.tutores.all %}
+                                                <p class="card-text ml-5">{{ t.nombre }}<br></p>
+                                            {% endfor %}
+                                            <p><b>Alumnos: </b></p>
+                                            {% for a in g.alumnos.all %}
+                                                <p class="card-text ml-5">{{ a.nombre }}<br></p>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                                            <a class='btn btn-warning' href='{% url 'menu:editar-grupo' id=g.id %}'>Editar grupo</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4" style="margin-left: 16px; margin-right: -16px;">
+                                <div class="card bg-light mb-3" style="max-width: 18rem;">
+                                    <div class="card-header"><button type="button" class="btn btn-link" data-toggle='modal' data-target='#exampleModalCenter{{ g.id }}'>
+                                        {{ g.titulo }}
+                                    </button></div>
+                                    <div class="card-body">
+                                        <p class="card-text">{{ g.descripcion }}</p>
+                                        {% for t in g.tutores.all %}
+                                            <p class="card-text"><b>Tutor/es: </b>{{ t.nombre }}<br></p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% if forloop.counter0|add:1|divisibleby:3 %}
+                                </div>
+                                <div class="row">
+                            {% endif %}
+                        {% endfor %}
+
+                        </div>
+                </div>
+            </div>
+        </div>
+
     {% endif %}
     {% if baja or alta %}
         <a class="btn btn-primary pull-right mr-2" href="{% url 'menu:buscar-tutor' %}">Atras</a>

@@ -42,4 +42,5 @@ urlpatterns = [
     path('grupos', views.listarGrupos, name = 'listar-grupos'),
     path('editar/grupo/<int:id>/', views.editarGrupo, name='editar-grupo'),
     path('grupo/eliminar/<int:id>/', views.eliminarGrupo, name = 'eliminar-grupo'),
+    path('informes/ranking-consultas/', views.rankingConsultas, name = 'ranking-consultas'),
 ]

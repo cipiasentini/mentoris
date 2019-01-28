@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from collections import Counter
 # calendario
 from django.shortcuts import render_to_response
 from django.contrib import messages
@@ -305,6 +306,7 @@ def buscarTutor(request):
             if (int(id) < 999999):
                 try:
                     tutor = Tutor.objects.get(legajo=id)
+                    grupos = Grupo.objects.filter(tutores__dni=tutor.dni)
                 except:
                     return render(request, 'menu/buscar-tutor.html',
                                   {'form': form, 'not_found': True, 'nbar': 'tutores'})
@@ -313,7 +315,7 @@ def buscarTutor(request):
                     tutor = Tutor.objects.get(dni=id)
                 except:
                     return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
-            return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'nbar': 'tutores'})
+            return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'grupos': grupos, 'nbar': 'tutores'})
         form = buscarTutorForm()
         return render(request, 'menu/buscar-tutor.html', {'form': form, 'bad': True, 'nbar': 'tutores'})
     else:
@@ -758,3 +760,22 @@ def eliminarGrupo(request, id):
             return redirect('menu:listar-grupos')
         grupo.delete()
         return redirect('menu:listar-grupos')
+    else:
+        return redirect('menu:listar-grupos')
+
+@staff_member_required
+def rankingConsultas(request):
+    if request.method == 'GET':
+        try:
+            int = Intervencion.objects.filter(fecha_alta__year=datetime.today().year)
+        except:
+            return redirect('menu:index')
+        # intervenciones = dict()
+        lista = []
+        for i in int:
+            lista.append(i.tipo)
+            intervenciones = Counter(lista)
+        #     intervenciones[i.tipo] = intervenciones.get(i, 0) + 1
+        return render(request, 'menu/informe-ranking-consultas.html', {'intervenciones': intervenciones, 'anio': datetime.today().year, 'nbar': 'informes'})
+    else:
+        return redirect('menu:informe-ranking-consultas')
