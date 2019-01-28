@@ -3,6 +3,22 @@
 {% block title %}<title>Tutorias: Editar tutor</title>{% endblock %}
 
 {% block content %}
+
+    <script>
+        $(function() {
+            var tipo = $("#id_tipo");
+            var hidden = $("#id_materia");
+            hidden.parent().hide();
+            tipo.change(function() {
+                if (tipo.val() == 'Academico') {
+                    hidden.parent().show();
+                } else {
+                    hidden.parent().hide();
+                };
+            });
+        });
+    </script>
+
     {% block warning %}
         {% if not_found %}
             <div id="separador" class="alert alert-danger" role="alert">

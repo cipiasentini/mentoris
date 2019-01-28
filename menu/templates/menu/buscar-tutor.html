@@ -89,6 +89,9 @@
                             <li class="list-group-item"><b>Legajo:</b> {{ tutor.legajo }}</li>
                             <li class="list-group-item"><b>Telefono:</b> {{ tutor.telefono }}</li>
                             <li class="list-group-item"><b>Tipo:</b> {{ tutor.tipo }}</li>
+                            {% if tutor.materia %}
+                                <li class="list-group-item"><b>Materia/s:</b> {{ tutor.materia }}</li>
+                            {% endif %}
                             <li class="list-group-item"><b>Mail:</b> {{ tutor.mail }}</li>
                             <li class="list-group-item"><b>Horario de atención:</b> {{ tutor.horario }}</li>
                             <li class="list-group-item"><b>Fecha de alta:</b> {{ tutor.fecha_alta }}</li>

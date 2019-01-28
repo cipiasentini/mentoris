@@ -259,6 +259,8 @@ def editarTutor(request, legajo):
     if request.method == 'POST':
         form = editarTutorForm(request.POST, instance=tutor)
         if form.is_valid():
+            if tutor.tipo != "Academico":
+                tutor.materia = None
             form.save()
             return render(request, 'menu/editar-tutor.html', {'form': form, 'success': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
         else:
