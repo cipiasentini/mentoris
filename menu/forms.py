@@ -80,7 +80,7 @@ class buscarTutorForm(forms.Form):
 class editarTutorForm(ModelForm):
     class Meta:
         model = Tutor
-        exclude = ['fecha_desvinculacion', 'fecha_alta']
+        exclude = ['fecha_desvinculacion', 'fecha_alta', 'usuario']
         widgets = {
             'tipo': Select2Widget(choices=(('Motivacional', 'Motivacional'),
                                            ('Academico', 'Académico'),

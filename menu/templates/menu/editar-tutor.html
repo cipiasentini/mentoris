@@ -9,6 +9,9 @@
             var tipo = $("#id_tipo");
             var hidden = $("#id_materia");
             hidden.parent().hide();
+            if (tipo.val() == 'Academico') {
+                    hidden.parent().show();
+                }
             tipo.change(function() {
                 if (tipo.val() == 'Academico') {
                     hidden.parent().show();
