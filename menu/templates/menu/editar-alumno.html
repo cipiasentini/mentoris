@@ -8,13 +8,25 @@
         $(function() {
             var checkbox = $("#id_discapacidad");
             var hidden = $("#id_tipo_discapacidad");
-            {#hidden.parent().hide();#}
+            if (!checkbox.is(':checked')) {
+                hidden.parent().hide();
+            }
             checkbox.change(function() {
                 if (checkbox.is(':checked')) {
                     hidden.parent().show();
                 } else {
                     hidden.parent().hide();
                     hidden.val('');
+                }
+            });
+            var checkbox2 = $("#id_dejo_seminario");
+            var hidden2 = $("#id_motivo_dejo_seminario");
+            hidden2.parent().hide();
+            checkbox2.change(function() {
+                if (checkbox2.is(':checked')) {
+                    hidden2.parent().show();
+                } else {
+                    hidden2.parent().hide();
                 }
             });
         });

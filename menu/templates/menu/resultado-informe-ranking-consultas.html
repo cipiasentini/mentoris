@@ -17,17 +17,10 @@
         {% endif %}
     {% endblock %}
 
-    <h2>Ranking de consultas por tema</h2>
-    <form class="mt-3" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {% include 'common/form_template.html' with form=form %}
-        </div>
-        <div class="clearfix mb-3">
-            <div class="float-right">
-                <button type="submit" class="btn btn-secondary"  value="login" tabindex="3">Buscar</button>
-            </div>
-        </div>
-        <input type="hidden" name="next" value="{{ next }}" />
-    </form>
+    <h2>Ranking consultas desde {{ desde.date }} hasta {{ hasta.date }}</h2>
+    <div class="card-body" style="margin: -10px -20px -20px -20px;">
+        {% for i in intervenciones %}
+            <p>{{ i }}: {{ intervenciones|get_item:i }} </p>
+        {% endfor %}
+    </div>
 {% endblock %}

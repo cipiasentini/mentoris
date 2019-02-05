@@ -88,7 +88,7 @@
                                 <li class="list-group-item"><b>DNI:</b> {{ alumno_inst.dni }}</li>
                                 <li class="list-group-item"><b>Legajo:</b> {{ alumno_inst.legajo }}</li>
                                 <li class="list-group-item"><b>Email:</b> {{ alumno_inst.mail }}</li>
-                                {% if alumno_inst.situacion_riesgo == 'Ninguna' %}
+                                {% if alumno_inst.situacion_riesgo == 'No' %}
                                     <li class="list-group-item"><b>Situacion de riesgo:</b> <span class="badge badge-success">NO</span></li>
                                 {% else %}
                                     <li class="list-group-item"><b>Situacion de riesgo:</b> <span class="badge badge-danger">SI</span></li>
@@ -125,7 +125,18 @@
                     <div class="tab-pane fade" id="seminario" role="tabpanel" aria-labelledby="home-tab">
                         <div class="card-body col pull-left">
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><b>Test:</b> {{ alumno_inst.carrera }}</li>
+                                <li class="list-group-item"><b>Tipo de cursado:</b> {{ alumno_inst.tipo_cursado }}</li>
+                                {% if alumno_inst.dejo_seminario == 'True' %}
+                                    <li class="list-group-item"><b>Dejo el seminario?</b> <span class="badge badge-danger">SI</span></li>
+                                    <li class="list-group-item"><b>Motivo por el que dejo el seminario:</b> {{ alumno_inst.motivo_dejo_seminario }}</li>
+                                {% else %}
+                                    <li class="list-group-item"><b>Dejo el seminario?</b> <span class="badge badge-success">NO</span></li>
+                                {% endif %}
+                                {% if alumno_inst.recursante == 'No' %}
+                                    <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-success">NO</span></li>
+                                {% else %}
+                                    <li class="list-group-item"><b>Recursa el seminario?</b> {{ alumno_inst.recursante }}</li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -233,7 +244,7 @@
                                 </table>
                             </div>
                         </div>
-                                                    <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>
+                        <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:alta-intervencion' %}?next={{request.path}}">Agregar intervención</a>
                     </ul>
                 </div>
             </div>

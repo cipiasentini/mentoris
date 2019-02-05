@@ -40,9 +40,13 @@ class Alumno(Persona):
     # legajo = models.IntegerField(unique=True, blank=True)
     legajo = models.IntegerField(unique=True, blank=True, null=True)
     situacion_riesgo = models.CharField(max_length=60, null=True, blank=True, default='No')
-    observaciones = models.TextField(null=True, blank=True)
+    tipo_cursado = models.CharField(max_length=60, null=True, blank=True, default='Semipresencial')
+    recursante = models.CharField(max_length=60, null=True, blank=True, default='No')
     discapacidad = models.BooleanField(default=False)
     tipo_discapacidad = models.CharField(max_length=40, null=True, blank=True, default=None)
+    dejo_seminario = models.BooleanField(default=False, blank=True)
+    motivo_dejo_seminario = models.CharField(max_length=60, null=True, blank=True)
+    observaciones = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return ' Legajo: {}, Nombre: {}'.format(self.legajo, self.nombre)
@@ -59,6 +63,7 @@ class Intervencion(models.Model):
     materia = models.ForeignKey('sysacad.Materia', on_delete=models.DO_NOTHING, null=True, blank=True)
     tutor_asignado = models.ForeignKey('Tutor', on_delete=models.DO_NOTHING)
     alumno = models.ForeignKey('Alumno', on_delete=models.DO_NOTHING)
+    medio = models.CharField(max_length=40, default='Personal')
 
     # dni = CompositeForeignKey('sysacad.Materia', on_delete=models.DO_NOTHING, related_name=persona, to_fields={
     #     "tipodocume":

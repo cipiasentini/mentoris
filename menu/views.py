@@ -5,7 +5,8 @@ from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo
 from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria, Alumcom as MateriaAlumno, Especial as SysacadEspecial)
 from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agregarIntervencionForm, agregarIntervencionTipoForm)
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarIntervencionForm,
-                    editarNovedadForm, agregarTareaForm, editarTutorForm, editarTareaForm, agregarGrupoForm, editarGrupoForm)
+                    editarNovedadForm, agregarTareaForm, editarTutorForm, editarTareaForm, agregarGrupoForm, editarGrupoForm,
+                    rankingConsultasTemaForm)
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.http import HttpResponse
@@ -121,7 +122,6 @@ def buscarAlumno(request):
                     especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
                     intervenciones = Intervencion.objects.filter(alumno=alumno)
                     materiaAlumno = MateriaAlumno.objects.filter(legajo=id)
-                    materias = SysacadMateria.objects.all()
                 except:
                     return render(request, 'menu/buscar-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
             else:
@@ -132,14 +132,13 @@ def buscarAlumno(request):
                     especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
                     intervenciones = Intervencion.objects.filter(alumno=alumno)
                     materiaAlumno = MateriaAlumno.objects.filter(legajo=id)
-                    materias = SysacadMateria.objects.all()
                 except:
                     return render(request, 'menu/buscar-alumno.html',
                                   {'form': form, 'not_found': True, 'nbar': 'alumnos'})
             return render(request, 'menu/buscar-alumno.html', {'form': form, 'materiasAlumno': materiaAlumno ,'alumno_inst': alumno,
                                                                'intervenciones': intervenciones, 'nbar': 'alumnos',
-                                                               'materias': materias, 'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
-                                                                'sys_esp': especialidadSysacad})
+                                                               'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+                                                               'sys_esp': especialidadSysacad})
         else:
             return render(request, 'menu/buscar-alumno.html', {'form': form,  'nbar': 'alumnos'})
     else:
@@ -336,6 +335,7 @@ def agregarIntervencion(request):
                     nueva_intervencion = Intervencion(
                         tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
                         descripcion=str(form.cleaned_data['descripcion']),
+                        medio=form.cleaned_data['medio'],
                         tutor_asignado=Tutor.objects.get(dni=form.cleaned_data['tutor_asignado'].dni),
                         alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
                     )
@@ -343,6 +343,7 @@ def agregarIntervencion(request):
                     nueva_intervencion = Intervencion(
                         tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
                         descripcion=str(form.cleaned_data['descripcion']),
+                        medio=form.cleaned_data['medio'],
                         tutor_asignado=Tutor.objects.get(dni=request.user.username),
                         alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
                     )
@@ -355,6 +356,7 @@ def agregarIntervencion(request):
                     tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
                     descripcion=str(form.cleaned_data['descripcion']),
                     materia=mat,
+                    medio=form.cleaned_data['medio'],
                     tutor_asignado=Tutor.objects.get(dni=form.cleaned_data['tutor_asignado'].dni),
                     alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
                 )
@@ -363,6 +365,7 @@ def agregarIntervencion(request):
                     tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
                     descripcion=str(form.cleaned_data['descripcion']),
                     materia=mat,
+                    medio=form.cleaned_data['medio'],
                     tutor_asignado=Tutor.objects.get(dni=request.user.username),
                     alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
                 )
@@ -459,7 +462,7 @@ def cerrarIntervencionB(request, id):
         intervencion.estado = 'Cerrada'
         intervencion.fecha_baja = datetime.now()
         intervencion.save()
-        return redirect('menu:buscar-alumno-id', id=intervencion.alumno.legajo)
+        return redirect('menu:buscar-alumno')
 
 @login_required
 def abrirIntervencionB(request, id):
@@ -471,7 +474,7 @@ def abrirIntervencionB(request, id):
         intervencion.estado = 'Abierta'
         intervencion.fecha_baja = None
         intervencion.save()
-        return redirect('menu:buscar-alumno-id', id=intervencion.alumno.legajo)
+        return redirect('menu:buscar-alumno')
 
 @staff_member_required
 def eliminarIntervencion(request, id):
@@ -765,19 +768,44 @@ def eliminarGrupo(request, id):
     else:
         return redirect('menu:listar-grupos')
 
+# @staff_member_required
+# def rankingConsultas(request):
+#     if request.method == 'GET':
+#         try:
+#             int = Intervencion.objects.filter(fecha_alta__year=datetime.today().year)
+#         except:
+#             return redirect('menu:index')
+#         lista = []
+#         for i in int:
+#             lista.append(i.tipo)
+#             intervenciones = Counter(lista)
+#         #     intervenciones[i.tipo] = intervenciones.get(i, 0) + 1
+#         return render(request, 'menu/informe-ranking-consultas.html', {'intervenciones': intervenciones, 'anio': datetime.today().year, 'nbar': 'informes'})
+#     else:
+#         return redirect('menu:informe-ranking-consultas')
+
 @staff_member_required
 def rankingConsultas(request):
-    if request.method == 'GET':
-        try:
-            int = Intervencion.objects.filter(fecha_alta__year=datetime.today().year)
-        except:
-            return redirect('menu:index')
-        # intervenciones = dict()
-        lista = []
-        for i in int:
-            lista.append(i.tipo)
-            intervenciones = Counter(lista)
-        #     intervenciones[i.tipo] = intervenciones.get(i, 0) + 1
-        return render(request, 'menu/informe-ranking-consultas.html', {'intervenciones': intervenciones, 'anio': datetime.today().year, 'nbar': 'informes'})
+    if request.method == 'POST':
+        form = rankingConsultasTemaForm(request.POST)
+        if form.is_valid():
+            try:
+                desde = form.cleaned_data['desde']
+                hasta = form.cleaned_data['hasta']
+            except:
+                return render(request, 'menu/informe-ranking-consultas.html', {'form': form, 'error': True, 'nbar': 'informes'})
+            try:
+                int = Intervencion.objects.filter(fecha_alta__range=(desde, hasta))
+            except:
+                return render(request, 'menu/informe-ranking-consultas.html', {'form': form, 'error': True, 'nbar': 'informes'})
+            lista = []
+            for i in int:
+                lista.append(i.tipo)
+                intervenciones = Counter(lista)
+            if len(lista) == 0:
+                return render(request, 'menu/informe-ranking-consultas.html',
+                       {'form': form, 'not_found': True, 'nbar': 'informes'})
+            return render(request, 'menu/resultado-informe-ranking-consultas.html', {'intervenciones': intervenciones, 'desde': desde, 'hasta': hasta, 'nbar': 'informes'})
     else:
-        return redirect('menu:informe-ranking-consultas')
+        form = rankingConsultasTemaForm()
+        return render(request, 'menu/informe-ranking-consultas.html', {'form': form, 'nbar': 'informes'})

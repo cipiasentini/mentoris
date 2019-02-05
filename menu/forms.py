@@ -21,13 +21,26 @@ class buscarAlumnoForm(forms.Form):
 class agregarAlumnoForm(ModelForm):
     class Meta:
         model = Alumno
-        fields = ['dni', 'observaciones', 'discapacidad', 'tipo_discapacidad']
+        fields = ['dni', 'tipo_cursado', 'recursante', 'discapacidad', 'tipo_discapacidad',
+                  'dejo_seminario', 'motivo_dejo_seminario', 'observaciones']
+        widgets = {
+            'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial')))
+        }
 
 class agregarIntervencionForm(forms.Form):
+    TIPOS = (
+        ('Personal', 'Personal'),
+        ('Campus virtual', 'Campus virtual'),
+        ('Instagram', 'Instagram'),
+        ('Facebook', 'Facebook'),
+        ('Correo electronico', 'Correo electronico'),
+        ('Otro', 'Otro')
+    )
     alumno = forms.ModelChoiceField(help_text="Ingrese el alumno involucrado en la intervención.", queryset=Alumno.objects.all(), widget=Select2Widget)
     materia = forms.ModelChoiceField(required=False, help_text="Ingrese la materia a la cual corresponda la consulta.", queryset=Materia.objects.all(), widget=Select2Widget)
     tutor_asignado = forms.ModelChoiceField(help_text="Ingrese el tutor que se encarga de la consulta.", queryset=Tutor.objects.all(), widget=Select2Widget)
     tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de la intervención.", queryset=Tipo.objects.all(), widget=Select2Widget)
+    medio = forms.ChoiceField(help_text="Ingrese el medio por el cuál se efectuó la intervención.", choices=TIPOS, widget=Select2Widget)
     descripcion = forms.CharField(widget=forms.Textarea)
 
     def __init__(self, *args, **kwargs):
@@ -97,6 +110,7 @@ class editarAlumnoForm(ModelForm):
         widgets = {
             'situacion_riesgo': Select2Widget(choices=(('Si', 'Si'), ('No', 'No'))),
             'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
+            'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial')))
         }
 
 class agregarNovedadForm(ModelForm):
@@ -134,29 +148,71 @@ class editarTareaForm(ModelForm):
             'estado': Select2Widget(choices=(('Abierta', 'Abierta'), ('Cerrada', 'Cerrada'))),
         }
 
-class editarIntervencionForm(forms.Form):
-    estado = (
+# class editarIntervencionForm(forms.Form):
+#     ESTADOS = (
+#         ('Abierta', 'Abierta'),
+#         ('Cerrada', 'Cerrada')
+#     )
+#     TIPOS = (
+#         ('Personal', 'Personal'),
+#         ('Campus virtual', 'Campus virtual'),
+#         ('Instagram', 'Instagram'),
+#         ('Facebook', 'Facebook'),
+#         ('Correo electronico', 'Correo electronico'),
+#         ('Otro', 'Otro')
+#     )
+#     tipo = forms.ModelChoiceField(queryset=Tipo.objects.all(), widget=Select2Widget)
+#     estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
+#     descripcion = forms.CharField()
+#     fecha_alta = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
+#     fecha_baja = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
+#     materia = forms.ModelChoiceField(queryset=Materia.objects.all(), widget=Select2Widget)
+#     tutor_asignado = forms.ModelChoiceField(queryset=Tutor.objects.all(), widget=Select2Widget)
+#     medio = forms.ChoiceField(choices=TIPOS, widget=Select2Widget)
+#     alumno = forms.ModelChoiceField(queryset=Alumno.objects.all(), widget=Select2Widget)
+#
+#     def __init__(self, *args, **kwargs):
+#         user = kwargs.pop('user', None)
+#         super(editarIntervencionForm, self).__init__(*args, **kwargs)
+#         if not user.is_staff:
+#             del self.fields['tutor_asignado']
+#             del self.fields['fecha_baja']
+#             del self.fields['alumno']
+#             del self.fields['materia']
+#             del self.fields['fecha_alta']
+
+class editarIntervencionForm(ModelForm):
+    ESTADOS = (
         ('Abierta', 'Abierta'),
         ('Cerrada', 'Cerrada')
     )
+    TIPOS = (
+        ('Personal', 'Personal'),
+        ('Campus virtual', 'Campus virtual'),
+        ('Instagram', 'Instagram'),
+        ('Facebook', 'Facebook'),
+        ('Correo electronico', 'Correo electronico'),
+        ('Otro', 'Otro')
+    )
     tipo = forms.ModelChoiceField(queryset=Tipo.objects.all(), widget=Select2Widget)
-    estado = forms.ChoiceField(choices=estado)
-    descripcion = forms.CharField()
-    fecha_alta = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
-    fecha_baja = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
+    estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
+    descripcion = forms.CharField(widget=forms.Textarea)
     materia = forms.ModelChoiceField(queryset=Materia.objects.all(), widget=Select2Widget)
     tutor_asignado = forms.ModelChoiceField(queryset=Tutor.objects.all(), widget=Select2Widget)
+    medio = forms.ChoiceField(choices=TIPOS, widget=Select2Widget)
     alumno = forms.ModelChoiceField(queryset=Alumno.objects.all(), widget=Select2Widget)
+
+    class Meta:
+        model = Intervencion
+        exclude = ['fecha_baja', 'fecha_alta']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
         super(editarIntervencionForm, self).__init__(*args, **kwargs)
         if not user.is_staff:
             del self.fields['tutor_asignado']
-            del self.fields['fecha_baja']
             del self.fields['alumno']
             del self.fields['materia']
-            del self.fields['fecha_alta']
 
 class agregarGrupoForm(ModelForm):
     tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
@@ -180,6 +236,10 @@ class editarGrupoForm(ModelForm):
         widgets = {
             'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
         }
+
+class rankingConsultasTemaForm(forms.Form):
+    desde = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d'))
+    hasta = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d'))
 
 # class editarIntervencionForm(ModelForm):
 #     class Meta:

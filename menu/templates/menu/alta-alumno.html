@@ -16,6 +16,16 @@
                     hidden.parent().hide();
                 }
             });
+            var checkbox2 = $("#id_dejo_seminario");
+            var hidden2 = $("#id_motivo_dejo_seminario");
+            hidden2.parent().hide();
+            checkbox2.change(function() {
+                if (checkbox2.is(':checked')) {
+                    hidden2.parent().show();
+                } else {
+                    hidden2.parent().hide();
+                }
+            });
         });
     </script>
 
