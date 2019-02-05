@@ -21,12 +21,26 @@
             });
             var checkbox2 = $("#id_dejo_seminario");
             var hidden2 = $("#id_motivo_dejo_seminario");
-            hidden2.parent().hide();
+            if (!checkbox2.is(':checked')) {
+                hidden2.parent().hide();
+            }
             checkbox2.change(function() {
                 if (checkbox2.is(':checked')) {
                     hidden2.parent().show();
                 } else {
                     hidden2.parent().hide();
+                }
+            });
+            var checkbox3 = $("#id_recursante");
+            var hidden3 = $("#id_motivo_recursante");
+            if (!checkbox3.is(':checked')) {
+                hidden3.parent().hide();
+            }
+            checkbox3.change(function() {
+                if (checkbox3.is(':checked')) {
+                    hidden3.parent().show();
+                } else {
+                    hidden3.parent().hide();
                 }
             });
         });

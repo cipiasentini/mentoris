@@ -1,5 +1,5 @@
 # Preguntar a Bianca:
-1. Si le gustaria mas buscar el tutor por nombre que por DNI/Legajo (seguramente si)?
+1. Si le gustaria mas buscar el TUTOR por nombre que por DNI/Legajo (seguramente si)? Esto si puedo cambiar, para alumno no.
 2. Los grupos se borran? Con que periodicidad? O queda todo guardado nomas...
 
 ---

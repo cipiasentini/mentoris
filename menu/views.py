@@ -29,6 +29,12 @@ def editarAlumno(request, dni):
     if request.method == 'POST':
         form = editarAlumnoForm(request.POST, instance=alumno)
         if form.is_valid():
+            if not alumno.recursante:
+                alumno.motivo_recursante = None
+            if not alumno.discapacidad:
+                alumno.tipo_discapacidad = None
+            if not alumno.dejo_seminario:
+                alumno.motivo_dejo_seminario = None
             form.save()
             return render(request, 'menu/editar-alumno.html', {'form': form, 'success': True, 'alumno_inst': alumno, 'nbar': 'alumno'})
         else:
@@ -122,6 +128,7 @@ def buscarAlumno(request):
                     especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
                     intervenciones = Intervencion.objects.filter(alumno=alumno)
                     materiaAlumno = MateriaAlumno.objects.filter(legajo=id)
+                    materias = SysacadMateria.objects.all()
                 except:
                     return render(request, 'menu/buscar-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
             else:
@@ -132,13 +139,33 @@ def buscarAlumno(request):
                     especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
                     intervenciones = Intervencion.objects.filter(alumno=alumno)
                     materiaAlumno = MateriaAlumno.objects.filter(legajo=id)
+                    materias = SysacadMateria.objects.all()
                 except:
                     return render(request, 'menu/buscar-alumno.html',
                                   {'form': form, 'not_found': True, 'nbar': 'alumnos'})
-            return render(request, 'menu/buscar-alumno.html', {'form': form, 'materiasAlumno': materiaAlumno ,'alumno_inst': alumno,
+            seminario = []
+            for ma in materiaAlumno:
+                if ma.especialid == 900:
+                    try:
+                        materia = SysacadMateria.objects.get(ma.materia)
+                    except:
+                        return render(request, 'menu/buscar-alumno.html',
+                                      {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
+                                       'intervenciones': intervenciones, 'nbar': 'alumnos',
+                                       'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+                                       'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma})
+                    seminario.append(tuple((ma, materia)))
+            if len(seminario) > 0:
+                return render(request, 'menu/buscar-alumno.html', {'form': form, 'materiasAlumno': materiaAlumno ,'alumno_inst': alumno,
                                                                'intervenciones': intervenciones, 'nbar': 'alumnos',
                                                                'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
-                                                               'sys_esp': especialidadSysacad})
+                                                               'sys_esp': especialidadSysacad, 'seminario': seminario})
+            else:
+                return render(request, 'menu/buscar-alumno.html',
+                              {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
+                               'intervenciones': intervenciones, 'nbar': 'alumnos',
+                               'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+                               'sys_esp': especialidadSysacad})
         else:
             return render(request, 'menu/buscar-alumno.html', {'form': form,  'nbar': 'alumnos'})
     else:
@@ -165,8 +192,12 @@ def agregarAlumno(request):
                 telefono=persona_sysacad.telefono,
                 mail=persona_sysacad.mail,
                 legajo=alumno_sysacad.legajo,
-                situacion_riesgo='Ninguna',
+                situacion_riesgo='No',
                 observaciones=observaciones,
+                recursante=form.cleaned_data['recursante'],
+                motivo_recursante=form.cleaned_data['motivo_recursante'],
+                dejo_seminario=form.cleaned_data['dejo_seminario'],
+                motivo_dejo_seminario=form.cleaned_data['motivo_dejo_seminario'],
             )
             Alumno.save(nuevo_alumno)
             form = agregarAlumnoForm()
@@ -314,6 +345,7 @@ def buscarTutor(request):
             else:
                 try:
                     tutor = Tutor.objects.get(dni=id)
+                    grupos = Grupo.objects.filter(tutores__dni=tutor.dni)
                 except:
                     return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
             return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'grupos': grupos, 'nbar': 'tutores'})
@@ -707,14 +739,14 @@ def agregarGrupo(request):
                     try:
                         persona_sysacad = SysacadPersona.objects.get(numerodocu=alu.numerodocu)
                     except:
-                        return render(request, 'menu/alta-grupo.html', {'form': form, 'nbar': 'grupos'})
+                        return render(request, 'menu/alta-grupo.html', {'form': form, 'error_alumno': True, 'nbar': 'grupos'})
                     nuevo_alumno = Alumno(
                         nombre=persona_sysacad.nombre,
                         dni=alu.numerodocu,
                         telefono=persona_sysacad.telefono,
                         mail=persona_sysacad.mail,
                         legajo=alu.legajo,
-                        situacion_riesgo='Ninguna'
+                        situacion_riesgo='No'
                     )
                     Alumno.save(nuevo_alumno)
                     grupo.alumnos.add(nuevo_alumno)

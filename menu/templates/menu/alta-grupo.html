@@ -9,9 +9,14 @@
                 El grupo <b>{{ grupo.titulo }}</b> fue dado de alta correctamente.
             </div>
         {% endif %}
+        {% if error_alumno %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Alguno de los alumnos escogidos no se encuentra en el sysacad.
+            </div>
+        {% endif %}
     {% endblock %}
     <div class="container">
-        <h2>Nuevo Tutor</h2>
+        <h2>Nuevo Grupo</h2>
         <div class="row">
             <div class="col">
                 <form method="post">{% csrf_token %}

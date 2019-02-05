@@ -94,7 +94,7 @@
                             {% endif %}
                             <li class="list-group-item"><b>Mail:</b> {{ tutor.mail }}</li>
                             <li class="list-group-item"><b>Horario de atención:</b> {{ tutor.horario }}</li>
-                            <li class="list-group-item"><b>Fecha de alta:</b> {{ tutor.fecha_alta }}</li>
+                            <li class="list-group-item"><b>Fecha de alta:</b> {{ tutor.fecha_alta.date }}</li>
                             {% if tutor.fecha_desvinculacion %}
                                 <li class="list-group-item"><b>Fecha de desvinculación:</b> <span class="badge badge-danger">{{ tutor.fecha_desvinculacion }}</span></li>
                             {% endif %}

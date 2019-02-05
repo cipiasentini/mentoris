@@ -41,7 +41,8 @@ class Alumno(Persona):
     legajo = models.IntegerField(unique=True, blank=True, null=True)
     situacion_riesgo = models.CharField(max_length=60, null=True, blank=True, default='No')
     tipo_cursado = models.CharField(max_length=60, null=True, blank=True, default='Semipresencial')
-    recursante = models.CharField(max_length=60, null=True, blank=True, default='No')
+    recursante = models.BooleanField(default=False, blank=True)
+    motivo_recursante = models.CharField(max_length=60, null=True, blank=True, default=None)
     discapacidad = models.BooleanField(default=False)
     tipo_discapacidad = models.CharField(max_length=40, null=True, blank=True, default=None)
     dejo_seminario = models.BooleanField(default=False, blank=True)
@@ -100,11 +101,3 @@ class Grupo(models.Model):
     def __str__(self):
         return ' Grupo: {}, Horario: {}'.format(self.titulo, self.horario)
 
-#
-# class Tutor_x_grupo(models.Model):
-#     grupo = models.ForeignKey('Grupo', on_delete=models.DO_NOTHING)
-#     tutor = models.ForeignKey('Tutor', on_delete=models.DO_NOTHING)
-#
-# class Alumno_x_grupo(models.Model):
-#     grupo = models.ForeignKey('Grupo', on_delete=models.DO_NOTHING)
-#     alumno = models.ForeignKey('Alumno', on_delete=models.DO_NOTHING)

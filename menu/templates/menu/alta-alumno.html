@@ -26,6 +26,16 @@
                     hidden2.parent().hide();
                 }
             });
+            var checkbox3 = $("#id_recursante");
+            var hidden3 = $("#id_motivo_recursante");
+            hidden3.parent().hide();
+            checkbox3.change(function() {
+                if (checkbox3.is(':checked')) {
+                    hidden3.parent().show();
+                } else {
+                    hidden3.parent().hide();
+                }
+            });
         });
     </script>
 

@@ -305,6 +305,9 @@ class Alumno(models.Model):
         db_table = 'Sysacad].[alumno'
         unique_together = (('facultad', 'legajo'),)
 
+    def __str__(self):
+        return ' DNI: {}'.format(self.numerodocu)
+
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)

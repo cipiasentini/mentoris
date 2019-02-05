@@ -21,8 +21,8 @@ class buscarAlumnoForm(forms.Form):
 class agregarAlumnoForm(ModelForm):
     class Meta:
         model = Alumno
-        fields = ['dni', 'tipo_cursado', 'recursante', 'discapacidad', 'tipo_discapacidad',
-                  'dejo_seminario', 'motivo_dejo_seminario', 'observaciones']
+        fields = ['dni', 'tipo_cursado', 'observaciones', 'recursante', 'motivo_recursante', 'discapacidad', 'tipo_discapacidad',
+                  'dejo_seminario', 'motivo_dejo_seminario']
         widgets = {
             'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial')))
         }
@@ -106,10 +106,10 @@ class editarTutorForm(ModelForm):
 class editarAlumnoForm(ModelForm):
     class Meta:
         model = Alumno
-        exclude = ['fecha_desvinculacion']
+        exclude = ['fecha_desvinculacion', 'fecha_alta']
         widgets = {
             'situacion_riesgo': Select2Widget(choices=(('Si', 'Si'), ('No', 'No'))),
-            'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
+            # 'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
             'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial')))
         }
 
