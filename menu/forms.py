@@ -220,7 +220,7 @@ class agregarGrupoForm(ModelForm):
     titulo = forms.CharField(help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
     class Meta:
         model = Grupo
-        exclude = ['fecha_baja']
+        exclude = ['fecha_baja', 'fecha_alta']
         widgets = {
             'fecha_alta': DatePickerInput(format='%Y-%m-%d')
         }

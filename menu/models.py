@@ -34,7 +34,7 @@ class Tutor(Persona):
     # fecha_desvinculacion = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return ' Nombre de tutor: {}, Tipo: {}'.format(self.nombre, self.tipo)
+        return 'DNI: {}, Nombre: {}, Tipo: {}'.format(self.dni, self.nombre, self.tipo)
 
 class Alumno(Persona):
     # legajo = models.IntegerField(unique=True, blank=True)
@@ -50,7 +50,7 @@ class Alumno(Persona):
     observaciones = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return ' Legajo: {}, Nombre: {}'.format(self.legajo, self.nombre)
+        return ' Legajo: {}, DNI: {}, Nombre: {}'.format(self.legajo, self.dni, self.nombre)
 
 class Intervencion(models.Model):
     # tipo = models.CharField(max_length=40, blank= True, null=True)

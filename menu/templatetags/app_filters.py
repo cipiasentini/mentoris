@@ -16,3 +16,7 @@ def concat(arg1, arg2):
 @register.filter(name='get_item')
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+@register.filter(name='get_seminario_nombre')
+def get_seminario_nombre(lista, key):
+    return lista[key].nombre

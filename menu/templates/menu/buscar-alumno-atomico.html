@@ -109,11 +109,11 @@
                                 {% if alumno_inst.discapacidad %}
                                     <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.tipo_discapacidad }}</li>
                                 {% else %}
-                                    <li class="list-group-item"><b>Discapacidad:</b> No </li>
+                                    <li class="list-group-item"><b>Discapacidad:</b> <span class="badge badge-warning">NO</span></li>
                                 {% endif %}
                                 {#                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>#}
-                                <li class="list-group-item"><b>Trabajo:</b> {{ sys_per.trabaja }}</li>
-                                <li class="list-group-item"><b>Hijos:</b> {{ sys_per.tenenciahi }}</li>
+                                <li class="list-group-item"><b>Trabajo:</b> <span class="badge badge-warning">{{ sys_per.trabaja }}</span></li>
+                                <li class="list-group-item"><b>Hijos:</b> <span class="badge badge-warning">{{ sys_per.tenenciahi }}</span></li>
                                 <li class="list-group-item"><b>Código postal de ciudad originaria:</b> {{ sys_per.codigopost }}</li>
                                 <li class="list-group-item"><b>Código postal de ciudad de residencia:</b> {{ sys_per.resicodigo }}</li>
                             </ul>
@@ -128,7 +128,24 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="seminario" role="tabpanel" aria-labelledby="home-tab">
-                        <div class="card-body col pull-left">
+                        {#                        <div class="card-body col pull-left">#}
+                        {#                            <ul class="list-group list-group-flush">#}
+                        {#                                <li class="list-group-item"><b>Tipo de cursado:</b> {{ alumno_inst.tipo_cursado }}</li>#}
+                        {#                                {% if alumno_inst.dejo_seminario == True %}#}
+                        {#                                    <li class="list-group-item"><b>Dejo el seminario?</b> <span class="badge badge-danger">SI</span></li>#}
+                        {#                                    <li class="list-group-item"><b>Motivo por el que dejo el seminario:</b> {{ alumno_inst.motivo_dejo_seminario }}</li>#}
+                        {#                                {% else %}#}
+                        {#                                    <li class="list-group-item"><b>Dejo el seminario?</b> <span class="badge badge-success">NO</span></li>#}
+                        {#                                {% endif %}#}
+                        {#                                {% if alumno_inst.recursante == True %}#}
+                        {#                                    <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-danger">SI</span></li>#}
+                        {#                                    <li class="list-group-item"><b>Motivo por el que dejo el seminario:</b> {{ alumno_inst.motivo_recursante }}</li>#}
+                        {#                                {% else %}#}
+                        {#                                    <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-success">NO</span></li>#}
+                        {#                                {% endif %}#}
+                        {#                            </ul>#}
+                        {#                        </div>#}
+                        <div class="card-body col-6 pull-left">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><b>Tipo de cursado:</b> {{ alumno_inst.tipo_cursado }}</li>
                                 {% if alumno_inst.dejo_seminario == True %}
@@ -142,6 +159,22 @@
                                     <li class="list-group-item"><b>Motivo por el que dejo el seminario:</b> {{ alumno_inst.motivo_recursante }}</li>
                                 {% else %}
                                     <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-success">NO</span></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="card-body col-6 pull-right">
+                            <ul class="list-group list-group-flush">
+                                {% if seminario %}
+                                    {% if cant_seminario == 3 %}
+                                        {% for m in seminario %}
+                                            <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-success">APROBÓ</span> </li>
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for m in seminario %}
+                                            <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-danger">DESAPROBÓ</span> </li>
+                                        {% endfor %}
+                                    {% endif %}
+
                                 {% endif %}
                             </ul>
                         </div>
