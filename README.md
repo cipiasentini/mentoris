@@ -1,5 +1,4 @@
 # Preguntar a Bianca:
-1. Si le gustaria mas buscar el TUTOR por nombre que por DNI/Legajo (seguramente si)? Esto si puedo cambiar, para alumno no.
 2. Los grupos se borran? Con que periodicidad? O queda todo guardado nomas...
 
 ---
@@ -7,16 +6,14 @@
 ## To-Do:
 ##### Funcionalidades
 1. Ver como hacer para que los grupos se borren automaticamente al iniciar un nuevo ciclo lectivo.
-4. Falta en alumno la info de la escuela.. hasta que la mendez no se ponga las pilas no puedo.
-Hay algo que si puedo hacer respecto al seminario: me dijo que las materias tienen especialidad 900, asi que busco en alumcom y materias las que existan con especialidad 900 y ahi veo cuales estan aprobadas o no. Ahora como se eso ni idea por las nota1..15 que hay.
+4. Falta en alumno la info de la escuela..
 
 ##### Bugs:
 7. Fixear el problema de display en pantallas chicas (celulares)
 9. Ver si se puede al cerrar/abrir una intervencion desde 'buscar-alumnos' para que redireccione a la busqueda del alummno y no al inicio
 
 ## Work in progress:
-2. Informes de escuela y el otro. El de consulta por tema ya esta a medias falta lo de periodo de comnsulta.
-3. Pedir a la mendez tabla de escuela y seminario con datos.
+2. Informes de escuela y el otro.
 
 ## Done:
 4. Pantalla de "buscar/editar tutor" agregar funcionalidad a editar y dar de baja tutor

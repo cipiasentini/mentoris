@@ -145,7 +145,7 @@
                         {#                                {% endif %}#}
                         {#                            </ul>#}
                         {#                        </div>#}
-                        <div class="card-body col-6 pull-left">
+                        <div class="card-body {% if seminario %}col-6{% else %}col{% endif %} pull-left">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><b>Tipo de cursado:</b> {{ alumno_inst.tipo_cursado }}</li>
                                 {% if alumno_inst.dejo_seminario == True %}
@@ -162,22 +162,21 @@
                                 {% endif %}
                             </ul>
                         </div>
-                        <div class="card-body col-6 pull-right">
-                            <ul class="list-group list-group-flush">
-                                {% if seminario %}
-                                    {% if cant_seminario == 3 %}
-                                        {% for m in seminario %}
-                                            <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-success">APROBÓ</span> </li>
-                                        {% endfor %}
-                                    {% else %}
-                                        {% for m in seminario %}
-                                            <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-danger">DESAPROBÓ</span> </li>
-                                        {% endfor %}
-                                    {% endif %}
-
-                                {% endif %}
-                            </ul>
-                        </div>
+                        {% if seminario %}
+                            <div class="card-body col-6 pull-right">
+                                <ul class="list-group list-group-flush">
+                                        {% if cant_seminario == 3 %}
+                                            {% for m in seminario %}
+                                                <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-success">APROBÓ</span> </li>
+                                            {% endfor %}
+                                        {% else %}
+                                            {% for m in seminario %}
+                                                <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-danger">DESAPROBÓ</span> </li>
+                                            {% endfor %}
+                                        {% endif %}
+                                </ul>
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                         <div class="col">

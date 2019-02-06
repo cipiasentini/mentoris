@@ -819,7 +819,7 @@ def rankingConsultas(request):
             if len(lista) == 0:
                 return render(request, 'menu/informe-ranking-consultas.html',
                               {'form': form, 'not_found': True, 'nbar': 'informes'})
-            return render(request, 'menu/resultado-informe-ranking-consultas.html', {'intervenciones': intervenciones, 'desde': desde, 'hasta': hasta, 'nbar': 'informes'})
+            return render(request, 'menu/resultado-informe-ranking-consultas.html', {'todas_intervencions': int, 'intervenciones': intervenciones, 'desde': desde, 'hasta': hasta, 'nbar': 'informes'})
     else:
         form = rankingConsultasTemaForm()
         return render(request, 'menu/informe-ranking-consultas.html', {'form': form, 'nbar': 'informes'})

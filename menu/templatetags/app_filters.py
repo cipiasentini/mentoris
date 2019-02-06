@@ -20,3 +20,8 @@ def get_item(dictionary, key):
 @register.filter(name='get_seminario_nombre')
 def get_seminario_nombre(lista, key):
     return lista[key].nombre
+
+@register.filter(name='get_element')
+def get_element(lista, tipo):
+    if tipo == lista.tipo:
+        return lista.descripcion

@@ -97,20 +97,6 @@
                                         </div>
                                     </li>
                                 {% endif %}
-                                {% if user.is_staff %}
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle {% if nbar == 'informes' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Informes
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <a class="dropdown-item" href="{% url 'menu:ranking-consultas' %}">Obtener ranking de consultas por tema</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="">Obtener resumen de rendimiento por colegio</a>
-                                            <div class="dropdown-divider"></div>
-                                            <a class="dropdown-item" href="">Obtener resumen de categorización de alumnos</a>
-                                        </div>
-                                    </li>
-                                {% endif %}
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle {% if nbar == 'grupos' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Grupos
@@ -136,11 +122,20 @@
                                         <a class="dropdown-item" href="{% url 'menu:agenda-tareas' year=c_year month=c_month day=c_day %}">Agenda de tareas</a>
                                     </div>
                                 </li>
-                                {#                            {% if user.is_staff %}#}
-                                {#                                <li class="nav-item {% if nbar == 'tareas' %}active{% endif %}">#}
-                                {#                                    <a class="nav-link" href="#">Agenda de tareas</a>#}
-                                {#                                </li>#}
-                                {#                            {% endif %}#}
+                                {% if user.is_staff %}
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle {% if nbar == 'informes' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Informes
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="{% url 'menu:ranking-consultas' %}">Obtener ranking de consultas por tema</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="">Obtener resumen de rendimiento por colegio</a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="">Obtener resumen de categorización de alumnos</a>
+                                        </div>
+                                    </li>
+                                {% endif %}
                                 {% if user.is_staff %}
                                     <li class="nav-item dropdown">
                                         <a class="nav-link dropdown-toggle {% if nbar == 'administrador' %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

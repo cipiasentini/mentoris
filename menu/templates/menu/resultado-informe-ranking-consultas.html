@@ -19,8 +19,26 @@
 
     <h2>Ranking consultas desde {{ desde.date }} hasta {{ hasta.date }}</h2>
     <div class="card-body" style="margin: -10px -20px -20px -20px;">
-        {% for i in intervenciones %}
-            <p>{{ i }}: {{ intervenciones|get_item:i }} </p>
-        {% endfor %}
+        <ul class="list-group">
+            {% for i in intervenciones %}
+                <li class="page-link h5 list-group-item d-flex justify-content-between align-items-center" data-toggle="collapse"
+                    data-target="#{{ i }}">
+                    <b><span class="badge badge-light">></span> {{ i }}</b>
+                    <span class="badge badge-primary badge-pill">{{ intervenciones|get_item:i }}</span>
+                </li>
+                <div class="collapse" id="{{ i }}">
+                    <div class="card card-body">
+                        {% for d in todas_intervencions %}
+                            {% if d|get_element:i %}
+                                <p>{{ d|get_element:i }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </ul>
+        {#        {% for i in intervenciones %}#}
+        {#            <p><b><a href="">{{ i }}:</a></b> {{ intervenciones|get_item:i }} </p>#}
+        {#        {% endfor %}#}
     </div>
 {% endblock %}
