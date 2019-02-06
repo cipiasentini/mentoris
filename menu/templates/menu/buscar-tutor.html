@@ -36,7 +36,7 @@
         <form class="mt-3" method="post">
             {% csrf_token %}
             <div class="form-group">
-                {% include 'common/form_template.html' with form=form %}
+                {% include 'common/form_busqueda.html' with form=form %}
             </div>
             <div class="clearfix mb-3">
                 <div class="float-right">

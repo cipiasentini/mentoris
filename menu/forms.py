@@ -9,7 +9,8 @@ from sysacad.models import Materia, Alumno as SysacadAlumno
 from bootstrap_datepicker_plus import DatePickerInput
 
 class buscarAlumnoForm(forms.Form):
-    id = forms.CharField(help_text="Ingrese el legajo o dni del alumno.")
+    id = forms.ModelChoiceField(help_text="Ingrese el legajo o dni del alumno.", queryset=Alumno.objects.all(), widget=Select2Widget)
+    # id = forms.CharField(help_text="Ingrese el legajo o dni del alumno.")
 
     def clean_id(self):
         data = self.cleaned_data['id']
@@ -80,7 +81,8 @@ class agregarTutorPersonalizadoForm(forms.Form):
     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
 
 class buscarTutorForm(forms.Form):
-    id = forms.CharField(help_text="Ingrese el legajo o dni del tutor.")
+    id = forms.ModelChoiceField(help_text="Ingrese el legajo o dni del tutor.", queryset=Tutor.objects.all(), widget=Select2Widget)
+    # id = forms.CharField(help_text="Ingrese el legajo o dni del tutor.")
 
     def clean_id(self):
         data = self.cleaned_data['id']

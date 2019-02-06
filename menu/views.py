@@ -45,61 +45,108 @@ def editarAlumno(request, dni):
 def buscarAlumno(request):
     if request.method == 'POST':
         form = buscarAlumnoForm(request.POST)
-        if form.is_valid():
-            id = form.cleaned_data['id']
-            # legajo
-            if (int(id) < 999999):
+        alu = int(form.data.get('id'))
+        alumno = Alumno.objects.get(dni=alu)
+        try:
+            personaSysacad = SysacadPersona.objects.get(numerodocu=alumno.dni)
+            alumnoSysacad = SysacadAlumno.objects.get(numerodocu=alumno.dni)
+            especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
+            intervenciones = Intervencion.objects.filter(alumno=alumno)
+            materiaAlumno = MateriaAlumno.objects.filter(legajo=alumno.legajo)
+        except:
+            return render(request, 'menu/buscar-alumno.html',
+                          {'form': form, 'not_found': True, 'nbar': 'alumnos'})
+        seminario = []
+        for ma in materiaAlumno:
+            if ma.especialid == 900:
                 try:
-                    alumno = Alumno.objects.get(legajo=id)
-                    personaSysacad = SysacadPersona.objects.get(numerodocu=alumno.dni)
-                    alumnoSysacad = SysacadAlumno.objects.get(numerodocu=alumno.dni)
-                    especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
-                    intervenciones = Intervencion.objects.filter(alumno=alumno)
-                    materiaAlumno = MateriaAlumno.objects.filter(legajo=id)
-                    materias = SysacadMateria.objects.all()
-                except:
-                    return render(request, 'menu/buscar-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
-            # dni
-            else:
-                try:
-                    alumno = Alumno.objects.get(dni=id)
-                    personaSysacad = SysacadPersona.objects.get(numerodocu=alumno.dni)
-                    alumnoSysacad = SysacadAlumno.objects.get(numerodocu=alumno.dni)
-                    especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
-                    intervenciones = Intervencion.objects.filter(alumno=alumno)
-                    materiaAlumno = MateriaAlumno.objects.filter(legajo=id)
-                    materias = SysacadMateria.objects.all()
+                    materia = SysacadMateria.objects.get(materia=ma.materia)
                 except:
                     return render(request, 'menu/buscar-alumno.html',
-                                  {'form': form, 'not_found': True, 'nbar': 'alumnos'})
-            seminario = []
-            for ma in materiaAlumno:
-                if ma.especialid == 900:
-                    try:
-                        materia = SysacadMateria.objects.get(materia=ma.materia)
-                    except:
-                        return render(request, 'menu/buscar-alumno.html',
-                                      {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
-                                       'intervenciones': intervenciones, 'nbar': 'alumnos',
-                                       'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
-                                       'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma})
-                    seminario.append(tuple((ma, materia)))
-            if len(seminario) > 0:
-                return render(request, 'menu/buscar-alumno.html', {'form': form, 'materiasAlumno': materiaAlumno ,'alumno_inst': alumno,
+                                  {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
+                                   'intervenciones': intervenciones, 'nbar': 'alumnos',
+                                   'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+                                   'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma})
+                seminario.append(tuple((ma, materia)))
+        if len(seminario) > 0:
+            return render(request, 'menu/buscar-alumno.html', {'form': form, 'materiasAlumno': materiaAlumno ,'alumno_inst': alumno,
                                                                'intervenciones': intervenciones, 'nbar': 'alumnos',
                                                                'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
                                                                'sys_esp': especialidadSysacad, 'seminario': seminario, 'cant_seminario': len(seminario)})
-            else:
-                return render(request, 'menu/buscar-alumno.html',
-                              {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
-                               'intervenciones': intervenciones, 'nbar': 'alumnos',
-                               'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
-                               'sys_esp': especialidadSysacad})
         else:
-            return render(request, 'menu/buscar-alumno.html', {'form': form,  'nbar': 'alumnos'})
+            return render(request, 'menu/buscar-alumno.html',
+                          {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
+                           'intervenciones': intervenciones, 'nbar': 'alumnos',
+                           'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+                           'sys_esp': especialidadSysacad})
     else:
         form = buscarAlumnoForm()
         return render(request, 'menu/buscar-alumno.html', {'form': form, 'nbar': 'alumnos'})
+
+# ESTE BUSCAR ALUMNO ES CON EL CAMPO DE BUSQUEDA COMUN, BUSCAR POR LEGAJO O DNI
+# PARA QUE FUNCIONE NECESITAS CAMBIAR EN BUSCAR-ALUMNO-ATOMICO.HTML EL FORM TEMPLATE form_template.html
+# Y EL FORM DE BUSCAR ALUMNO POR EL ID COMUN.
+# LO MISMO VA A PASAR PARA EL TUTOR, PORQUE CREO QUE ASI ES MEJOR BUSCARLO MAS FACIL.
+
+# @login_required
+# def buscarAlumno(request):
+#     if request.method == 'POST':
+#         form = buscarAlumnoForm(request.POST)
+#         if form.is_valid():
+#             id = form.cleaned_data['id']
+#             # legajo
+#             if (int(id) < 999999):
+#                 try:
+#                     alumno = Alumno.objects.get(legajo=id)
+#                     personaSysacad = SysacadPersona.objects.get(numerodocu=alumno.dni)
+#                     alumnoSysacad = SysacadAlumno.objects.get(numerodocu=alumno.dni)
+#                     especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
+#                     intervenciones = Intervencion.objects.filter(alumno=alumno)
+#                     materiaAlumno = MateriaAlumno.objects.filter(legajo=id)
+#                     materias = SysacadMateria.objects.all()
+#                 except:
+#                     return render(request, 'menu/buscar-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
+#             # dni
+#             else:
+#                 try:
+#                     alumno = Alumno.objects.get(dni=id)
+#                     personaSysacad = SysacadPersona.objects.get(numerodocu=alumno.dni)
+#                     alumnoSysacad = SysacadAlumno.objects.get(numerodocu=alumno.dni)
+#                     especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
+#                     intervenciones = Intervencion.objects.filter(alumno=alumno)
+#                     materiaAlumno = MateriaAlumno.objects.filter(legajo=id)
+#                     materias = SysacadMateria.objects.all()
+#                 except:
+#                     return render(request, 'menu/buscar-alumno.html',
+#                                   {'form': form, 'not_found': True, 'nbar': 'alumnos'})
+#             seminario = []
+#             for ma in materiaAlumno:
+#                 if ma.especialid == 900:
+#                     try:
+#                         materia = SysacadMateria.objects.get(materia=ma.materia)
+#                     except:
+#                         return render(request, 'menu/buscar-alumno.html',
+#                                       {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
+#                                        'intervenciones': intervenciones, 'nbar': 'alumnos',
+#                                        'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+#                                        'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma})
+#                     seminario.append(tuple((ma, materia)))
+#             if len(seminario) > 0:
+#                 return render(request, 'menu/buscar-alumno.html', {'form': form, 'materiasAlumno': materiaAlumno ,'alumno_inst': alumno,
+#                                                                'intervenciones': intervenciones, 'nbar': 'alumnos',
+#                                                                'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+#                                                                'sys_esp': especialidadSysacad, 'seminario': seminario, 'cant_seminario': len(seminario)})
+#             else:
+#                 return render(request, 'menu/buscar-alumno.html',
+#                               {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
+#                                'intervenciones': intervenciones, 'nbar': 'alumnos',
+#                                'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+#                                'sys_esp': especialidadSysacad})
+#         else:
+#             return render(request, 'menu/buscar-alumno.html', {'form': form,  'nbar': 'alumnos'})
+#     else:
+#         form = buscarAlumnoForm()
+#         return render(request, 'menu/buscar-alumno.html', {'form': form, 'nbar': 'alumnos'})
 
 @login_required
 def agregarAlumno(request):
@@ -262,27 +309,48 @@ def altaTutor(request, legajo):
 def buscarTutor(request):
     if request.method == 'POST':
         form = buscarTutorForm(request.POST)
-        if form.is_valid():
-            id = form.cleaned_data['id']
-            if (int(id) < 999999):
-                try:
-                    tutor = Tutor.objects.get(legajo=id)
-                    grupos = Grupo.objects.filter(tutores__dni=tutor.dni)
-                except:
-                    return render(request, 'menu/buscar-tutor.html',
-                                  {'form': form, 'not_found': True, 'nbar': 'tutores'})
-            else:
-                try:
-                    tutor = Tutor.objects.get(dni=id)
-                    grupos = Grupo.objects.filter(tutores__dni=tutor.dni)
-                except:
-                    return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
-            return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'grupos': grupos, 'nbar': 'tutores'})
-        form = buscarTutorForm()
-        return render(request, 'menu/buscar-tutor.html', {'form': form, 'bad': True, 'nbar': 'tutores'})
+        tut = int(form.data.get('id'))
+        tutor = Tutor.objects.get(dni=tut)
+        try:
+            grupos = Grupo.objects.filter(tutores__dni=tutor.dni)
+        except:
+            return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
+        return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'grupos': grupos, 'nbar': 'tutores'})
     else:
         form = buscarTutorForm()
         return render(request, 'menu/buscar-tutor.html', {'form': form, 'nbar': 'tutores'})
+
+
+# ESTE BUSCAR ALUMNO ES CON EL CAMPO DE BUSQUEDA COMUN, BUSCAR POR LEGAJO O DNI
+# PARA QUE FUNCIONE NECESITAS CAMBIAR EN BUSCAR-ALUMNO-ATOMICO.HTML EL FORM TEMPLATE form_template.html
+# Y EL FORM DE BUSCAR ALUMNO POR EL ID COMUN.
+# LO MISMO VA A PASAR PARA EL TUTOR, PORQUE CREO QUE ASI ES MEJOR BUSCARLO MAS FACIL.
+
+# @staff_member_required
+# def buscarTutor(request):
+#     if request.method == 'POST':
+#         form = buscarTutorForm(request.POST)
+#         if form.is_valid():
+#             id = form.cleaned_data['id']
+#             if (int(id) < 999999):
+#                 try:
+#                     tutor = Tutor.objects.get(legajo=id)
+#                     grupos = Grupo.objects.filter(tutores__dni=tutor.dni)
+#                 except:
+#                     return render(request, 'menu/buscar-tutor.html',
+#                                   {'form': form, 'not_found': True, 'nbar': 'tutores'})
+#             else:
+#                 try:
+#                     tutor = Tutor.objects.get(dni=id)
+#                     grupos = Grupo.objects.filter(tutores__dni=tutor.dni)
+#                 except:
+#                     return render(request, 'menu/buscar-tutor.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
+#             return render(request, 'menu/buscar-tutor.html', {'form': form, 'tutor': tutor, 'grupos': grupos, 'nbar': 'tutores'})
+#         else:
+#             return render(request, 'menu/buscar-tutor.html', {'form': form, 'bad': True, 'nbar': 'tutores'})
+#     else:
+#         form = buscarTutorForm()
+#         return render(request, 'menu/buscar-tutor.html', {'form': form, 'nbar': 'tutores'})
 
 @login_required
 def agregarIntervencion(request):
@@ -750,7 +818,7 @@ def rankingConsultas(request):
                 intervenciones = Counter(lista)
             if len(lista) == 0:
                 return render(request, 'menu/informe-ranking-consultas.html',
-                       {'form': form, 'not_found': True, 'nbar': 'informes'})
+                              {'form': form, 'not_found': True, 'nbar': 'informes'})
             return render(request, 'menu/resultado-informe-ranking-consultas.html', {'intervenciones': intervenciones, 'desde': desde, 'hasta': hasta, 'nbar': 'informes'})
     else:
         form = rankingConsultasTemaForm()
