@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
 from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo
-from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria, Alumcom as MateriaAlumno, Especial as SysacadEspecial)
+from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria,
+                            Alumcom as MateriaAlumno, Especial as SysacadEspecial, Escuela as SysacadEscuela)
 from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agregarIntervencionForm, agregarIntervencionTipoForm)
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarIntervencionForm,
                     editarNovedadForm, agregarTareaForm, editarTutorForm, editarTareaForm, agregarGrupoForm, editarGrupoForm,
@@ -53,6 +54,7 @@ def buscarAlumno(request):
             especialidadSysacad = SysacadEspecial.objects.get(especialid=alumnoSysacad.especialid)
             intervenciones = Intervencion.objects.filter(alumno=alumno)
             materiaAlumno = MateriaAlumno.objects.filter(legajo=alumno.legajo)
+            escuelaSysacad = SysacadEscuela.objects.filter(escuela=personaSysacad.escuela)
         except:
             return render(request, 'menu/buscar-alumno.html',
                           {'form': form, 'not_found': True, 'nbar': 'alumnos'})
@@ -65,18 +67,18 @@ def buscarAlumno(request):
                     return render(request, 'menu/buscar-alumno.html',
                                   {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
                                    'intervenciones': intervenciones, 'nbar': 'alumnos',
-                                   'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+                                   'sys_al': alumnoSysacad, 'sys_per': personaSysacad, 'escuela': escuelaSysacad,
                                    'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma})
                 seminario.append(tuple((ma, materia)))
         if len(seminario) > 0:
             return render(request, 'menu/buscar-alumno.html', {'form': form, 'materiasAlumno': materiaAlumno ,'alumno_inst': alumno,
                                                                'intervenciones': intervenciones, 'nbar': 'alumnos',
-                                                               'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+                                                               'sys_al': alumnoSysacad, 'sys_per': personaSysacad, 'escuela': escuelaSysacad,
                                                                'sys_esp': especialidadSysacad, 'seminario': seminario, 'cant_seminario': len(seminario)})
         else:
             return render(request, 'menu/buscar-alumno.html',
                           {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
-                           'intervenciones': intervenciones, 'nbar': 'alumnos',
+                           'intervenciones': intervenciones, 'nbar': 'alumnos', 'escuela': escuelaSysacad,
                            'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
                            'sys_esp': especialidadSysacad})
     else:

@@ -377,3 +377,23 @@ class Provincia(models.Model):
     class Meta:
         managed = False
         db_table = 'Sysacad].[provincia'
+
+class Escuela(models.Model):
+    escuela = models.DecimalField(max_digits=10, decimal_places=0, primary_key=True)
+    nombre = models.CharField(max_length=50, blank=True, null=True)
+    codigopost = models.SmallIntegerField(blank=True, null=True)
+    domicilio = models.CharField(max_length=40, blank=True, null=True)
+    tipoescuel = models.CharField(max_length=1, blank=True, null=True)
+    email = models.CharField(max_length=40, blank=True, null=True)
+    telefono = models.CharField(max_length=30, blank=True, null=True)
+    numerodomi = models.CharField(max_length=10, blank=True, null=True)
+    field_oper = models.CharField(db_column='__oper', max_length=1, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it started with '_'.
+    field_usuario = models.CharField(db_column='__usuario', max_length=12, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it started with '_'.
+    field_tiempo = models.DateTimeField(db_column='__tiempo', blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it started with '_'.
+
+    class Meta:
+        managed = False
+        db_table = 'Sysacad].[Escuela'
+
+    def __str__(self):
+        return ' Escuela: {}'.format(self.nombre.strip())
