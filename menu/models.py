@@ -33,8 +33,14 @@ class Tutor(Persona):
     usuario = models.CharField(max_length=20, blank=True, null=True)
     # fecha_desvinculacion = models.DateTimeField(null=True, blank=True)
 
+    def estado(self):
+        if self.fecha_desvinculacion:
+            return 'Inactivo'
+        else:
+            return 'Activo'
+
     def __str__(self):
-        return 'DNI: {}, Nombre: {}, Tipo: {}'.format(self.dni, self.nombre, self.tipo)
+        return 'DNI: {}; Nombre: {}; Tipo: {} --- Estado: {}'.format(self.dni, self.nombre, self.tipo, self.estado())
 
 class Alumno(Persona):
     # legajo = models.IntegerField(unique=True, blank=True)

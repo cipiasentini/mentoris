@@ -1,3 +1,13 @@
+/* CARDS de grupos scroll*/
+.scrollable{
+  overflow-y: auto !important;
+  max-height: 100px !important;
+}
+.card_scrollable{
+  width: 100% !important;
+  height: 200px !important;
+}
+
 /*CALENDArIO*/
 .cal-day {
     outline: 1px solid #cccccc;

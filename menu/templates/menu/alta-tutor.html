@@ -9,6 +9,11 @@
             var tipo = $("#id_tipo");
             var hidden = $("#id_materia");
             hidden.parent().hide();
+            if (tipo.val() == 'Academico') {
+                    hidden.parent().show();
+            } else {
+                hidden.parent().hide();
+            }
             tipo.change(function() {
                 if (tipo.val() == 'Academico') {
                     hidden.parent().show();
@@ -22,7 +27,7 @@
     {% block warning %}
         {% if not_found %}
             <div id="separador" class="alert alert-danger" role="alert">
-                No existe ningún registro en el SYSACAD para el DNI: {{ dni }}. Por favor cargue los datos del tutor manualmente.
+                No existe ningún registro en el SYSACAD para el DNI: <b>{{ dni }}</b>. Por favor cargue los datos del tutor manualmente.
             </div>
         {% endif %}
         {% if success %}
@@ -30,10 +35,14 @@
                 El tutor <b>{{ tutor.nombre }}</b> fue agregado correctamente.
             </div>
         {% endif %}
+        {% if error_form %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Verifique los campos ingresados.
+            </div>
+        {% endif %}
     {% endblock %}
 
     {% if alta_manual %}
-        <div class="container">
             <div class="row">
                 <div class="col">
                     <h2>Agregar tutor manualmente</h2>
@@ -42,9 +51,7 @@
                     <a class="btn btn-primary" href="{% url 'menu:alta-tutor-personalizada' %}">Añadir Manualmente</a>
                 </div>
             </div>
-        </div>
     {% else %}
-        <div class="container">
             <h2>Nuevo Tutor</h2>
             <div class="row">
                 <div class="col">
@@ -54,7 +61,6 @@
                     </form>
                 </div>
             </div>
-        </div>
     {% endif %}
 
 {% endblock %}

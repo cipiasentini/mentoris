@@ -63,9 +63,9 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         {% if tutor.fecha_desvinculacion %}
-                            <a class="btn btn-success" href="{% url 'menu:alta-tutor' legajo=tutor.legajo %}">Dar de alta</a>
+                            <a class="btn btn-success" href="{% url 'menu:alta-tutor' dni=tutor.dni %}">Dar de alta</a>
                         {% else %}
-                            <a class="btn btn-danger" href="{% url 'menu:baja-tutor' legajo=tutor.legajo %}">Dar de baja</a>
+                            <a class="btn btn-danger" href="{% url 'menu:baja-tutor' dni=tutor.dni %}">Dar de baja</a>
                         {% endif %}
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                     {% else %}
                         <button type="button" class="btn btn-danger pull-right mb-3 mr-3" data-toggle="modal" data-target="#exampleModal">Dar de baja</button>
                     {% endif %}
-                    <a class="btn btn-primary pull-right mr-2 mb-3" href="{% url 'menu:editar-tutor' legajo=tutor.legajo %}">Editar</a>
+                    <a class="btn btn-primary pull-right mr-2 mb-3" href="{% url 'menu:editar-tutor' dni=tutor.dni %}">Editar</a>
                 </div>
             </div>
 

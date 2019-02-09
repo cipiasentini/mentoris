@@ -9,6 +9,25 @@
         });
     </script>
 
+    {% block warning %}
+        {% if editado %}
+            <div id="separador" class="alert alert-success" role="alert">
+                El grupo <b>{{ grupo.titulo }}</b> fue editado correctamente.
+            </div>
+        {% endif %}
+        {% if agregado %}
+            <div id="separador" class="alert alert-success" role="alert">
+                El grupo <b>{{ grupo.titulo }}</b> fue agregado correctamente.
+            </div>
+        {% endif %}
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Error durante la edición del grupo.
+            </div>
+        {% endif %}
+    {% endblock %}
+
+
     {% if user.is_staff %}
         <h1>Grupos activos</h1>
     {% else %}
@@ -47,15 +66,19 @@
                 </div>
             </div>
             <div class="col-4">
-                <div class="card bg-light mb-3" style="max-width: 18rem;">
-                    <div class="card-header"><button type="button" class="btn btn-link" data-toggle='modal' data-target='#exampleModalCenter{{ g.id }}'>
+                <div class="card card_scrollable bg-light mb-3" style="max-width: 18rem;">
+                    <div class="card-header">
+                        <button type="button" class="btn btn-link" data-toggle='modal' data-target='#exampleModalCenter{{ g.id }}'>
                         {{ g.titulo }}
-                    </button></div>
+                        </button>
+                    </div>
                     <div class="card-body">
-                        <p class="card-text">{{ g.descripcion }}</p>
-                        {% for t in g.tutores.all %}
-                            <p class="card-text"><b>Tutor/es: </b>{{ t.nombre }}<br></p>
-                        {% endfor %}
+                        <div class="scrollable">
+                            <p class="card-text">{{ g.descripcion }}</p>
+                            {% for t in g.tutores.all %}
+                                <p class="card-text"><b>Tutor/es: </b>{{ t.nombre }}<br></p>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>

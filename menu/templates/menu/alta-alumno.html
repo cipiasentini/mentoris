@@ -8,7 +8,9 @@
         $(function() {
             var checkbox = $("#id_discapacidad");
             var hidden = $("#id_tipo_discapacidad");
-            hidden.parent().hide();
+            if (!checkbox.is(':checked')) {
+                hidden.parent().hide();
+            }
             checkbox.change(function() {
                 if (checkbox.is(':checked')) {
                     hidden.parent().show();
@@ -18,7 +20,9 @@
             });
             var checkbox2 = $("#id_dejo_seminario");
             var hidden2 = $("#id_motivo_dejo_seminario");
-            hidden2.parent().hide();
+            if (!checkbox2.is(':checked')) {
+                hidden2.parent().hide();
+            }
             checkbox2.change(function() {
                 if (checkbox2.is(':checked')) {
                     hidden2.parent().show();
@@ -28,7 +32,9 @@
             });
             var checkbox3 = $("#id_recursante");
             var hidden3 = $("#id_motivo_recursante");
-            hidden3.parent().hide();
+            if (!checkbox3.is(':checked')) {
+                hidden3.parent().hide();
+            }
             checkbox3.change(function() {
                 if (checkbox3.is(':checked')) {
                     hidden3.parent().show();
@@ -42,17 +48,28 @@
     {% block warning %}
         {% if not_found %}
             <div id="separador" class="alert alert-danger" role="alert">
-                No existe ningun alumno con ese legajo o nombre.
+                No existe ningun alumno con el DNI <b>{{ dni }}</b> en el SYSACAD.
             </div>
         {% endif %}
         {% if success %}
             <div id="separador" class="alert alert-success" role="alert">
-                El alumno {{ alumno.nombre }} fue agregado correctamente.
+                El alumno <b>{{ alumno.nombre }}</b> fue agregado correctamente.
+            </div>
+        {% endif %}
+        {% if existe_alumno %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                El alumno <b>{{ alumno.nombre }}</b> ya fue creado con antelación en la base de datos de tutorias.
+                Busquelo usando el buscador de alumnos en caso que desee editarlo.
+            </div>
+        {% endif %}
+        {% if error_form %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Verifique los campos ingresados.
             </div>
         {% endif %}
     {% endblock %}
 
-    <div class="container">
+{#    <div class="container">#}
         <h2>Nuevo Alumno</h2>
         <div class="row">
             <div class="col">
@@ -63,5 +80,5 @@
                 </form>
             </div>
         </div>
-    </div>
+{#    </div>#}
 {% endblock %}

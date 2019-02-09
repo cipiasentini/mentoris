@@ -158,10 +158,10 @@ def agregarAlumno(request):
             dni = form.cleaned_data['dni']
             observaciones = form.cleaned_data['observaciones']
             try:
-                persona_sysacad = SysacadPersona.objects.get(pk = dni)
-                alumno_sysacad = SysacadAlumno.objects.get(pk = dni)
-            except SysacadAlumno.DoesNotExist:
-                return render(request, 'menu/alta-alumno.html', {'form': form, 'not_found': True, 'nbar': 'alumnos'})
+                persona_sysacad = SysacadPersona.objects.get(numerodocu=dni)
+                alumno_sysacad = SysacadAlumno.objects.get(numerodocu=dni)
+            except:
+                return render(request, 'menu/alta-alumno.html', {'form': form, 'dni': dni, 'not_found': True, 'nbar': 'alumnos'})
             nuevo_alumno = Alumno(
                 nombre=persona_sysacad.nombre,
                 dni=dni,
@@ -180,6 +180,9 @@ def agregarAlumno(request):
             Alumno.save(nuevo_alumno)
             form = agregarAlumnoForm()
             return render(request, 'menu/alta-alumno.html', {'form': form, 'alumno': nuevo_alumno, 'success': True, 'nbar': 'alumnos'})
+        else:
+            return render(request, 'menu/alta-alumno.html',
+                              {'form': form, 'error_form': True, 'nbar': 'alumnos'})
     else:
         form = agregarAlumnoForm()
         return render(request, 'menu/alta-alumno.html', {'form': form, 'nbar': 'alumnos'})
@@ -194,14 +197,8 @@ def agregarTutor(request):
                 persona_sysacad = SysacadPersona.objects.get(pk=dni)
                 alumno_sysacad = SysacadAlumno.objects.get(pk=dni)
             except SysacadPersona.DoesNotExist:
-                # return agregarTutorPersonalizado(request)
-                # return render(request, 'menu/alta-tutor-personalizada.html', {'not_found': True, 'nbar': 'tutores', 'dni': dni})
                 return render(request, 'menu/alta-tutor.html',
                               {'alta_manual': True, 'not_found': True, 'nbar': 'tutores', 'dni': dni})
-                # return redirect('menu:alta-tutor-personalizada', {'not_found': True, 'nbar': 'tutores', 'dni': dni})
-                # return render(request, 'menu/alta-tutor-personalizada.html',
-                #               {'form': agregarTutorPersonalizadoForm(request.POST),
-                #                'alta_manual': True, 'nbar': 'tutores'})
             nuevo_tutor = Tutor(
                 nombre=persona_sysacad.nombre.rstrip(),
                 dni=persona_sysacad.numerodocu,
@@ -222,7 +219,7 @@ def agregarTutor(request):
             form = agregarTutorForm()
             return render(request, 'menu/alta-tutor.html', {'form': form, 'tutor': nuevo_tutor, 'success': True, 'nbar': 'tutores'})
         else:
-            return render(request, 'menu/alta-tutor.html', {'form': form,  'nbar': 'tutores'})
+            return render(request, 'menu/alta-tutor.html', {'form': form, 'error_form': True, 'nbar': 'tutores'})
     else:
         form = agregarTutorForm()
         return render(request, 'menu/alta-tutor.html', {'form': form, 'nbar': 'tutores'})
@@ -252,15 +249,15 @@ def agregarTutorPersonalizado(request):
             return render(request, 'menu/alta-tutor-personalizada.html', {'form': form, 'tutor': nuevo_tutor,
                                                                           'success': True, 'nbar': 'tutores'})
         else:
-            return render(request, 'menu/alta-tutor-personalizada.html', {'form': form, 'not_found': True, 'nbar': 'tutores'})
+            return render(request, 'menu/alta-tutor-personalizada.html', {'form': form, 'error_form': True, 'nbar': 'tutores'})
     else:
         form = agregarTutorPersonalizadoForm()
         return render(request, 'menu/alta-tutor-personalizada.html', {'form': form, 'nbar': 'tutores'})
 
 @staff_member_required
-def editarTutor(request, legajo):
+def editarTutor(request, dni):
     try:
-        tutor = Tutor.objects.get(legajo=legajo)
+        tutor = Tutor.objects.get(dni=dni)
     except:
         return render(request, 'menu/editar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
     form = editarTutorForm(instance=tutor)
@@ -276,9 +273,9 @@ def editarTutor(request, legajo):
     return render(request, 'menu/editar-tutor.html', {'form': form, 'nbar': 'tutor'})
 
 @staff_member_required
-def bajaTutor(request, legajo):
+def bajaTutor(request, dni):
     try:
-        tutor = Tutor.objects.get(legajo=legajo)
+        tutor = Tutor.objects.get(dni=dni)
     except:
         return render(request, 'menu/buscar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
     tutor.fecha_desvinculacion = datetime.today()
@@ -291,9 +288,9 @@ def bajaTutor(request, legajo):
     return render(request, 'menu/buscar-tutor.html', {'baja': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
 
 @staff_member_required
-def altaTutor(request, legajo):
+def altaTutor(request, dni):
     try:
-        tutor = Tutor.objects.get(legajo=legajo)
+        tutor = Tutor.objects.get(dni=dni)
     except:
         return render(request, 'menu/buscar-tutor.html', {'not_found': True, 'nbar': 'tutor'})
     tutor.fecha_alta = datetime.today()
@@ -381,7 +378,7 @@ def agregarIntervencion(request):
                 Intervencion.save(nueva_intervencion)
                 form = agregarIntervencionForm(user=request.user)
                 return render(request, 'menu/alta-intervencion.html', {'form': form, 'intervencion': nueva_intervencion,
-                                                                       'success': True, 'nbar': 'intervencion'})
+                              'success': True, 'nbar': 'intervencion'})
             if request.user.is_staff:
                 nueva_intervencion = Intervencion(
                     tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
@@ -727,7 +724,6 @@ def agregarGrupo(request):
                 horario=form.cleaned_data['horario'],
                 fecha_alta=datetime.today()
             )
-
             for tut in tutores:
                 grupo.tutores.add(tut)
             for alu in alumnos:
@@ -749,9 +745,12 @@ def agregarGrupo(request):
                     )
                     Alumno.save(nuevo_alumno)
                     grupo.alumnos.add(nuevo_alumno)
-
             Grupo.save(grupo)
-            return render(request, 'menu/alta-grupo.html', {'form': form, 'grupo': grupo, 'success': True, 'nbar': 'grupos'})
+            grupos = Grupo.objects.all()
+            return render(request, 'menu/listar-grupos-activos.html', {'grupos': grupos, 'grupo': grupo, 'agregado': True, 'nbar': 'grupos'})
+        else:
+            return render(request, 'menu/alta-grupo.html',
+                          {'form': form, 'success': False, 'nbar': 'grupos'})
     else:
         form = agregarGrupoForm()
         return render(request, 'menu/alta-grupo.html', {'form': form, 'nbar': 'grupos'})
@@ -782,7 +781,8 @@ def editarGrupo(request, id):
         form = editarGrupoForm(request.POST, instance=grupo)
         if form.is_valid():
             form.save()
-            return render(request, 'menu/editar-grupo.html', {'form': form, 'success': True, 'grupo': grupo, 'nbar': 'grupos'})
+            grupos = Grupo.objects.all()
+            return render(request, 'menu/listar-grupos-activos.html', {'grupos': grupos, 'grupo': grupo, 'nbar': 'grupos', 'editado': True})
         else:
             form = editarGrupoForm(instance=grupo)
     return render(request, 'menu/editar-grupo.html', {'form': form, 'grupo': grupo, 'nbar': 'grupos'})

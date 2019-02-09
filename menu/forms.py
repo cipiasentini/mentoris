@@ -53,36 +53,68 @@ class agregarIntervencionForm(forms.Form):
 class agregarIntervencionTipoForm(forms.Form):
     descripcion = forms.CharField()
 
-class agregarTutorForm(forms.Form):
-    TIPOS = (
-        ('Motivacional', 'Motivacional'),
-        ('Academico', 'Académico'),
-        ('Psicologo', 'Psicologo'),
-        ('Otro', 'Otro')
-    )
-    dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
-    tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
-    materia = forms.CharField(help_text="Ingrese el materias de las cuales es tutor.")
-    horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
+# class agregarTutorForm(forms.Form):
+#     TIPOS = (
+#         ('Motivacional', 'Motivacional'),
+#         ('Academico', 'Académico'),
+#         ('Psicologo', 'Psicologo'),
+#         ('Otro', 'Otro')
+#     )
+#     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
+#     tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
+#     # materia = forms.CharField(help_text="Ingrese el materias de las cuales es tutor.")
+#     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
 
-class agregarTutorPersonalizadoForm(forms.Form):
-    TIPOS = (
-        ('Motivacional', 'Motivacional'),
-        ('Academico', 'Académico'),
-        ('Psicologo', 'Psicologo'),
-        ('Otro', 'Otro')
-    )
-    materia = forms.CharField(help_text="Ingrese el materias de las cuales es tutor.")
-    dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
-    nombre = forms.CharField(help_text='Ingrese el nombre y apellido completo del nuevo tutor.')
-    tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
-    telefono = forms.DecimalField(help_text='Ingrese el numero de telefono/celular del tutor.')
-    mail = forms.EmailField(help_text='Ingrese el mail del tutor.')
-    horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
+class agregarTutorForm(ModelForm):
+    class Meta:
+        model = Tutor
+        TIPOS = (
+            ('Motivacional', 'Motivacional'),
+            ('Academico', 'Académico'),
+            ('Psicologo', 'Psicologo'),
+            ('Otro', 'Otro')
+        )
+        fields = ['dni', 'tipo', 'materia', 'horario']
+        widgets = {
+            'tipo': Select2Widget(choices=TIPOS)
+        }
+
+# class agregarTutorPersonalizadoForm(forms.Form):
+#     TIPOS = (
+#         ('Motivacional', 'Motivacional'),
+#         ('Academico', 'Académico'),
+#         ('Psicologo', 'Psicologo'),
+#         ('Otro', 'Otro')
+#     )
+#     materia = forms.CharField(help_text="Ingrese el materias de las cuales es tutor.")
+#     dni = forms.DecimalField(help_text="Ingrese el DNI del tutor.")
+#     nombre = forms.CharField(help_text='Ingrese el nombre y apellido completo del nuevo tutor.')
+#     tipo = forms.ChoiceField(choices=TIPOS, help_text="Ingrese el TIPO del tutor.", widget=Select2Widget)
+#     telefono = forms.DecimalField(help_text='Ingrese el numero de telefono/celular del tutor.')
+#     mail = forms.EmailField(help_text='Ingrese el mail del tutor.')
+#     horario = forms.CharField(help_text="Ingrese el HORARIO de disponibilidad del tutor.")
+
+class agregarTutorPersonalizadoForm(ModelForm):
+    class Meta:
+        model = Tutor
+        TIPOS = (
+            ('Motivacional', 'Motivacional'),
+            ('Academico', 'Académico'),
+            ('Psicologo', 'Psicologo'),
+            ('Otro', 'Otro')
+        )
+        fields = ['dni', 'nombre', 'tipo', 'materia', 'telefono', 'mail', 'horario']
+        widgets = {
+            'tipo': Select2Widget(choices=TIPOS)
+        }
 
 class buscarTutorForm(forms.Form):
     id = forms.ModelChoiceField(help_text="Ingrese el legajo o dni del tutor.", queryset=Tutor.objects.all(), widget=Select2Widget)
     # id = forms.CharField(help_text="Ingrese el legajo o dni del tutor.")
+
+    def __init__(self,*args, **kwargs):
+        super(buscarTutorForm, self).__init__(*args, **kwargs)
+        self.fields['id'].queryset = self.fields['id'].queryset.order_by('nombre')
 
     def clean_id(self):
         data = self.cleaned_data['id']
