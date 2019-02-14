@@ -721,7 +721,7 @@ def editarTarea(request, id):
             form = editarTareaForm(instance=tarea)
     return render(request, 'menu/editar-tarea.html', {'form': form, 'tarea': tarea, 'nbar': 'tareas'})
 
-@staff_member_required
+@login_required
 def agregarGrupo(request):
     if request.method == 'POST':
         form = agregarGrupoForm(request.POST)

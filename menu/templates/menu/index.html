@@ -102,10 +102,8 @@
                                         Grupos
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        {% if user.is_staff %}
-                                            <a class="dropdown-item" href="{% url 'menu:alta-grupo' %}">Nuevo grupo</a>
-                                            <div class="dropdown-divider"></div>
-                                        {% endif %}
+                                        <a class="dropdown-item" href="{% url 'menu:alta-grupo' %}">Nuevo grupo</a>
+                                        <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="{% url 'menu:listar-grupos' %}">Listar grupos</a>
                                     </div>
                                 </li>
