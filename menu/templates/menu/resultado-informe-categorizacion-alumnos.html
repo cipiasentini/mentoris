@@ -1,0 +1,26 @@
+{% extends "menu/index.html" %}
+{% load app_filters %}
+
+{% block title %}<title>Tutorías: Ranking de consultas por tema</title>{% endblock %}
+
+{% block content %}
+    {% block warning %}
+        {% if not_found %}
+            <div class="alert alert-danger" role="alert">
+                No existen consultas en el periodo seleccionado, por favor intente otras fechas. Recuerde que la busqueda no incluye el dia final, si quiere incluirlo elija un dia posterior.
+            </div>
+        {% endif %}
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                Hubo un problema al intentar realizar la consulta, por favor comuniquese con el administrador.
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    <h2>Estado alumno de escuelas desde {{ desde.date }} hasta {{ hasta.date }}</h2>
+    <div class="card-body" style="margin: -10px -20px -20px -20px;">
+        <ul class="list-group">
+            <p>{{ aprobados }} {{ recursantes }} {{ abandonaron }}</p>
+        </ul>
+    </div>
+{% endblock %}

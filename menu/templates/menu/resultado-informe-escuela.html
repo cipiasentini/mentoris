@@ -1,0 +1,110 @@
+{% extends "menu/index.html" %}
+{% load app_filters %}
+
+{% block title %}<title>Tutorías: Ranking de consultas por tema</title>{% endblock %}
+
+{% block content %}
+    {% block warning %}
+        {% if not_found %}
+            <div class="alert alert-danger" role="alert">
+                No existen consultas en el periodo seleccionado, por favor intente otras fechas. Recuerde que la busqueda no incluye el dia final, si quiere incluirlo elija un dia posterior.
+            </div>
+        {% endif %}
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                Hubo un problema al intentar realizar la consulta, por favor comuniquese con el administrador.
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    <h2 style="margin-bottom: 35px;">Estado alumno de escuelas desde {{ desde.date }} hasta {{ hasta.date }}</h2>
+    <div class="row">
+        <div class="col-4">
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header">
+                    <h2>Aprobados <span style="float: right!important;" class="badge badge-primary">{{ totAp }}</span></h2>
+                </div>
+                <div class="card-body">
+                    {% for a in aprobados %}
+                        {% if a == 'P' %}
+                            <p>Escuala Pública: {{ aprobados|get_item:a }}</p>
+                        {% else %}
+                            {% if a == 'R' %}
+                                <p>Escuala Privada: {{ aprobados|get_item:a }}</p>
+                            {% else %}
+                                {% if a == None %}
+                                    <p>Escuala No definida: {{ aprobados|get_item:a }}</p>
+                                {% else %}
+                                    <p>Escuela {{ a }}: {{ aprobados|get_item:a }}</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header">
+                    <h2>Recursantes<span style="float: right!important;" class="badge badge-primary">{{ totRec }}</span></h2>
+                </div>
+                <div class="card-body">
+                    {% for a in recursantes %}
+                        {% if a == 'P' %}
+                            <p>Escuala Pública: {{ recursantes|get_item:a }}</p>
+                        {% else %}
+                            {% if a == 'R' %}
+                                <p>Escuala Privada: {{ recursantes|get_item:a }}</p>
+                            {% else %}
+                                {% if a == None %}
+                                    <p>Escuala No definida: {{ recursantes|get_item:a }}</p>
+                                {% else %}
+                                    <p>Escuela {{ a }}: {{ recursantes|get_item:a }}</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header">
+                    <h2>Abandonaron<span style="float: right!important;" class="badge badge-primary">{{ totAba }}</span></h2>
+                </div>
+                <div class="card-body">
+                    {% for a in abandonaron %}
+                        {% if a == 'P' %}
+                            <p>Escuala Pública: {{ abandonaron|get_item:a }}</p>
+                        {% else %}
+                            {% if a == 'R' %}
+                                <p>Escuala Privada: {{ abandonaron|get_item:a }}</p>
+                                {% else %}{% if a == None %}
+                                    <p>Escuala No definida: {{ abandonaron|get_item:a }}</p>
+                                {% else %}
+                                    <p>Escuela {{ a }}: {{ abandonaron|get_item:a }}</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {#    <div class="card-body" style="margin: -10px -20px -20px -20px;">#}
+    {#        <ul class="list-group">#}
+    {#            <h3>Aprobados</h3>#}
+    {#            {% for a in aprobados %}#}
+    {#                {% if a == 'P' %}#}
+    {#                    <p>Escuala Pública: {{ aprobados|get_item:a }}</p>#}
+    {#                {% else %}#}
+    {#                    {% if a == 'R' %}#}
+    {#                        <p>Escuala Privada: {{ aprobados|get_item:a }}</p>#}
+    {#                    {% else %}#}
+    {#                        <p>Escuela {{ a }}: {{ aprobados|get_item:a }}</p>#}
+    {#                    {% endif %}#}
+    {#                {% endif %}#}
+    {#            {% endfor %}#}
+    {#        </ul>#}
+    {#    </div>#}
+{% endblock %}

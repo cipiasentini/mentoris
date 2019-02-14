@@ -66,20 +66,22 @@ def buscarAlumno(request):
                 except:
                     return render(request, 'menu/buscar-alumno.html',
                                   {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
-                                   'intervenciones': intervenciones, 'nbar': 'alumnos',
+                                   'intervenciones': intervenciones, 'nbar': 'alumnos', 'origen': alumno.ciudad_origen,
                                    'sys_al': alumnoSysacad, 'sys_per': personaSysacad, 'escuela': escuelaSysacad,
-                                   'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma})
+                                   'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma,
+                                    'residencia': alumno.ciudad_residencia})
                 seminario.append(tuple((ma, materia)))
         if len(seminario) > 0:
             return render(request, 'menu/buscar-alumno.html', {'form': form, 'materiasAlumno': materiaAlumno ,'alumno_inst': alumno,
-                                                               'intervenciones': intervenciones, 'nbar': 'alumnos',
+                                                               'intervenciones': intervenciones, 'nbar': 'alumnos', 'origen': alumno.ciudad_origen,
                                                                'sys_al': alumnoSysacad, 'sys_per': personaSysacad, 'escuela': escuelaSysacad,
-                                                               'sys_esp': especialidadSysacad, 'seminario': seminario, 'cant_seminario': len(seminario)})
+                                                               'sys_esp': especialidadSysacad, 'seminario': seminario, 'cant_seminario': len(seminario),
+                                                               'residencia': alumno.ciudad_residencia})
         else:
             return render(request, 'menu/buscar-alumno.html',
-                          {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
+                          {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno, 'origen': alumno.ciudad_origen,
                            'intervenciones': intervenciones, 'nbar': 'alumnos', 'escuela': escuelaSysacad,
-                           'sys_al': alumnoSysacad, 'sys_per': personaSysacad,
+                           'sys_al': alumnoSysacad, 'sys_per': personaSysacad, 'residencia': alumno.ciudad_residencia,
                            'sys_esp': especialidadSysacad})
     else:
         form = buscarAlumnoForm()
@@ -176,6 +178,9 @@ def agregarAlumno(request):
                 motivo_recursante=form.cleaned_data['motivo_recursante'],
                 dejo_seminario=form.cleaned_data['dejo_seminario'],
                 motivo_dejo_seminario=form.cleaned_data['motivo_dejo_seminario'],
+                ciudad_origen=form.cleaned_data['ciudad_origen'],
+                ciudad_residencia=form.cleaned_data['ciudad_residencia'],
+                tipo_escuela=form.cleaned_data['tipo_escuela']
             )
             Alumno.save(nuevo_alumno)
             form = agregarAlumnoForm()
@@ -365,7 +370,8 @@ def agregarIntervencion(request):
                         descripcion=str(form.cleaned_data['descripcion']),
                         medio=form.cleaned_data['medio'],
                         tutor_asignado=Tutor.objects.get(dni=form.cleaned_data['tutor_asignado'].dni),
-                        alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
+                        alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni),
+                        fecha_alta=form.cleaned_data['fecha_alta']
                     )
                 else:
                     nueva_intervencion = Intervencion(
@@ -373,7 +379,8 @@ def agregarIntervencion(request):
                         descripcion=str(form.cleaned_data['descripcion']),
                         medio=form.cleaned_data['medio'],
                         tutor_asignado=Tutor.objects.get(dni=request.user.username),
-                        alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
+                        alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni),
+                        fecha_alta=form.cleaned_data['fecha_alta']
                     )
                 Intervencion.save(nueva_intervencion)
                 form = agregarIntervencionForm(user=request.user)
@@ -386,7 +393,8 @@ def agregarIntervencion(request):
                     materia=mat,
                     medio=form.cleaned_data['medio'],
                     tutor_asignado=Tutor.objects.get(dni=form.cleaned_data['tutor_asignado'].dni),
-                    alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
+                    alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni),
+                    fecha_alta=form.cleaned_data['fecha_alta']
                 )
             else:
                 nueva_intervencion = Intervencion(
@@ -395,7 +403,8 @@ def agregarIntervencion(request):
                     materia=mat,
                     medio=form.cleaned_data['medio'],
                     tutor_asignado=Tutor.objects.get(dni=request.user.username),
-                    alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni)
+                    alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni),
+                    fecha_alta=form.cleaned_data['fecha_alta']
                 )
             Intervencion.save(nueva_intervencion)
             form = agregarIntervencionForm(user=request.user)
@@ -437,6 +446,8 @@ def listarIntervenciones(request):
             except:
                 intervenciones = Intervencion.objects.all()
             return render(request, 'menu/intervenciones.html', {'intervenciones': intervenciones, 'nbar': 'intervencion'})
+        else:
+            return render(request, 'menu/index.html', {'nbar': 'index'})
 
 @login_required
 def editarIntervencion(request, id):
@@ -679,7 +690,7 @@ def bcal(request, year, month, day):
         request,
         'menu/agenda-tareas.html',
         {
-            'calendar': get_bcal(y, m, day, user=request.user),
+            'calendar': get_bcal(y, m, day),
             'today': today_events,
         },
         content_type='html')
@@ -825,3 +836,105 @@ def rankingConsultas(request):
     else:
         form = rankingConsultasTemaForm()
         return render(request, 'menu/informe-ranking-consultas.html', {'form': form, 'nbar': 'informes'})
+
+
+@staff_member_required
+def categorizacionAlumnos(request):
+    if request.method == 'POST':
+        form = rankingConsultasTemaForm(request.POST)
+        if form.is_valid():
+            try:
+                desde = form.cleaned_data['desde']
+                hasta = form.cleaned_data['hasta']
+            except:
+                return render(request, 'menu/informe-escuela.html', {'form': form, 'error': True, 'nbar': 'informes'})
+            try:
+                alumnos = Alumno.objects.filter(fecha_alta__range=(desde, hasta))
+            except:
+                return render(request, 'menu/informe-escuela.html', {'form': form, 'error': True, 'nbar': 'informes'})
+            recursantes = 0
+            aprobados = 0
+            abandonaron = 0
+            for alu in alumnos:
+                if alu.recursante:
+                    recursantes += 1
+                else:
+                    if alu.dejo_seminario:
+                        abandonaron += 1
+                    else:
+                        try:
+                            materias_alumno = MateriaAlumno.objects.filter(especialid=900, legajo=alu.legajo)
+                        except:
+                            continue
+                        if len(materias_alumno) == 3:
+                            aprobados += 1
+            return render(request, 'menu/resultado-informe-escuela.html', {'recursantes': recursantes,
+                    'aprobados': aprobados, 'abandonaron': abandonaron, 'desde': desde, 'hasta': hasta, 'nbar': 'informes'})
+    else:
+        form = rankingConsultasTemaForm()
+        return render(request, 'menu/informe-escuela.html', {'form': form, 'nbar': 'informes'})
+
+@staff_member_required
+def estadoEscuelas(request):
+    if request.method == 'POST':
+        form = rankingConsultasTemaForm(request.POST)
+        if form.is_valid():
+            try:
+                desde = form.cleaned_data['desde']
+                hasta = form.cleaned_data['hasta']
+            except:
+                return render(request, 'menu/informe-escuela.html', {'form': form, 'error': True, 'nbar': 'informes'})
+            try:
+                alumnos = Alumno.objects.filter(fecha_alta__range=(desde, hasta))
+            except:
+                return render(request, 'menu/informe-escuela.html', {'form': form, 'error': True, 'nbar': 'informes'})
+
+            recursantes = {
+                'Tecnica': 0,
+                'No tecnica': 0,
+                'P': 0,
+                'R': 0,
+                None: 0
+            }
+            aprobados = {
+                'Tecnica': 0,
+                'No tecnica': 0,
+                'P': 0,
+                'R': 0,
+                None: 0
+            }
+            abandonaron = {
+                'Tecnica': 0,
+                'No tecnica': 0,
+                'P': 0,
+                'R': 0,
+                None: 0
+            }
+            for alu in alumnos:
+                try:
+                    personaSysacad = SysacadPersona.objects.get(numerodocu=alu.dni)
+                    escuelaSysacad = SysacadEscuela.objects.get(escuela=personaSysacad.escuela).tipoescuel
+                except:
+                    continue
+                if alu.recursante:
+                    recursantes[alu.tipo_escuela] += 1
+                    recursantes[escuelaSysacad] += 1
+                if alu.dejo_seminario:
+                    abandonaron[alu.tipo_escuela] += 1
+                    abandonaron[escuelaSysacad] += 1
+                try:
+                    materias_alumno = MateriaAlumno.objects.filter(especialid=900, legajo=alu.legajo)
+                except:
+                    continue
+                if len(materias_alumno) == 3:
+                    aprobados[alu.tipo_escuela] += 1
+                    aprobados[escuelaSysacad] += 1
+            totalAp = aprobados.get('P') + aprobados.get('R') + aprobados.get(None)
+            totalRec = recursantes.get('P') + recursantes.get('R') + recursantes.get(None)
+            totalAba = abandonaron.get('P') + abandonaron.get('R') + abandonaron.get(None)
+            return render(request, 'menu/resultado-informe-escuela.html', {'recursantes': recursantes,
+                    'aprobados': aprobados, 'abandonaron': abandonaron, 'desde': desde, 'hasta': hasta, 'nbar': 'informes',
+                    'totAp': totalAp, 'totRec': totalRec, 'totAba': totalAba})
+    else:
+        form = rankingConsultasTemaForm()
+        return render(request, 'menu/informe-escuela.html', {'form': form, 'nbar': 'informes'})

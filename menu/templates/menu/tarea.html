@@ -23,7 +23,7 @@
                         <li class="list-group-item">Tarea: {{tarea.titulo }}</li>
                         <li class="list-group-item">Descripción: {{ tarea.descripcion}}</li>
                         <li class="list-group-item">Fecha programada: {{ tarea.fecha_alta }}</li>
-                        <li class="list-group-item">Estado: {{ tarea.estado }}</li>
+                        <li class="list-group-item">Estado: {% if tarea.estado == 'Abierta' %}<span class="badge badge-success">Abierta</span>{% else %}<span class="badge badge-warning">Cerrada</span>{% endif %}</li>
                         <li class="list-group-item">
                             <a class="btn btn-primary" style="margin-top: 10px; float: right;" href="{% url 'menu:editar-tarea' id=tarea.id %}">Editar tarea</a>
                             <button class="btn btn-secondary" style="margin-top: 10px; margin-right: 10px; float: right;" onClick="javascript:history.go(-1);">Atras</button>

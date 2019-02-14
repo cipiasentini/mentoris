@@ -21,11 +21,17 @@ class buscarAlumnoForm(forms.Form):
 
 class agregarAlumnoForm(ModelForm):
     class Meta:
+        TIPOS = (
+            ('Tecnica', 'Tecnica'),
+            ('No tecnica', 'No tecnica')
+        )
         model = Alumno
-        fields = ['dni', 'tipo_cursado', 'observaciones', 'recursante', 'motivo_recursante', 'discapacidad', 'tipo_discapacidad',
-                  'dejo_seminario', 'motivo_dejo_seminario']
+        fields = ['dni', 'ciudad_origen', 'ciudad_residencia', 'tipo_escuela', 'observaciones', 'tipo_cursado',
+                  'recursante', 'motivo_recursante', 'discapacidad', 'tipo_discapacidad', 'dejo_seminario',
+                  'motivo_dejo_seminario']
         widgets = {
-            'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial')))
+            'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial'))),
+            'tipo_escuela': Select2Widget(choices=TIPOS)
         }
 
 class agregarIntervencionForm(forms.Form):
@@ -43,6 +49,7 @@ class agregarIntervencionForm(forms.Form):
     tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de la intervención.", queryset=Tipo.objects.all(), widget=Select2Widget)
     medio = forms.ChoiceField(help_text="Ingrese el medio por el cuál se efectuó la intervención.", choices=TIPOS, widget=Select2Widget)
     descripcion = forms.CharField(widget=forms.Textarea)
+    fecha_alta = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -139,12 +146,17 @@ class editarTutorForm(ModelForm):
 
 class editarAlumnoForm(ModelForm):
     class Meta:
+        TIPOS = (
+            ('Tecnica', 'Tecnica'),
+            ('No tecnica', 'No tecnica')
+        )
         model = Alumno
         exclude = ['fecha_desvinculacion', 'fecha_alta']
         widgets = {
             'situacion_riesgo': Select2Widget(choices=(('Si', 'Si'), ('No', 'No'))),
             # 'fecha_alta': DatePickerInput(format='%Y-%m-%d'),
-            'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial')))
+            'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial'))),
+            'tipo_escuela': Select2Widget(choices=TIPOS)
         }
 
 class agregarNovedadForm(ModelForm):
@@ -235,10 +247,11 @@ class editarIntervencionForm(ModelForm):
     tutor_asignado = forms.ModelChoiceField(queryset=Tutor.objects.all(), widget=Select2Widget)
     medio = forms.ChoiceField(choices=TIPOS, widget=Select2Widget)
     alumno = forms.ModelChoiceField(queryset=Alumno.objects.all(), widget=Select2Widget)
+    fecha_alta = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
 
     class Meta:
         model = Intervencion
-        exclude = ['fecha_baja', 'fecha_alta']
+        exclude = ['fecha_baja']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -249,6 +262,11 @@ class editarIntervencionForm(ModelForm):
             del self.fields['materia']
 
 class agregarGrupoForm(ModelForm):
+    ESTADOS = (
+        ('Abierto', 'Abierto'),
+        ('Cerrado', 'Cerrado')
+    )
+    estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
     tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
     alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=SysacadAlumno.objects.all())
     titulo = forms.CharField(help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
@@ -260,6 +278,11 @@ class agregarGrupoForm(ModelForm):
         }
 
 class editarGrupoForm(ModelForm):
+    ESTADOS = (
+        ('Abierto', 'Abierto'),
+        ('Cerrado', 'Cerrado')
+    )
+    estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
     tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
     alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Alumno.objects.all())
     titulo = forms.CharField(

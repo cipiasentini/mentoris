@@ -1,7 +1,7 @@
 {% extends "menu/index.html" %}
 {% load app_filters %}
 
-{% block title %}<title>Tutorías: Ranking de situación alumnos por tipo de escuela</title>{% endblock %}
+{% block title %}<title>Tutorías: Informe de categorización de alumnos</title>{% endblock %}
 
 {% block content %}
     {% block warning %}
@@ -17,7 +17,7 @@
         {% endif %}
     {% endblock %}
 
-    <h2>Ranking de situación alumnos por tipo de escuela</h2>
+    <h2>Categorización de alumnos</h2>
     <form class="mt-3" method="post">
         {% csrf_token %}
         <div class="form-group">

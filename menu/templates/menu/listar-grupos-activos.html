@@ -29,13 +29,25 @@
 
 
     {% if user.is_staff %}
-        <h1>Grupos activos</h1>
+        <h1>Grupos</h1>
     {% else %}
         <h1>Grupos de {{ user.first_name }}</h1>
     {% endif %}
 
-    <div class="row mt-4">
+        <div id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingOne" onclick="$.get('{% url "menu:update-session" collapse=1 %}');">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseTwo">
+                            <h3><span class="pull-left">Abiertos</span></h3>
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseOne" class="collapse  {% if request.session.collapse == 1 %}show{% endif %}" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row mt-4">
         {% for g in grupos %}
+            {% if g.estado == 'Abierto' %}
             <div class="modal fade" id="exampleModalCenter{{ g.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
@@ -65,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-3">
                 <div class="card card_scrollable bg-light mb-3" style="max-width: 18rem;">
                     <div class="card-header">
                         <button type="button" class="btn btn-link" data-toggle='modal' data-target='#exampleModalCenter{{ g.id }}'>
@@ -82,9 +94,136 @@
                     </div>
                 </div>
             </div>
-            {% if forloop.counter0|add:1|divisibleby:3 %}
+            {% if forloop.counter0|add:1|divisibleby:5 %}
                 </div>
                 <div class="row">
             {% endif %}
+            {% endif %}
         {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" id="headingTwo" onclick="$.get('{% url "menu:update-session" collapse=2 %}');">
+                    <h5 class="mb-0">
+                        <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            <h3><span class="pull-left">Cerrados</span></h3>
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="collapse {% if request.session.collapse == 2 %}show{% endif %}" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="card-body">
+                        <div class="row mt-4">
+        {% for g in grupos %}
+            {% if g.estado == 'Cerrado' %}
+            <div class="modal fade" id="exampleModalCenter{{ g.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Detalles del grupo: {{ g.titulo }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><b>Descripción: </b>{{ g.descripcion }}</p>
+                            <p><b>Fecha de creación: </b>{{ g.fecha_alta }}</p>
+                            <p><b>Horario: </b>{{ g.horario }}</p>
+                            <p><b>Tutores encargados: </b></p>
+                            {% for t in g.tutores.all %}
+                                <p class="card-text ml-5">{{ t.nombre }}<br></p>
+                            {% endfor %}
+                            <p><b>Alumnos: </b></p>
+                            {% for a in g.alumnos.all %}
+                                <p class="card-text ml-5">{{ a.nombre }}<br></p>
+                            {% endfor %}
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>
+                            <a class='btn btn-warning' href='{% url 'menu:editar-grupo' id=g.id %}'>Editar grupo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card card_scrollable bg-light mb-3" style="max-width: 18rem;">
+                    <div class="card-header">
+                        <button type="button" class="btn btn-link" data-toggle='modal' data-target='#exampleModalCenter{{ g.id }}'>
+                        {{ g.titulo }}
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="scrollable">
+                            <p class="card-text">{{ g.descripcion }}</p>
+                            {% for t in g.tutores.all %}
+                                <p class="card-text"><b>Tutor/es: </b>{{ t.nombre }}<br></p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if forloop.counter0|add:1|divisibleby:5 %}
+                </div>
+                <div class="row">
+            {% endif %}
+            {% endif %}
+        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+{#    <div class="row mt-4">#}
+{#        {% for g in grupos %}#}
+{#            <div class="modal fade" id="exampleModalCenter{{ g.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">#}
+{#                <div class="modal-dialog modal-dialog-centered" role="document">#}
+{#                    <div class="modal-content">#}
+{#                        <div class="modal-header">#}
+{#                            <h5 class="modal-title" id="exampleModalLongTitle">Detalles del grupo: {{ g.titulo }}</h5>#}
+{#                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                                <span aria-hidden="true">&times;</span>#}
+{#                            </button>#}
+{#                        </div>#}
+{#                        <div class="modal-body">#}
+{#                            <p><b>Descripción: </b>{{ g.descripcion }}</p>#}
+{#                            <p><b>Fecha de creación: </b>{{ g.fecha_alta }}</p>#}
+{#                            <p><b>Horario: </b>{{ g.horario }}</p>#}
+{#                            <p><b>Tutores encargados: </b></p>#}
+{#                            {% for t in g.tutores.all %}#}
+{#                                <p class="card-text ml-5">{{ t.nombre }}<br></p>#}
+{#                            {% endfor %}#}
+{#                            <p><b>Alumnos: </b></p>#}
+{#                            {% for a in g.alumnos.all %}#}
+{#                                <p class="card-text ml-5">{{ a.nombre }}<br></p>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{#                        <div class="modal-footer">#}
+{#                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Aceptar</button>#}
+{#                            <a class='btn btn-warning' href='{% url 'menu:editar-grupo' id=g.id %}'>Editar grupo</a>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            <div class="col-4">#}
+{#                <div class="card card_scrollable bg-light mb-3" style="max-width: 18rem;">#}
+{#                    <div class="card-header">#}
+{#                        <button type="button" class="btn btn-link" data-toggle='modal' data-target='#exampleModalCenter{{ g.id }}'>#}
+{#                        {{ g.titulo }}#}
+{#                        </button>#}
+{#                    </div>#}
+{#                    <div class="card-body">#}
+{#                        <div class="scrollable">#}
+{#                            <p class="card-text">{{ g.descripcion }}</p>#}
+{#                            {% for t in g.tutores.all %}#}
+{#                                <p class="card-text"><b>Tutor/es: </b>{{ t.nombre }}<br></p>#}
+{#                            {% endfor %}#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#            {% if forloop.counter0|add:1|divisibleby:3 %}#}
+{#                </div>#}
+{#                <div class="row">#}
+{#            {% endif %}#}
+{#        {% endfor %}#}
 {% endblock %}

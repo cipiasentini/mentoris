@@ -43,7 +43,9 @@ class Tutor(Persona):
         return 'DNI: {}; Nombre: {}; Tipo: {} --- Estado: {}'.format(self.dni, self.nombre, self.tipo, self.estado())
 
 class Alumno(Persona):
-    # legajo = models.IntegerField(unique=True, blank=True)
+    ciudad_origen = models.CharField(max_length=60, null=True, blank=True)
+    ciudad_residencia = models.CharField(max_length=60, null=True, blank=True)
+    tipo_escuela = models.CharField(max_length=20, null=True, blank=True, default='No tecnica')
     legajo = models.IntegerField(unique=True, blank=True, null=True)
     situacion_riesgo = models.CharField(max_length=60, null=True, blank=True, default='No')
     tipo_cursado = models.CharField(max_length=60, null=True, blank=True, default='Semipresencial')
@@ -54,6 +56,7 @@ class Alumno(Persona):
     dejo_seminario = models.BooleanField(default=False, blank=True)
     motivo_dejo_seminario = models.CharField(max_length=60, null=True, blank=True)
     observaciones = models.TextField(null=True, blank=True)
+
 
     def __str__(self):
         return ' Legajo: {}, DNI: {}, Nombre: {}'.format(self.legajo, self.dni, self.nombre)
@@ -103,6 +106,7 @@ class Grupo(models.Model):
     horario = models.CharField(max_length=50, blank=True, null=True)
     alumnos = models.ManyToManyField(Alumno)
     tutores = models.ManyToManyField(Tutor)
+    estado = models.CharField(max_length=20, null=True, blank=True, default='Abierto')
 
     def __str__(self):
         return ' Grupo: {}, Horario: {}'.format(self.titulo, self.horario)

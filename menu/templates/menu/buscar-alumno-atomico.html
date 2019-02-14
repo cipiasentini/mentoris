@@ -114,8 +114,8 @@
                                 {#                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>#}
                                 <li class="list-group-item"><b>Trabajo:</b> <span class="badge badge-warning">{{ sys_per.trabaja }}</span></li>
                                 <li class="list-group-item"><b>Hijos:</b> <span class="badge badge-warning">{{ sys_per.tenenciahi }}</span></li>
-                                <li class="list-group-item"><b>Código postal de ciudad originaria:</b> {{ sys_per.codigopost }}</li>
-                                <li class="list-group-item"><b>Código postal de ciudad de residencia:</b> {{ sys_per.resicodigo }}</li>
+                                <li class="list-group-item"><b>Código postal de ciudad originaria:</b> {{ origen }}</li>
+                                <li class="list-group-item"><b>Código postal de ciudad de residencia:</b> {{ residencia }}</li>
                             </ul>
                         </div>
                     </div>
@@ -164,20 +164,19 @@
                                 {% else %}
                                     <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-success">NO</span></li>
                                 {% endif %}
+                                {% if cant_seminario == 3 %}
+                                    <li class="list-group-item"><b>Estado del seminario de ingreso: </b> <span class="badge badge-success">INGRESÓ</span> </li>
+                                {% else %}
+                                    <li class="list-group-item"><b>Estado del seminario de ingreso: </b> <span class="badge badge-danger">NO INGRESÓ</span> </li>
+                                {% endif %}
                             </ul>
                         </div>
                         {% if seminario %}
                             <div class="card-body col-6 pull-right">
                                 <ul class="list-group list-group-flush">
-                                        {% if cant_seminario == 3 %}
-                                            {% for m in seminario %}
-                                                <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-success">APROBÓ</span> </li>
-                                            {% endfor %}
-                                        {% else %}
-                                            {% for m in seminario %}
-                                                <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-danger">DESAPROBÓ</span> </li>
-                                            {% endfor %}
-                                        {% endif %}
+                                    {% for m in seminario %}
+                                        <li class="list-group-item"><b>{{ m|get_seminario_nombre:1 }}: </b> <span class="badge badge-success">APROBÓ</span> </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                         {% endif %}
@@ -218,7 +217,6 @@
                                         <th scope="col">Fecha creación</th>
                                         <th scope="col">Tutor Asignado</th>
                                         <th scope="col">Tipo</th>
-                                        {#                                <th scope="col">Descripción</th>#}
                                         <th scope="col">Materia</th>
                                         <th scope="col">Estado</th>
                                     </tr>
@@ -227,20 +225,19 @@
                                     {% for int in intervenciones|dictsort:"estado" %}
                                         {% if int.estado == 'Abierta' %}
                                             <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                                data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                                data-html="true" data-content="<a class='btn btn-primary'
+                                                href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a></br></br>
+                                            <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>">
                                                 <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
                                                 <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
                                                 <td style="border-width: thick" >{{ int.tipo }}</td>
-                                                {#                                        <td>{{ int.descripcion }}</td>#}
                                                 <td style="border-width: thick">{{ int.materia.nombre }}</td>
                                                 <td style="border-width: thick">{{ int.estado }}</td>
                                             </tr>
                                             <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                                data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
+                                                data-html="true" data-content="<a class='btn btn-primary'
+                                                href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a></br></br>
+                                            <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>">
                                                 <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
                                             </tr>
                                         {% endif %}
@@ -261,27 +258,97 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for int in intervenciones|dictsort:"estado" %}
-                                        {% if int.estado == 'Cerrada' %}
-                                            <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                                data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                                <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
-                                                <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
-                                                <td style="border-width: thick" >{{ int.tipo }}</td>
-                                                {#                                        <td>{{ int.descripcion }}</td>#}
-                                                <td style="border-width: thick">{{ int.materia.nombre }}</td>
-                                                <td style="border-width: thick">{{ int.estado }}</td>
-                                            </tr>
-                                            <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
-                                                data-html="true" data-content="{% if int.estado == 'Abierta' %}<a class='btn
-                                        btn-primary' href='{% url 'menu:cerrar-intervencion-b' id=int.id %}'>Cerrar Intervencion</a>{% else %}<a
-                                        class='btn btn-primary' href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a>{% endif %}">
-                                                <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
-                                            </tr>
-                                        {% endif %}
-                                    {% endfor %}
+                                    {% if user.is_staff %}
+                                        {% for int in intervenciones|dictsort:"estado" %}
+                                            {% if int.estado == 'Cerrada' %}
+                                                <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                                    data-html="true" data-content="<a class='btn btn-primary'
+                                                    href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a></br></br>
+                                                    <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>
+                                                    </br></br><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModalCenter{{ int.id }}'>
+                                                    Eliminar Intervención </button>">
+                                                    <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
+                                                    <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
+                                                    <td style="border-width: thick" >{{ int.tipo }}</td>
+                                                    {#                                        <td>{{ int.descripcion }}</td>#}
+                                                    <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                                    <td style="border-width: thick">{{ int.estado }}</td>
+                                                </tr>
+                                                <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                                    data-html="true" data-content="<a class='btn btn-primary' href='<a class='btn btn-primary'
+                                                    href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a></br></br>
+                                                    <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>
+                                                    </br></br><button type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModalCenter{{ int.id }}'>
+                                                    Eliminar Intervención </button>">
+                                                    <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                                </tr>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModalCenter{{ int.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLongTitle">Eliminar intervención <b>{{ int.fecha_alta }}</b></h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                ¿Está seguro que desa eliminar la intervención?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                <a class='btn btn-danger' href='{% url 'menu:eliminar-intervencion' id=int.id %}'>Eliminar intervención</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal -->
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for int in intervenciones|dictsort:"estado" %}
+                                            {% if int.estado == 'Cerrada' %}
+                                                <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                                    data-html="true" data-content="<a class='btn btn-primary'
+                                                    href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a></br></br>
+                                                    <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>">
+                                                    <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
+                                                    <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
+                                                    <td style="border-width: thick" >{{ int.tipo }}</td>
+                                                    {#                                        <td>{{ int.descripcion }}</td>#}
+                                                    <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                                    <td style="border-width: thick">{{ int.estado }}</td>
+                                                </tr>
+                                                <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                                                    data-html="true" data-content="<a class='btn btn-primary' href='<a class='btn btn-primary'
+                                                    href='{% url 'menu:abrir-intervencion-b' id=int.id %}'>Abrir Intervencion</a></br></br>
+                                                    <a class='btn btn-primary' href='{% url 'menu:editar-intervencion' id=int.id %}'>Editar intervención</a>">
+                                                    <td colspan="4"><b>Descripción:</b> {{ int.descripcion }}</td>
+                                                </tr>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModalCenter{{ int.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLongTitle">Eliminar intervención <b>{{ int.fecha_alta }}</b></h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                ¿Está seguro que desa eliminar la intervención?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                <a class='btn btn-danger' href='{% url 'menu:eliminar-intervencion' id=int.id %}'>Eliminar intervención</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Modal -->
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                     </tbody>
                                 </table>
                             </div>
@@ -291,135 +358,6 @@
                 </div>
             </div>
         </div>
-
-
-        {#  ESTO ES PARA LO DE LAS MATERIAS PERO CAPAZ LE SACO NOMAS ESTA RE MAL HECHO, MUY INOPTIMO...  #}
-
-
-
-        {#    <div class="card">#}
-        {#        <div class="card-header" id="headingThree" onclick="$.get('{% url "menu:update-session" collapse=3 %}');">#}
-        {#            <h5 class="mb-0">#}
-        {#                <button class="btn btn-link btn-block collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseTwo">#}
-        {#                    <h3><span class="pull-left">Materias de {{ alumno_inst.nombre }}</span></h3>#}
-        {#                </button>#}
-        {#            </h5>#}
-        {#        </div>#}
-        {#        <div id="collapseThree" class="collapse {% if request.session.collapse == 3 %}show{% endif %}" aria-labelledby="headingThree" data-parent="#accordion">#}
-        {#            <ul class="nav nav-tabs" id="myTab" role="tablist">#}
-        {#                <li class="nav-item">#}
-        {#                    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#cursando" role="tab" aria-controls="cursando" aria-selected="true">Cursando</a>#}
-        {#                </li>#}
-        {#                <li class="nav-item">#}
-        {#                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#regularizadas" role="tab" aria-controls="regularizadas" aria-selected="false">Regularizadas</a>#}
-        {#                </li>#}
-        {#                <li class="nav-item">#}
-        {#                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#promocionadas" role="tab" aria-controls="promocionadas" aria-selected="false">Promociono TP</a>#}
-        {#                </li>#}
-        {#            </ul>#}
-        {#            <div class="tab-content" id="myTabContent">#}
-        {#                <div class="tab-pane fade show active" id="cursando" role="tabpanel" aria-labelledby="home-tab">#}
-        {#                    <table class="table table-hover">#}
-        {#                        <thead>#}
-        {#                        <tr>#}
-        {#                            <th scope="col">Materia</th>#}
-        {#                            {% for i in "xxxxxxxx" %}#}
-        {#                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>#}
-        {#                            {% endfor %}#}
-        {#                        </tr>#}
-        {#                        </thead>#}
-        {#                        <tbody>#}
-        {#                        {% for matAlu in materiasAlumno %}#}
-        {#                            {% for mat in materias %}#}
-        {#                                {% if mat.materia == matAlu.materia %}#}
-        {#                                    {% if matAlu.acadestado == 0 %}#}
-        {#                                        <tr>#}
-        {#                                            <th scope="row">{{ mat.nombre }}</th>#}
-        {#                                            <td>{{ matAlu.nota1 }}</td>#}
-        {#                                            <td>{{ matAlu.nota2 }}</td>#}
-        {#                                            <td>{{ matAlu.nota3 }}</td>#}
-        {#                                            <td>{{ matAlu.nota4 }}</td>#}
-        {#                                            <td>{{ matAlu.nota5 }}</td>#}
-        {#                                            <td>{{ matAlu.nota6 }}</td>#}
-        {#                                            <td>{{ matAlu.nota7 }}</td>#}
-        {#                                            <td>{{ matAlu.nota8 }}</td>#}
-        {#                                        </tr>#}
-        {#                                    {% endif %}#}
-        {#                                {% endif %}#}
-        {#                            {% endfor %}#}
-        {#                        {% endfor %}#}
-        {#                        </tbody>#}
-        {#                    </table>#}
-        {#                </div>#}
-        {#                <div class="tab-pane fade" id="regularizadas" role="tabpanel" aria-labelledby="profile-tab">#}
-        {#                    <table class="table table-hover">#}
-        {#                        <thead>#}
-        {#                        <tr>#}
-        {#                            <th scope="col">Materia</th>#}
-        {#                            {% for i in "xxxxxxxx" %}#}
-        {#                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>#}
-        {#                            {% endfor %}#}
-        {#                        </tr>#}
-        {#                        </thead>#}
-        {#                        <tbody>#}
-        {#                        {% for matAlu in materiasAlumno %}#}
-        {#                            {% for mat in materias %}#}
-        {#                                {% if mat.materia == matAlu.materia %}#}
-        {#                                    {% if matAlu.acadestado == 2 %}#}
-        {#                                        <tr>#}
-        {#                                            <th scope="row">{{ mat.nombre }}</th>#}
-        {#                                            <td>{{ matAlu.nota1 }}</td>#}
-        {#                                            <td>{{ matAlu.nota2 }}</td>#}
-        {#                                            <td>{{ matAlu.nota3 }}</td>#}
-        {#                                            <td>{{ matAlu.nota4 }}</td>#}
-        {#                                            <td>{{ matAlu.nota5 }}</td>#}
-        {#                                            <td>{{ matAlu.nota6 }}</td>#}
-        {#                                            <td>{{ matAlu.nota7 }}</td>#}
-        {#                                            <td>{{ matAlu.nota8 }}</td>#}
-        {#                                        </tr>#}
-        {#                                    {% endif %}#}
-        {#                                {% endif %}#}
-        {#                            {% endfor %}#}
-        {#                        {% endfor %}#}
-        {#                        </tbody>#}
-        {#                    </table>#}
-        {#                </div>#}
-        {#                <div class="tab-pane fade" id="promocionadas" role="tabpanel" aria-labelledby="contact-tab">#}
-        {#                    <table class="table table-hover">#}
-        {#                        <thead>#}
-        {#                        <tr>#}
-        {#                            <th scope="col">Materia</th>#}
-        {#                            {% for i in "xxxxxxxx" %}#}
-        {#                                <th scope="col">{{ "Nota"|concat_pers:forloop.counter0 }}</th>#}
-        {#                            {% endfor %}#}
-        {#                        </tr>#}
-        {#                        </thead>#}
-        {#                        <tbody>#}
-        {#                        {% for matAlu in materiasAlumno %}#}
-        {#                            {% for mat in materias %}#}
-        {#                                {% if mat.materia == matAlu.materia %}#}
-        {#                                    {% if matAlu.acadestado == 3 %}#}
-        {#                                        <tr>#}
-        {#                                            <th scope="row">{{ mat.nombre }}</th>#}
-        {#                                            <td>{{ matAlu.nota1 }}</td>#}
-        {#                                            <td>{{ matAlu.nota2 }}</td>#}
-        {#                                            <td>{{ matAlu.nota3 }}</td>#}
-        {#                                            <td>{{ matAlu.nota4 }}</td>#}
-        {#                                            <td>{{ matAlu.nota5 }}</td>#}
-        {#                                            <td>{{ matAlu.nota6 }}</td>#}
-        {#                                            <td>{{ matAlu.nota7 }}</td>#}
-        {#                                            <td>{{ matAlu.nota8 }}</td>#}
-        {#                                        </tr>#}
-        {#                                    {% endif %}#}
-        {#                                {% endif %}#}
-        {#                            {% endfor %}#}
-        {#                        {% endfor %}#}
-        {#                        </tbody>#}
-        {#                    </table>#}
-        {#                </div>#}
-        {#            </div>#}
-        {#        </div>#}
-        {#    </div>#}
     </div>
 {% endif %}
 
