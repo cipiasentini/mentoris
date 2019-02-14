@@ -17,10 +17,43 @@
         {% endif %}
     {% endblock %}
 
-    <h2>Estado alumno de escuelas desde {{ desde.date }} hasta {{ hasta.date }}</h2>
-    <div class="card-body" style="margin: -10px -20px -20px -20px;">
-        <ul class="list-group">
-            <p>{{ aprobados }} {{ recursantes }} {{ abandonaron }}</p>
-        </ul>
+    <h2 style="margin-bottom: 35px;">Estado alumno de escuelas desde {{ desde.date }} hasta {{ hasta.date }}</h2>
+    <div class="row">
+        <div class="col-4">
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header">
+                    <h2>Aprobados <span style="float: right!important;" class="badge badge-primary">{{ totAp }}</span></h2>
+                </div>
+                <div class="card-body">
+                    {% for a in aprobados %}
+                        <p>{{ cod|get_item:a }}: {{ aprobados|get_item:a }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header">
+                    <h2>Recursantes<span style="float: right!important;" class="badge badge-primary">{{ totRec }}</span></h2>
+                </div>
+                <div class="card-body">
+                    {% for a in recursantes %}
+                        <p>{{ cod|get_item:a }}: {{ recursantes|get_item:a }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card bg-light mb-3" style="max-width: 18rem;">
+                <div class="card-header">
+                    <h2>Abandonaron<span style="float: right!important;" class="badge badge-primary">{{ totAba }}</span></h2>
+                </div>
+                <div class="card-body">
+                    {% for a in abandonaron %}
+                        <p>{{ cod|get_item:a }}: {{ abandonaron|get_item:a }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

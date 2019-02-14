@@ -793,9 +793,10 @@ def editarGrupo(request, id):
         if form.is_valid():
             form.save()
             grupos = Grupo.objects.all()
-            return render(request, 'menu/listar-grupos-activos.html', {'grupos': grupos, 'grupo': grupo, 'nbar': 'grupos', 'editado': True})
+            return redirect('menu:listar-grupos')
         else:
             form = editarGrupoForm(instance=grupo)
+            return redirect(request, 'menu/listar-grupos-activos.html', {'form': form, 'nbar': 'grupos', 'not_found': True})
     return render(request, 'menu/editar-grupo.html', {'form': form, 'grupo': grupo, 'nbar': 'grupos'})
 
 @staff_member_required
@@ -847,32 +848,63 @@ def categorizacionAlumnos(request):
                 desde = form.cleaned_data['desde']
                 hasta = form.cleaned_data['hasta']
             except:
-                return render(request, 'menu/informe-escuela.html', {'form': form, 'error': True, 'nbar': 'informes'})
+                return render(request, 'menu/informe-categorizacion-alumnos.html', {'form': form, 'error': True, 'nbar': 'informes'})
             try:
                 alumnos = Alumno.objects.filter(fecha_alta__range=(desde, hasta))
             except:
-                return render(request, 'menu/informe-escuela.html', {'form': form, 'error': True, 'nbar': 'informes'})
-            recursantes = 0
-            aprobados = 0
-            abandonaron = 0
+                return render(request, 'menu/informe-categorizacion-alumnos.html', {'form': form, 'error': True, 'nbar': 'informes'})
+            recursantes = {
+                5: 0,
+                8: 0,
+                27: 0,
+                84: 0
+            }
+            aprobados = {
+                5: 0,
+                8: 0,
+                27: 0,
+                84: 0
+            }
+            abandonaron = {
+                5: 0,
+                8: 0,
+                27: 0,
+                84: 0
+            }
+            codigos = {
+                5: 'ISI',
+                84: 'LAR',
+                27: 'IQ',
+                8: 'IEM'
+            }
             for alu in alumnos:
+                try:
+                    alumnoSysacad = SysacadAlumno.objects.get(numerodocu=alu.dni)
+                except:
+                    continue
                 if alu.recursante:
-                    recursantes += 1
-                else:
-                    if alu.dejo_seminario:
-                        abandonaron += 1
-                    else:
-                        try:
-                            materias_alumno = MateriaAlumno.objects.filter(especialid=900, legajo=alu.legajo)
-                        except:
-                            continue
-                        if len(materias_alumno) == 3:
-                            aprobados += 1
-            return render(request, 'menu/resultado-informe-escuela.html', {'recursantes': recursantes,
-                    'aprobados': aprobados, 'abandonaron': abandonaron, 'desde': desde, 'hasta': hasta, 'nbar': 'informes'})
+                    recursantes[alumnoSysacad.especialid] += 1
+                if alu.dejo_seminario:
+                    abandonaron[alumnoSysacad.especialid] += 1
+                try:
+                    materias_alumno = MateriaAlumno.objects.filter(especialid=900, legajo=alu.legajo)
+                except:
+                    continue
+                if len(materias_alumno) == 3:
+                    aprobados[alumnoSysacad.especialid] += 1
+            totalAp = aprobados.get(5) + aprobados.get(84) + aprobados.get(27) + aprobados.get(8)
+            totalRec = recursantes.get(5) + recursantes.get(84) + recursantes.get(27) + recursantes.get(8)
+            totalAba = abandonaron.get(5) + abandonaron.get(84) + abandonaron.get(27) + abandonaron.get(8)
+            return render(request, 'menu/resultado-informe-categorizacion-alumnos.html', {'recursantes': recursantes,
+                                                                               'aprobados': aprobados,
+                                                                               'abandonaron': abandonaron,
+                                                                               'desde': desde, 'hasta': hasta,
+                                                                               'nbar': 'informes',
+                                                                               'totAp': totalAp, 'totRec': totalRec,
+                                                                               'totAba': totalAba, 'cod': codigos})
     else:
         form = rankingConsultasTemaForm()
-        return render(request, 'menu/informe-escuela.html', {'form': form, 'nbar': 'informes'})
+        return render(request, 'menu/informe-categorizacion-alumnos.html', {'form': form, 'nbar': 'informes'})
 
 @staff_member_required
 def estadoEscuelas(request):
