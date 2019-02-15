@@ -112,8 +112,8 @@
                                     <li class="list-group-item"><b>Discapacidad:</b> <span class="badge badge-warning">NO</span></li>
                                 {% endif %}
                                 {#                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>#}
-                                <li class="list-group-item"><b>Trabajo:</b> <span class="badge badge-warning">{{ sys_per.trabaja }}</span></li>
-                                <li class="list-group-item"><b>Hijos:</b> <span class="badge badge-warning">{{ sys_per.tenenciahi }}</span></li>
+                                <li class="list-group-item"><b>Trabajo:</b> <span class="badge badge-warning">{% if sys_per.trabaja == 'N' %}NO{% else %}SI{% endif %}</span></li>
+                                <li class="list-group-item"><b>Hijos:</b> <span class="badge badge-warning">{% if sys_per.tenenciahi == 'N' %}NO{% else %}SI{% endif %}</span></li>
                                 <li class="list-group-item"><b>Código postal de ciudad originaria:</b> {{ origen }}</li>
                                 <li class="list-group-item"><b>Código postal de ciudad de residencia:</b> {{ residencia }}</li>
                             </ul>
@@ -125,30 +125,14 @@
                             <ul class="list-group list-group-flush">
                                 {% for esc in escuela %}
                                     <li class="list-group-item"><b>Escuela:</b> {{ esc.nombre }}</li>
-                                    <li class="list-group-item"><b>Tipo de escuela:</b> {{ esc.tipoescuel }}</li>
+                                    <li class="list-group-item"><b>Tipo de escuela:</b> {% if esc.tipoescuel == 'P' %}Pública{% else %}{% if esc.tipoescuel == 'R' %}Privada{% else %}No definida{% endif %}{% endif %}</li>
+                                    <li class="list-group-item"><b>Tipo de escuela:</b> {{ alumno_inst.tipo_escuela }}</li>
                                 {% endfor %}
 
                             </ul>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="seminario" role="tabpanel" aria-labelledby="home-tab">
-                        {#                        <div class="card-body col pull-left">#}
-                        {#                            <ul class="list-group list-group-flush">#}
-                        {#                                <li class="list-group-item"><b>Tipo de cursado:</b> {{ alumno_inst.tipo_cursado }}</li>#}
-                        {#                                {% if alumno_inst.dejo_seminario == True %}#}
-                        {#                                    <li class="list-group-item"><b>Dejo el seminario?</b> <span class="badge badge-danger">SI</span></li>#}
-                        {#                                    <li class="list-group-item"><b>Motivo por el que dejo el seminario:</b> {{ alumno_inst.motivo_dejo_seminario }}</li>#}
-                        {#                                {% else %}#}
-                        {#                                    <li class="list-group-item"><b>Dejo el seminario?</b> <span class="badge badge-success">NO</span></li>#}
-                        {#                                {% endif %}#}
-                        {#                                {% if alumno_inst.recursante == True %}#}
-                        {#                                    <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-danger">SI</span></li>#}
-                        {#                                    <li class="list-group-item"><b>Motivo por el que dejo el seminario:</b> {{ alumno_inst.motivo_recursante }}</li>#}
-                        {#                                {% else %}#}
-                        {#                                    <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-success">NO</span></li>#}
-                        {#                                {% endif %}#}
-                        {#                            </ul>#}
-                        {#                        </div>#}
                         <div class="card-body {% if seminario %}col-6{% else %}col{% endif %} pull-left">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><b>Tipo de cursado:</b> {{ alumno_inst.tipo_cursado }}</li>
@@ -160,7 +144,7 @@
                                 {% endif %}
                                 {% if alumno_inst.recursante == True %}
                                     <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-danger">SI</span></li>
-                                    <li class="list-group-item"><b>Motivo por el que dejo el seminario:</b> {{ alumno_inst.motivo_recursante }}</li>
+                                    <li class="list-group-item"><b>Motivo por el que recursó el seminario:</b> {{ alumno_inst.motivo_recursante }}</li>
                                 {% else %}
                                     <li class="list-group-item"><b>Recursa el seminario?</b> <span class="badge badge-success">NO</span></li>
                                 {% endif %}
