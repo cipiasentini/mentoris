@@ -40,6 +40,11 @@
                 Verifique los campos ingresados.
             </div>
         {% endif %}
+        {% if bad_dni %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                El DNI ingresado es incorrecto, un DNI valido tiene 8 digitos
+            </div>
+        {% endif %}
     {% endblock %}
 
     <h2>Agregar tutor manualmente</h2>

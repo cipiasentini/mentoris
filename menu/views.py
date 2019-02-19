@@ -234,6 +234,8 @@ def agregarTutorPersonalizado(request):
     if request.method == 'POST':
         form = agregarTutorPersonalizadoForm(request.POST)
         if form.is_valid():
+            if len(str(form.cleaned_data['dni'])) != 8:
+                return render(request, 'menu/alta-tutor-personalizada.html', {'form': form, 'bad_dni': True, 'nbar': 'tutores'})
             nuevo_tutor = Tutor(
                 nombre=form.cleaned_data['nombre'],
                 dni=form.cleaned_data['dni'],
@@ -271,6 +273,8 @@ def editarTutor(request, dni):
         if form.is_valid():
             if tutor.tipo != "Academico":
                 tutor.materia = None
+            if len(str(form.cleaned_data['dni'])) != 8:
+                return render(request, 'menu/editar-tutor.html', {'form': form, 'bad_dni': True, 'nbar': 'tutores'})
             form.save()
             return render(request, 'menu/editar-tutor.html', {'form': form, 'success': True, 'tutor_inst': tutor, 'nbar': 'tutor'})
         else:
@@ -771,12 +775,12 @@ def listarGrupos(request):
     if request.method == 'GET':
         if request.user.is_staff:
             try:
-                grupos = Grupo.objects.all()
+                grupos = Grupo.objects.all().extra(order_by=['estado'])
             except:
                 return render(request, 'menu/listar-grupos-activos.html', {'nbar': 'grupos', 'not_found': True})
         else:
             try:
-                grupos = Grupo.objects.filter(tutores__dni=request.user.username)
+                grupos = Grupo.objects.filter(tutores__dni=request.user.username).extra(order_by=['estado'])
             except:
                 return render(request, 'menu/listar-grupos-activos.html', {'nbar': 'grupos', 'not_found': True})
         return render(request, 'menu/listar-grupos-activos.html', {'nbar': 'grupos', 'grupos': grupos})
@@ -792,11 +796,12 @@ def editarGrupo(request, id):
         form = editarGrupoForm(request.POST, instance=grupo)
         if form.is_valid():
             form.save()
-            grupos = Grupo.objects.all()
+            grupos = Grupo.objects.all().extra(order_by=['estado'])
             return redirect('menu:listar-grupos')
         else:
             form = editarGrupoForm(instance=grupo)
-            return redirect(request, 'menu/listar-grupos-activos.html', {'form': form, 'nbar': 'grupos', 'not_found': True})
+            # grupos = Grupo.objects.all()
+            return render(request, 'menu/editar-grupo.html', {'form': form, 'nbar': 'grupos', 'not_found': True})
     return render(request, 'menu/editar-grupo.html', {'form': form, 'grupo': grupo, 'nbar': 'grupos'})
 
 @staff_member_required

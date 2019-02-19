@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import RegexValidator
 # from compositefk.fields import CompositeForeignKey
 
 class Tipo(models.Model):
@@ -10,9 +11,9 @@ class Tipo(models.Model):
 
 class Persona(models.Model):
     dni = models.DecimalField(max_digits=12, decimal_places=0, primary_key=True)
-    nombre = models.CharField(max_length=60, blank=True)
+    nombre = models.CharField(max_length=60)
     telefono = models.CharField(max_length=20, blank=True, null=True)
-    mail = models.CharField(max_length=100, blank=True, null=True)
+    mail = models.CharField(max_length=100)
     # carrera = models.CharField(max_length=20, blank=True, null=True)
     # fecha_alta = models.DateTimeField(default=timezone.now)
     # dni = models.OneToOneField('sysacad.Persona', verbose_name='DNI', primary_key=True, on_delete=models.DO_NOTHING)
@@ -46,7 +47,7 @@ class Alumno(Persona):
     ciudad_origen = models.CharField(max_length=60, null=True, blank=True)
     ciudad_residencia = models.CharField(max_length=60, null=True, blank=True)
     tipo_escuela = models.CharField(max_length=20, null=True, blank=True, default='No tecnica')
-    legajo = models.IntegerField(unique=True, blank=True, null=True)
+    legajo = models.IntegerField(unique=True)
     situacion_riesgo = models.CharField(max_length=60, null=True, blank=True, default='No')
     tipo_cursado = models.CharField(max_length=60, null=True, blank=True, default='Semipresencial')
     recursante = models.BooleanField(default=False, blank=True)
@@ -99,7 +100,8 @@ class Tarea(models.Model):
         return "/tarea/%d" % self.id
 
 class Grupo(models.Model):
-    titulo = models.CharField(max_length=60, null=True, blank=True)
+    titulo = models.CharField(max_length=60, validators=[RegexValidator(regex='^.{4}$',
+                                message='La longitud minima del titulo debe ser de 4 caracteres', code='nomatch')])
     descripcion = models.TextField(null=True, blank=True)
     fecha_alta = models.DateTimeField(default=timezone.now)
     fecha_baja = models.DateTimeField(null=True, blank=True)
