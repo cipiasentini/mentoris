@@ -1,7 +1,6 @@
 from django import forms
 from django.forms import ModelForm
 from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo
-# from sysacad.models import Persona
 from django.core.exceptions import ValidationError
 from django_select2.forms import Select2Widget, Select2MultipleWidget
 from sysacad.models import Materia, Alumno as SysacadAlumno
@@ -26,15 +25,19 @@ class agregarAlumnoForm(ModelForm):
             ('No tecnica', 'No tecnica')
         )
         model = Alumno
-        fields = ['dni', 'ciudad_origen', 'ciudad_residencia', 'tipo_escuela', 'observaciones', 'tipo_cursado',
+        fields = ['dni', 'ciudad_origen', 'ciudad_residencia', 'tipo_escuela', 'tipo_cursado', 'observaciones',
                   'recursante', 'motivo_recursante', 'discapacidad', 'tipo_discapacidad', 'dejo_seminario',
                   'motivo_dejo_seminario']
         widgets = {
             'tipo_cursado': Select2Widget(choices=(('Libre', 'Libre'), ('Semipresencial', 'Semipresencial'))),
             'tipo_escuela': Select2Widget(choices=TIPOS)
         }
+        labels = {
+            'tipo_cursado': 'Tipo de cursado del seminario',
+            'tipo_escuela': 'Tipo de escuela secundaria'
+        }
 
-class agregarIntervencionForm(forms.Form):
+class agregarIntervencionForm(ModelForm):
     TIPOS = (
         ('Personal', 'Personal'),
         ('Campus virtual', 'Campus virtual'),
@@ -43,13 +46,22 @@ class agregarIntervencionForm(forms.Form):
         ('Correo electronico', 'Correo electronico'),
         ('Otro', 'Otro')
     )
-    alumno = forms.ModelChoiceField(help_text="Ingrese el alumno involucrado en la intervención.", queryset=Alumno.objects.all(), widget=Select2Widget)
-    materia = forms.ModelChoiceField(required=False, help_text="Ingrese la materia a la cual corresponda la consulta.", queryset=Materia.objects.all(), widget=Select2Widget)
-    tutor_asignado = forms.ModelChoiceField(help_text="Ingrese el tutor que se encarga de la consulta.", queryset=Tutor.objects.all(), widget=Select2Widget)
-    tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de la intervención.", queryset=Tipo.objects.all(), widget=Select2Widget)
-    medio = forms.ChoiceField(help_text="Ingrese el medio por el cuál se efectuó la intervención.", choices=TIPOS, widget=Select2Widget)
+    alumno = forms.ModelChoiceField(help_text="Ingrese el alumno involucrado en la intervención.",
+                                    queryset=Alumno.objects.all(), widget=Select2Widget)
+    materia = forms.ModelChoiceField(required=False, help_text="Ingrese la materia a la cual corresponda la consulta.",
+                                     queryset=Materia.objects.all(), widget=Select2Widget)
+    tutor_asignado = forms.ModelChoiceField(help_text="Ingrese el tutor que se encarga de la consulta.",
+                                            queryset=Tutor.objects.all(), widget=Select2Widget)
+    tipo = forms.ModelChoiceField(help_text="Ingrese el tipo de la intervención.", queryset=Tipo.objects.all(),
+                                  widget=Select2Widget)
+    medio = forms.ChoiceField(help_text="Ingrese el medio por el cuál se efectuó la intervención.", choices=TIPOS,
+                              widget=Select2Widget)
     descripcion = forms.CharField(widget=forms.Textarea)
     fecha_alta = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
+
+    class Meta:
+        model = Intervencion
+        exclude = ['fecha_baja', 'estado']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -57,8 +69,12 @@ class agregarIntervencionForm(forms.Form):
         if not user.is_staff:
             del self.fields['tutor_asignado']
 
-class agregarIntervencionTipoForm(forms.Form):
-    descripcion = forms.CharField()
+class agregarIntervencionTipoForm(ModelForm):
+    descripcion = forms.CharField(min_length=4, max_length=40, label='Tipo de intervencion')
+
+    class Meta:
+        model = Tipo
+        exclude = ['']
 
 # class agregarTutorForm(forms.Form):
 #     TIPOS = (
@@ -81,6 +97,9 @@ class agregarTutorForm(ModelForm):
             ('Psicologo', 'Psicologo'),
             ('Otro', 'Otro')
         )
+        help_texts = {
+            'materia': 'En caso de ser mas de una materia, separarlas con comas'
+        }
         fields = ['dni', 'tipo', 'materia', 'horario']
         widgets = {
             'tipo': Select2Widget(choices=TIPOS)
@@ -111,6 +130,9 @@ class agregarTutorPersonalizadoForm(ModelForm):
             ('Otro', 'Otro')
         )
         fields = ['dni', 'nombre', 'tipo', 'materia', 'telefono', 'mail', 'horario']
+        help_texts = {
+            'materia': 'En caso de ser mas de una materia, separarlas con comas'
+        }
         widgets = {
             'tipo': Select2Widget(choices=TIPOS)
         }
@@ -269,7 +291,7 @@ class agregarGrupoForm(ModelForm):
     estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
     tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
     alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=SysacadAlumno.objects.all())
-    titulo = forms.CharField(help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
+    titulo = forms.CharField(min_length=4, help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
     class Meta:
         model = Grupo
         exclude = ['fecha_baja', 'fecha_alta']
@@ -286,7 +308,8 @@ class editarGrupoForm(ModelForm):
     tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
     alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Alumno.objects.all())
     titulo = forms.CharField(
-        help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
+        help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.',
+        min_length=4)
     class Meta:
         model = Grupo
         exclude = ['fecha_baja']

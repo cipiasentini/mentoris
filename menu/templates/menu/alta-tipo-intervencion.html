@@ -15,16 +15,36 @@
             </div>
         {% endif %}
     {% endblock %}
-    <div class="container">
-        <h2>Agregar nuevo tipo de Intervención</h2>
-        <div class="row">
-            <div class="col">
-                <form method="post">
-                    {% csrf_token %}
-                    {% include 'common/form_template.html' with form=form %}
-                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
-                </form>
-            </div>
-        </div>
-    </div>
+
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover({container: ".list-group"})
+        });
+        $(document).ready(function(){
+            $("#filtro-tipo-intervenciones").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#tipo-intervenciones li").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+    </script>
+    <h2>Tipos de Intervención</h2>
+    <input class="form-control" id="filtro-tipo-intervenciones" type="text" placeholder="Filtrar tipo de intervencion...">
+    <ul class="list-group" style="max-height: 200px; overflow: scroll;" id="tipo-intervenciones">
+        {% for t in tipos %}
+            <li class="list-group-item" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                data-placement="bottom" data-content="<a class='btn btn-primary' href='{% url 'menu:eliminar-tipo-intervencion' id=t.id %}'>
+                Eliminar</a></br>">
+                {{ t }}
+            </li>
+        {% endfor %}
+    </ul>
+    <form method="post">
+        {% csrf_token %}
+        <br>
+        <h4>Alta de nuevo tipo de intervención</h4>
+        {% include 'common/form_template.html' with form=form %}
+        <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
+    </form>
 {% endblock %}

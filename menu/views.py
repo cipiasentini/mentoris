@@ -422,21 +422,22 @@ def agregarIntervencion(request):
 
 @staff_member_required
 def agregarIntervencionTipo(request):
+    tipos = Tipo.objects.all()
     if request.method == 'POST':
         form = agregarIntervencionTipoForm(request.POST)
         if form.is_valid():
             nuevo_tipo_intervencion = Tipo(
                 descripcion=str(form.cleaned_data['descripcion']),
             )
-            Intervencion.save(nuevo_tipo_intervencion)
+            Tipo.save(nuevo_tipo_intervencion)
             form = agregarIntervencionTipoForm()
             return render(request, 'menu/alta-tipo-intervencion.html', {'form': form, 'tipo_intervencion': nuevo_tipo_intervencion,
-                                                                        'success': True, 'nbar': 'intervencion'})
+                                                                        'success': True, 'nbar': 'intervencion', 'tipos': tipos})
         else:
-            return render(request, 'menu/alta-tipo-intervencion.html', {'form': form,  'nbar': 'intervencion'})
+            return render(request, 'menu/alta-tipo-intervencion.html', {'form': form,  'nbar': 'intervencion', 'tipos': tipos})
     else:
         form = agregarIntervencionTipoForm()
-        return render(request, 'menu/alta-tipo-intervencion.html', {'form': form, 'nbar': 'intervencion'})
+        return render(request, 'menu/alta-tipo-intervencion.html', {'tipos': tipos, 'form': form, 'nbar': 'intervencion'})
 
 
 @login_required
@@ -503,6 +504,16 @@ def eliminarIntervencion(request, id):
             return redirect('menu:intervenciones')
         intervencion.delete()
         return redirect('menu:intervenciones')
+
+@staff_member_required
+def eliminarTipoIntervencion(request, id):
+    if request.method == 'GET':
+        try:
+            tipo = Tipo.objects.get(id=id)
+        except:
+            return redirect('menu:alta-tipo-intervencion')
+        tipo.delete()
+        return redirect('menu:alta-tipo-intervencion')
 
 # Estos son iguales pero para los del template buscar-alumno-atomico.html
 @login_required

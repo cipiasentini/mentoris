@@ -45,4 +45,5 @@ urlpatterns = [
     path('informes/ranking-consultas/', views.rankingConsultas, name = 'ranking-consultas'),
     path('informes/estado-escuelas/', views.estadoEscuelas, name = 'estado-escuelas'),
     path('informes/categorizacion-alumnos/', views.categorizacionAlumnos, name = 'categorizacion-alumnos'),
+    path('intervencion/tipo/eliminar/<int:id>/', views.eliminarTipoIntervencion, name = 'eliminar-tipo-intervencion'),
 ]
