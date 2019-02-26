@@ -739,19 +739,22 @@ def editarTarea(request, id):
 @login_required
 def agregarGrupo(request):
     if request.method == 'POST':
-        form = agregarGrupoForm(request.POST)
+        form = agregarGrupoForm(request.POST, user=request.user)
         if form.is_valid():
-            tutores = form.cleaned_data['tutores']
+            if request.user.is_staff:
+                tutores = form.cleaned_data['tutores']
             alumnos = form.cleaned_data['alumnos']
-
             grupo = Grupo.objects.create(
                 titulo=form.cleaned_data['titulo'],
                 descripcion=form.cleaned_data['descripcion'],
                 horario=form.cleaned_data['horario'],
                 fecha_alta=datetime.today()
             )
-            for tut in tutores:
-                grupo.tutores.add(tut)
+            if request.user.is_staff:
+                for tut in tutores:
+                    grupo.tutores.add(tut)
+            else:
+                grupo.tutores.add(Tutor.objects.get(dni=int(request.user.username)))
             for alu in alumnos:
                 try:
                     alumno_existente = Alumno.objects.get(dni=alu.numerodocu)
@@ -778,7 +781,7 @@ def agregarGrupo(request):
             return render(request, 'menu/alta-grupo.html',
                           {'form': form, 'success': False, 'nbar': 'grupos'})
     else:
-        form = agregarGrupoForm()
+        form = agregarGrupoForm(user=request.user)
         return render(request, 'menu/alta-grupo.html', {'form': form, 'nbar': 'grupos'})
 
 @login_required
@@ -807,13 +810,12 @@ def editarGrupo(request, id):
         form = editarGrupoForm(request.POST, instance=grupo)
         if form.is_valid():
             form.save()
-            grupos = Grupo.objects.all().extra(order_by=['estado'])
             return redirect('menu:listar-grupos')
         else:
             form = editarGrupoForm(instance=grupo)
-            # grupos = Grupo.objects.all()
             return render(request, 'menu/editar-grupo.html', {'form': form, 'nbar': 'grupos', 'not_found': True})
-    return render(request, 'menu/editar-grupo.html', {'form': form, 'grupo': grupo, 'nbar': 'grupos'})
+    else:
+        return render(request, 'menu/editar-grupo.html', {'form': form, 'grupo': grupo, 'nbar': 'grupos'})
 
 @staff_member_required
 def eliminarGrupo(request, id):

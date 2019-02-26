@@ -288,16 +288,22 @@ class agregarGrupoForm(ModelForm):
         ('Abierto', 'Abierto'),
         ('Cerrado', 'Cerrado')
     )
-    estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
+    # estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
     tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
     alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=SysacadAlumno.objects.all())
     titulo = forms.CharField(min_length=4, help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
     class Meta:
         model = Grupo
-        exclude = ['fecha_baja', 'fecha_alta']
+        exclude = ['fecha_baja', 'fecha_alta', 'estado']
         widgets = {
             'fecha_alta': DatePickerInput(format='%Y-%m-%d')
         }
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super(agregarGrupoForm, self).__init__(*args, **kwargs)
+        if not user.is_staff:
+            del self.fields['tutores']
 
 class editarGrupoForm(ModelForm):
     ESTADOS = (
