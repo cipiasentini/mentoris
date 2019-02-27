@@ -59,6 +59,7 @@
                         {% include 'common/form_template.html' with form=form %}
                         <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
                     </form>
+                    <a class="btn btn-secondary" href="{% url 'menu:alta-tutor-personalizada' %}">Añadir Manualmente</a>
                 </div>
             </div>
     {% endif %}
