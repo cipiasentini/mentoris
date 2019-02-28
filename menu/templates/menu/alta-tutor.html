@@ -52,6 +52,9 @@
                 </div>
             </div>
     {% else %}
+            <div class="alert alert-warning" role="alert">
+              Si no es alumno añadir manualmente desde <a href="{% url 'menu:alta-tutor-personalizada' %}" class="alert-link">aquí</a>.
+            </div>
             <h2>Nuevo Tutor</h2>
             <div class="row">
                 <div class="col">
@@ -59,7 +62,6 @@
                         {% include 'common/form_template.html' with form=form %}
                         <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
                     </form>
-                    <a class="btn btn-secondary" href="{% url 'menu:alta-tutor-personalizada' %}">Añadir Manualmente</a>
                 </div>
             </div>
     {% endif %}
