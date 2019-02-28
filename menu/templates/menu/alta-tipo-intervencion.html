@@ -18,7 +18,7 @@
 
     <script>
         $(function () {
-            $('[data-toggle="popover"]').popover({container: ".list-group"})
+            $('[data-toggle="popover"]').popover({boundary: 'window'});
         });
         $(document).ready(function(){
             $("#filtro-tipo-intervenciones").on("keyup", function() {
@@ -31,11 +31,11 @@
     </script>
     <h2>Tipos de Intervención</h2>
     <input class="form-control" id="filtro-tipo-intervenciones" type="text" placeholder="Filtrar tipo de intervencion...">
-    <ul class="list-group" style="max-height: 200px; overflow: scroll;" id="tipo-intervenciones">
+    <ul class="list-group" style="max-height: 200px; overflow-y: scroll; white-space: nowrap;" id="tipo-intervenciones">
         {% for t in tipos %}
-            <li class="list-group-item" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-html="true"
-                data-placement="bottom" data-content="<a class='btn btn-primary' href='{% url 'menu:eliminar-tipo-intervencion' id=t.id %}'>
-                Eliminar</a></br>">
+            <li id="example" class="list-group-item" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" data-html="true"
+                data-placement="right" data-content="<a class='btn btn-primary' href='{% url 'menu:eliminar-tipo-intervencion' id=t.id %}'>
+                    Eliminar</a></br>">
                 {{ t }}
             </li>
         {% endfor %}

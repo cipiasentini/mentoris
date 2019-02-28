@@ -682,34 +682,21 @@ def agregarTarea(request):
                     tutor_asignado=Tutor.objects.get(usuario=request.user.username),
                 )
             Tarea.save(nueva_tarea)
-            form = agregarTareaForm(user=request.user)
-            return render(request, 'menu/alta-tarea.html', {'form': form, 'tarea': nueva_tarea, 'tutor': request.user.username, 'success': True, 'nbar': 'tareas'})
+            # form = agregarTareaForm(user=request.user)
+            if request.user.is_staff:
+                return render(request, 'menu/alta-tarea.html',
+                              {'form': form, 'tarea': nueva_tarea, 'tutor': nueva_tarea.tutor_asignado.nombre, 'success': True,
+                               'nbar': 'tareas'})
+            else:
+                return render(request, 'menu/alta-tarea.html',
+                              {'form': form, 'tarea': nueva_tarea, 'tutor': request.user.username, 'success': True,
+                               'nbar': 'tareas'})
+        return render(request, 'menu/alta-tarea.html',
+                      {'form': form, 'tutor': request.user.username, 'error': True,
+                       'nbar': 'tareas'})
     else:
         form = agregarTareaForm(user=request.user)
         return render(request, 'menu/alta-tarea.html', {'form': form, 'nbar': 'tareas'})
-
-
-@login_required
-def bcal(request, year, month, day):
-    today = datetime.today()
-    today_events = Tarea.objects.filter(fecha_alta__year=year).filter(fecha_alta__month=month).filter(fecha_alta__day=day)
-    if int(month) > 12:
-        y = str(today.year)
-        m = str(today.month)
-        messages.add_message(request, messages.WARNING, 'Error de mes')
-    else:
-        y = year
-        m = month
-
-    return render(
-        request,
-        'menu/agenda-tareas.html',
-        {
-            'calendar': get_bcal(y, m, day),
-            'today': today_events,
-        },
-        content_type='html')
-
 
 @login_required
 def mostrarTareaId(request, id):
@@ -735,6 +722,39 @@ def editarTarea(request, id):
         else:
             form = editarTareaForm(instance=tarea)
     return render(request, 'menu/editar-tarea.html', {'form': form, 'tarea': tarea, 'nbar': 'tareas'})
+
+@staff_member_required
+def eliminarTarea(request, id):
+    if request.method == 'GET':
+        try:
+            tarea = Tarea.objects.get(id=id)
+        except:
+            return bcal(request, datetime.today().year, datetime.today().month, datetime.today().day)
+        tarea.delete()
+        return bcal(request, datetime.today().year, datetime.today().month, datetime.today().day)
+    else:
+        return bcal(request, datetime.today().year, datetime.today().month, datetime.today().day)
+
+@login_required
+def bcal(request, year, month, day):
+    today = datetime.today()
+    today_events = Tarea.objects.filter(fecha_alta__year=year).filter(fecha_alta__month=month).filter(fecha_alta__day=day)
+    if int(month) > 12:
+        y = str(today.year)
+        m = str(today.month)
+        messages.add_message(request, messages.WARNING, 'Error de mes')
+    else:
+        y = year
+        m = month
+
+    return render(
+        request,
+        'menu/agenda-tareas.html',
+        {
+            'calendar': get_bcal(y, m, day),
+            'today': today_events,
+        },
+        content_type='html')
 
 @login_required
 def agregarGrupo(request):

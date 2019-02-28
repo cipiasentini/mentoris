@@ -192,6 +192,7 @@ class editarNovedadForm(ModelForm):
         exclude = ['fecha_alta', 'estado']
 
 class agregarTareaForm(ModelForm):
+    titulo = forms.CharField(help_text='Titulo representativo de la tarea, asi se verá en la agenda de tareas.')
     class Meta:
         model = Tarea
         exclude = ['fecha_baja', 'estado']

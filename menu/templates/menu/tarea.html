@@ -22,6 +22,9 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item">Tarea: {{tarea.titulo }}</li>
                         <li class="list-group-item">Descripción: {{ tarea.descripcion}}</li>
+                        {% if user.is_staff %}
+                            <li class="list-group-item">Tutor asignado: {{ tarea.tutor_asignado.nombre}}</li>
+                        {% endif %}
                         <li class="list-group-item">Fecha programada: {{ tarea.fecha_alta }}</li>
                         <li class="list-group-item">Estado: {% if tarea.estado == 'Abierta' %}<span class="badge badge-success">Abierta</span>{% else %}<span class="badge badge-warning">Cerrada</span>{% endif %}</li>
                         <li class="list-group-item">

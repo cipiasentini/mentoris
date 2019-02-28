@@ -9,19 +9,22 @@
                 La tarea <b>{{ tarea.titulo }}</b> fue asignada correctamente al tutor <b>{{ tutor }}</b>.
             </div>
         {% endif %}
+        {% if error %}
+            <div id="separador" class="alert alert-success" role="alert">
+                Hubo un problema agregando la tarea, verifique los campos ingresados.
+            </div>
+        {% endif %}
 
     {% endblock %}
 
-    <div class="container">
-        <h2>Nueva Tarea</h2>
-        <div class="row">
-            <div class="col">
-                <form method="post">{% csrf_token %}
-                    {% include 'common/form_template.html' with form=form %}
-                    {{ form.media }}
-                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
-                </form>
-            </div>
+    <h2>Nueva Tarea</h2>
+    <div class="row">
+        <div class="col">
+            <form method="post">{% csrf_token %}
+                {% include 'common/form_template.html' with form=form %}
+                {{ form.media }}
+                <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
+            </form>
         </div>
     </div>
 

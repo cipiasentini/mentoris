@@ -15,18 +15,39 @@
             </div>
         {% endif %}
     {% endblock %}
-{#    <div class="container">#}
-{#    #}
-{#        <div class="row">#}
-{#            <div class="col">#}
+
+    {#    MODAL     #}
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Eliminar tarea: {{ tarea.titulo }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    ¿Está seguro que desa eliminar la tarea?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a class='btn btn-danger' href='{% url 'menu:eliminar-tarea' id=tarea.id %}'>Eliminar tarea</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#    END MODAL     #}
+
     <h2>Editar Tarea</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    {% include 'common/form_template.html' with form=form %}
-                    <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Aceptar</button>
-                    <a class="btn btn-secondary pull-right mr-2" style="margin-top: 10px!important;" href="{% url 'menu:agenda-tareas' year=tarea.fecha_alta.year month=tarea.fecha_alta.month day=tarea.fecha_alta.day %}">Atras</a>
-                </form>
-{#            </div>#}
-{#        </div>#}
-{#    </div>#}
+    <form method="post">
+        {% csrf_token %}
+        {% include 'common/form_template.html' with form=form %}
+        {% if user.is_staff %}
+            <button type='button' class='btn btn-danger pull-left' data-toggle='modal' data-target='#exampleModalCenter'>
+                Eliminar tarea
+            </button>
+        {% endif %}
+        <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Aceptar</button>
+        <a class="btn btn-secondary pull-right mr-2" style="margin-top: 10px!important;" href="{% url 'menu:agenda-tareas' year=tarea.fecha_alta.year month=tarea.fecha_alta.month day=tarea.fecha_alta.day %}">Atras</a>
+    </form>
 {% endblock %}

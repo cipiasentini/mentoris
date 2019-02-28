@@ -135,7 +135,7 @@ class Novedades(models.Model):
         super(Novedades, self).save(*args, **kwargs)
 
 class Tarea(models.Model):
-    titulo = models.CharField(max_length=60, null=True, blank=True)
+    titulo = models.CharField(max_length=25, null=True, blank=True)
     descripcion = models.TextField()
     fecha_alta = models.DateTimeField(default=timezone.now, verbose_name='Fecha programada')
     fecha_baja = models.DateTimeField(null=True, blank=True)
