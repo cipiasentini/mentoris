@@ -93,6 +93,7 @@
                                 <li class="list-group-item"><b>DNI:</b> {{ alumno_inst.dni }}</li>
                                 <li class="list-group-item"><b>Legajo:</b> {{ alumno_inst.legajo }}</li>
                                 <li class="list-group-item"><b>Email:</b> {{ alumno_inst.mail }}</li>
+                                <li class="list-group-item"><b>Telefono:</b> {{ alumno_inst.telefono }}</li>
                                 {% if alumno_inst.situacion_riesgo == 'No' %}
                                     <li class="list-group-item"><b>Situacion de riesgo:</b> <span class="badge badge-success">NO</span></li>
                                 {% else %}
@@ -114,8 +115,8 @@
                                 {#                                <li class="list-group-item"><b>Discapacidad:</b> {{ alumno_inst.discapacidad }}</li>#}
                                 <li class="list-group-item"><b>Trabajo:</b> <span class="badge badge-warning">{% if sys_per.trabaja == 'N' %}NO{% else %}SI{% endif %}</span></li>
                                 <li class="list-group-item"><b>Hijos:</b> <span class="badge badge-warning">{% if sys_per.tenenciahi == 'N' %}NO{% else %}SI{% endif %}</span></li>
-                                <li class="list-group-item"><b>Código postal de ciudad originaria:</b> {{ origen }}</li>
-                                <li class="list-group-item"><b>Código postal de ciudad de residencia:</b> {{ residencia }}</li>
+                                <li class="list-group-item"><b>Ciudad de origen:</b> {{ origen }}</li>
+                                <li class="list-group-item"><b>Ciudad de residencia:</b> {{ residencia }}</li>
                             </ul>
                         </div>
                     </div>

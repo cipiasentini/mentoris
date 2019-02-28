@@ -169,7 +169,7 @@ def agregarAlumno(request):
                 dni=dni,
                 discapacidad=form.cleaned_data['discapacidad'],
                 tipo_discapacidad=form.cleaned_data['tipo_discapacidad'],
-                telefono=persona_sysacad.telefono,
+                telefono=int(persona_sysacad.telefono.rstrip()),
                 mail=persona_sysacad.mail,
                 legajo=alumno_sysacad.legajo,
                 situacion_riesgo='No',
@@ -208,7 +208,7 @@ def agregarTutor(request):
                 nombre=persona_sysacad.nombre.rstrip(),
                 dni=persona_sysacad.numerodocu,
                 legajo=alumno_sysacad.legajo,
-                telefono=persona_sysacad.telefono.rstrip(),
+                telefono=int(persona_sysacad.telefono.rstrip()),
                 mail=persona_sysacad.mail.rstrip(),
                 tipo=form.cleaned_data['tipo'],
                 horario=form.cleaned_data['horario'],
@@ -239,7 +239,7 @@ def agregarTutorPersonalizado(request):
             nuevo_tutor = Tutor(
                 nombre=form.cleaned_data['nombre'],
                 dni=form.cleaned_data['dni'],
-                telefono=form.cleaned_data['telefono'],
+                telefono=int(form.cleaned_data['telefono'].strip()),
                 materia=form.cleaned_data['materia'],
                 mail=form.cleaned_data['mail'],
                 tipo=form.cleaned_data['tipo'],
@@ -767,7 +767,7 @@ def agregarGrupo(request):
                     nuevo_alumno = Alumno(
                         nombre=persona_sysacad.nombre,
                         dni=alu.numerodocu,
-                        telefono=persona_sysacad.telefono,
+                        telefono=int(persona_sysacad.telefono.rstrip()),
                         mail=persona_sysacad.mail,
                         legajo=alu.legajo,
                         situacion_riesgo='No'

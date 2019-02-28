@@ -23,7 +23,7 @@ class Tipo(models.Model):
 class Persona(models.Model):
     dni = models.DecimalField(max_digits=12, decimal_places=0, primary_key=True)
     nombre = models.CharField(max_length=60)
-    telefono = models.CharField(max_length=20, blank=True, null=True)
+    telefono = models.BigIntegerField(blank=True, null=True)
     mail = models.EmailField(max_length=100)
     # carrera = models.CharField(max_length=20, blank=True, null=True)
     # fecha_alta = models.DateTimeField(default=timezone.now)
