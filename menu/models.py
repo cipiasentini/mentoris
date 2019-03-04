@@ -91,7 +91,9 @@ class Alumno(Persona):
                     valor += i.lower().capitalize()+' '
                 valor = valor.rstrip()
                 setattr(self, campo, valor)
-        setattr(self, 'observaciones', getattr(self, 'observaciones', False).capitalize())
+        val = getattr(self, 'observaciones', False)
+        if val:
+            setattr(self, 'observaciones', val.capitalize())
         super(Persona, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -109,7 +111,9 @@ class Intervencion(models.Model):
     fecha_baja = models.DateTimeField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        setattr(self, 'descripcion', getattr(self, 'descripcion', False).capitalize())
+        val = getattr(self, 'descripcion', False)
+        if val:
+            setattr(self, 'descripcion', val.capitalize())
         super(Intervencion, self).save(*args, **kwargs)
 
     def __str__(self):
@@ -131,7 +135,9 @@ class Novedades(models.Model):
                     valor += i.lower().capitalize()+' '
                 valor = valor.rstrip()
                 setattr(self, campo, valor)
-        setattr(self, 'descripcion', getattr(self, 'descripcion', False).capitalize())
+        val = getattr(self, 'descripcion', False)
+        if val:
+            setattr(self, 'descripcion', val.capitalize())
         super(Novedades, self).save(*args, **kwargs)
 
 class Tarea(models.Model):
@@ -155,7 +161,9 @@ class Tarea(models.Model):
                     valor += i.lower().capitalize()+' '
                 valor = valor.rstrip()
                 setattr(self, campo, valor)
-        setattr(self, 'descripcion', getattr(self, 'descripcion', False).capitalize())
+        val = getattr(self, 'descripcion', False)
+        if val:
+            setattr(self, 'descripcion', val.capitalize())
         super(Tarea, self).save(*args, **kwargs)
 
 class Grupo(models.Model):
@@ -175,11 +183,9 @@ class Grupo(models.Model):
         for campo in ['titulo']:
             val = getattr(self, campo, False)
             if val:
-                val = val.rstrip().replace(',', '').split()
-                valor = ''
-                for i in val:
-                    valor += i.lower().capitalize()+' '
-                valor = valor.rstrip()
+                valor = val.rstrip().upper()
                 setattr(self, campo, valor)
-        setattr(self, 'descripcion', getattr(self, 'descripcion', False).capitalize())
+        val = getattr(self, 'descripcion', False)
+        if val:
+            setattr(self, 'descripcion', val.capitalize())
         super(Grupo, self).save(*args, **kwargs)

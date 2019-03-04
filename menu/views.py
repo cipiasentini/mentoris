@@ -777,7 +777,7 @@ def agregarGrupo(request):
                 grupo.tutores.add(Tutor.objects.get(dni=int(request.user.username)))
             for alu in alumnos:
                 try:
-                    alumno_existente = Alumno.objects.get(dni=alu.numerodocu)
+                    alumno_existente = Alumno.objects.get(dni=int(alu.numerodocu))
                     grupo.alumnos.add(alumno_existente)
                 except:
                     try:
@@ -785,10 +785,10 @@ def agregarGrupo(request):
                     except:
                         return render(request, 'menu/alta-grupo.html', {'form': form, 'error_alumno': True, 'nbar': 'grupos'})
                     nuevo_alumno = Alumno(
-                        nombre=persona_sysacad.nombre,
-                        dni=alu.numerodocu,
+                        nombre=persona_sysacad.nombre.rstrip(),
+                        dni=int(alu.numerodocu),
                         telefono=int(persona_sysacad.telefono.rstrip()),
-                        mail=persona_sysacad.mail,
+                        mail=persona_sysacad.mail.rstrip(),
                         legajo=alu.legajo,
                         situacion_riesgo='No'
                     )
