@@ -169,7 +169,7 @@ def agregarAlumno(request):
                 dni=dni,
                 discapacidad=form.cleaned_data['discapacidad'],
                 tipo_discapacidad=form.cleaned_data['tipo_discapacidad'],
-                telefono=int(persona_sysacad.telefono.rstrip()),
+                telefono=int(persona_sysacad.telefono),
                 mail=persona_sysacad.mail,
                 legajo=alumno_sysacad.legajo,
                 situacion_riesgo='No',
@@ -208,7 +208,7 @@ def agregarTutor(request):
                 nombre=persona_sysacad.nombre.rstrip(),
                 dni=persona_sysacad.numerodocu,
                 legajo=alumno_sysacad.legajo,
-                telefono=int(persona_sysacad.telefono.rstrip()),
+                telefono=int(persona_sysacad.telefono),
                 mail=persona_sysacad.mail.rstrip(),
                 tipo=form.cleaned_data['tipo'],
                 horario=form.cleaned_data['horario'],
@@ -239,7 +239,7 @@ def agregarTutorPersonalizado(request):
             nuevo_tutor = Tutor(
                 nombre=form.cleaned_data['nombre'],
                 dni=form.cleaned_data['dni'],
-                telefono=int(form.cleaned_data['telefono'].strip()),
+                telefono=int(form.cleaned_data['telefono']),
                 materia=form.cleaned_data['materia'],
                 mail=form.cleaned_data['mail'],
                 tipo=form.cleaned_data['tipo'],
@@ -510,8 +510,14 @@ def eliminarTipoIntervencion(request, id):
     if request.method == 'GET':
         try:
             tipo = Tipo.objects.get(id=id)
+            intervenciones = Intervencion.objects.filter(tipo=tipo)
         except:
             return redirect('menu:alta-tipo-intervencion')
+        if intervenciones:
+            tipos = Tipo.objects.all()
+            form = agregarIntervencionTipoForm()
+            return render(request, 'menu/alta-tipo-intervencion.html', {'tipos': tipos, 'form': form, 'no_borrar': True,
+                                                                        'nbar': 'intervencion', 'tipo': tipo})
         tipo.delete()
         return redirect('menu:alta-tipo-intervencion')
 
@@ -787,7 +793,7 @@ def agregarGrupo(request):
                     nuevo_alumno = Alumno(
                         nombre=persona_sysacad.nombre.rstrip(),
                         dni=int(alu.numerodocu),
-                        telefono=int(persona_sysacad.telefono.rstrip()),
+                        telefono=int(persona_sysacad.telefono),
                         mail=persona_sysacad.mail.rstrip(),
                         legajo=alu.legajo,
                         situacion_riesgo='No'
