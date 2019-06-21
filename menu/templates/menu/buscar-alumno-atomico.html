@@ -216,7 +216,7 @@
                                                 <td rowspan="2" style="border-width: thick" scope="row">{{ int.fecha_alta }}</td>
                                                 <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
                                                 <td style="border-width: thick" >{{ int.tipo }}</td>
-                                                <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                                <td style="border-width: thick">{{ materias|get_materia_nombre:int.materia }}</td>
                                                 <td style="border-width: thick">{{ int.estado }}</td>
                                             </tr>
                                             <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
@@ -256,7 +256,7 @@
                                                     <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
                                                     <td style="border-width: thick" >{{ int.tipo }}</td>
                                                     {#                                        <td>{{ int.descripcion }}</td>#}
-                                                    <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                                    <td style="border-width: thick">{{ materias|get_materia_nombre:int.materia }}</td>
                                                     <td style="border-width: thick">{{ int.estado }}</td>
                                                 </tr>
                                                 <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
@@ -301,7 +301,7 @@
                                                     <td style="border-width: thick">{{ int.tutor_asignado.nombre }}</td>
                                                     <td style="border-width: thick" >{{ int.tipo }}</td>
                                                     {#                                        <td>{{ int.descripcion }}</td>#}
-                                                    <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                                    <td style="border-width: thick">{{ materias|get_materia_nombre:int.materia }}</td>
                                                     <td style="border-width: thick">{{ int.estado }}</td>
                                                 </tr>
                                                 <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"

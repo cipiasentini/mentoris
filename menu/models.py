@@ -101,7 +101,8 @@ class Alumno(Persona):
 
 class Intervencion(models.Model):
     alumno = models.ForeignKey('Alumno', on_delete=models.DO_NOTHING)
-    materia = models.ForeignKey('sysacad.Materia', on_delete=models.DO_NOTHING, null=True, blank=True)
+    # materia = models.ForeignKey('sysacad.Materia', on_delete=models.DO_NOTHING, null=True, blank=True)
+    materia = models.IntegerField(null=True, blank=True)
     tutor_asignado = models.ForeignKey('Tutor', on_delete=models.DO_NOTHING)
     tipo = models.ForeignKey('Tipo', on_delete=models.DO_NOTHING)
     medio = models.CharField(max_length=40, default='Personal')

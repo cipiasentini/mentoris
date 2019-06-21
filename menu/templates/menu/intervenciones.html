@@ -1,5 +1,5 @@
 {% extends "menu/index.html" %}
-
+{% load app_filters %}
 {% block title %}<title>Tutorías: Intervenciones a cargo de {{ user.first_name }} {{ user.last_name }}</title>{% endblock %}
 
 {% block content %}
@@ -53,7 +53,7 @@
                                         {% endif %}
                                         <td style="border-width: thick" >{{ int.tipo }}</td>
                                         {#                                        <td>{{ int.descripcion }}</td>#}
-                                        <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                        <td style="border-width: thick">{{ materias|get_materia_nombre:int.materia }}</td>
                                         {#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
                                     </tr>
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
@@ -115,7 +115,7 @@
                                         {% endif %}
                                         <td style="border-width: thick" >{{ int.tipo }}</td>
                                         {#                                        <td>{{ int.descripcion }}</td>#}
-                                        <td style="border-width: thick">{{ int.materia.nombre }}</td>
+                                        <td style="border-width: thick">{{ materias|get_materia_nombre:int.materia }}</td>
                                         {#                                        <td style="border-width: thick">{{ int.estado }}</td>#}
                                     </tr>
                                     <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"

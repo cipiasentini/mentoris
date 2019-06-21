@@ -25,3 +25,9 @@ def get_seminario_nombre(lista, key):
 def get_element(lista, tipo):
     if tipo == lista.tipo:
         return lista.descripcion
+
+@register.filter(name='get_materia_nombre')
+def get_materia_nombre(materias, id):
+    for ma in materias:
+        if id == ma.materia:
+            return ma.nombre

@@ -59,6 +59,7 @@ def buscarAlumno(request):
             return render(request, 'menu/buscar-alumno.html',
                           {'form': form, 'not_found': True, 'nbar': 'alumnos'})
         seminario = []
+        materias = SysacadMateria.objects.all()
         for ma in materiaAlumno:
             if ma.especialid == 900:
                 try:
@@ -68,7 +69,7 @@ def buscarAlumno(request):
                                   {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno,
                                    'intervenciones': intervenciones, 'nbar': 'alumnos', 'origen': alumno.ciudad_origen,
                                    'sys_al': alumnoSysacad, 'sys_per': personaSysacad, 'escuela': escuelaSysacad,
-                                   'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma,
+                                   'sys_esp': especialidadSysacad, 'error_materia': True, 'materia': ma, 'materias': materias,
                                     'residencia': alumno.ciudad_residencia})
                 seminario.append(tuple((ma, materia)))
         if len(seminario) > 0:
@@ -76,13 +77,13 @@ def buscarAlumno(request):
                                                                'intervenciones': intervenciones, 'nbar': 'alumnos', 'origen': alumno.ciudad_origen,
                                                                'sys_al': alumnoSysacad, 'sys_per': personaSysacad, 'escuela': escuelaSysacad,
                                                                'sys_esp': especialidadSysacad, 'seminario': seminario, 'cant_seminario': len(seminario),
-                                                               'residencia': alumno.ciudad_residencia})
+                                                               'residencia': alumno.ciudad_residencia, 'materias': materias})
         else:
             return render(request, 'menu/buscar-alumno.html',
                           {'form': form, 'materiasAlumno': materiaAlumno, 'alumno_inst': alumno, 'origen': alumno.ciudad_origen,
                            'intervenciones': intervenciones, 'nbar': 'alumnos', 'escuela': escuelaSysacad,
                            'sys_al': alumnoSysacad, 'sys_per': personaSysacad, 'residencia': alumno.ciudad_residencia,
-                           'sys_esp': especialidadSysacad})
+                           'sys_esp': especialidadSysacad, 'materias': materias})
     else:
         form = buscarAlumnoForm()
         return render(request, 'menu/buscar-alumno.html', {'form': form, 'nbar': 'alumnos'})
@@ -450,7 +451,8 @@ def listarIntervenciones(request):
                 intervenciones = Intervencion.objects.filter(tutor_asignado__dni=username)
             except:
                 intervenciones = Intervencion.objects.all()
-            return render(request, 'menu/intervenciones.html', {'intervenciones': intervenciones, 'nbar': 'intervencion'})
+            materias = SysacadMateria.objects.all()
+            return render(request, 'menu/intervenciones.html', {'intervenciones': intervenciones,'materias': materias, 'nbar': 'intervencion'})
         else:
             return render(request, 'menu/index.html', {'nbar': 'index'})
 

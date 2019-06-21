@@ -308,15 +308,15 @@ class Alumno(models.Model):
     def __str__(self):
         return ' DNI: {}'.format(self.numerodocu)
 
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'dbo].[django_migrations'
+#
+# class DjangoMigrations(models.Model):
+#     app = models.CharField(max_length=255)
+#     name = models.CharField(max_length=255)
+#     applied = models.DateTimeField()
+#
+#     class Meta:
+#         managed = False
+#         db_table = 'dbo].[django_migrations'
 
 
 class Especial(models.Model):
