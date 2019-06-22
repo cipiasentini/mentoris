@@ -59,6 +59,16 @@ class agregarIntervencionForm(ModelForm):
     descripcion = forms.CharField(widget=forms.Textarea)
     fecha_alta = forms.DateField(widget=DatePickerInput(format='%Y-%m-%d'))
 
+    def is_valid(self):
+        valid = super(agregarIntervencionForm, self).is_valid()
+        if not valid:
+            for e in super(agregarIntervencionForm, self).errors:
+                if e == 'materia':
+                    return True
+                else:
+                    return False
+        return valid
+
     class Meta:
         model = Intervencion
         exclude = ['fecha_baja', 'estado']

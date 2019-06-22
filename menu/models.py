@@ -113,9 +113,13 @@ class Intervencion(models.Model):
 
     def save(self, *args, **kwargs):
         val = getattr(self, 'descripcion', False)
+        # materia = getattr(self, 'materia', False)
         if val:
             setattr(self, 'descripcion', val.capitalize())
+        # if materia:
+        #     setattr(self, 'materia', materia.materia)
         super(Intervencion, self).save(*args, **kwargs)
+
 
     def __str__(self):
         return 'Alumno: {}, Intervencion: {}, {}'.format(self.alumno, self.tipo, self.descripcion)

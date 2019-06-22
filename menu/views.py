@@ -367,7 +367,8 @@ def agregarIntervencion(request):
         form = agregarIntervencionForm(request.POST, user=request.user)
         if form.is_valid():
             try:
-                mat = SysacadMateria.objects.get(materia=form.cleaned_data['materia'].materia)
+                m = request.POST.get('materia')
+                mat = SysacadMateria.objects.get(materia=m)
             except:
                 if request.user.is_staff:
                     nueva_intervencion = Intervencion(
@@ -395,7 +396,7 @@ def agregarIntervencion(request):
                 nueva_intervencion = Intervencion(
                     tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
                     descripcion=str(form.cleaned_data['descripcion']),
-                    materia=mat,
+                    materia=mat.materia,
                     medio=form.cleaned_data['medio'],
                     tutor_asignado=Tutor.objects.get(dni=form.cleaned_data['tutor_asignado'].dni),
                     alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni),
@@ -405,7 +406,7 @@ def agregarIntervencion(request):
                 nueva_intervencion = Intervencion(
                     tipo=Tipo.objects.get(id=form.cleaned_data['tipo'].id),
                     descripcion=str(form.cleaned_data['descripcion']),
-                    materia=mat,
+                    materia=mat.materia,
                     medio=form.cleaned_data['medio'],
                     tutor_asignado=Tutor.objects.get(dni=request.user.username),
                     alumno=Alumno.objects.get(dni=form.cleaned_data['alumno'].dni),
