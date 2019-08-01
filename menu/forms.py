@@ -301,7 +301,9 @@ class agregarGrupoForm(ModelForm):
     )
     # estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
     tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
-    alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=SysacadAlumno.objects.all())
+    # alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=SysacadAlumno.objects.all())
+    alumnos = forms.CharField(help_text="Ingrese legajos individualmente seguido de tecla ENTER",
+                              widget=forms.TextInput(attrs={'type': 'text', 'placeholder': 'Ingrese legajos', 'multiple': 'multiple'}))
     titulo = forms.CharField(min_length=4, help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.')
     class Meta:
         model = Grupo
@@ -323,7 +325,10 @@ class editarGrupoForm(ModelForm):
     )
     estado = forms.ChoiceField(choices=ESTADOS, widget=Select2Widget)
     tutores = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Tutor.objects.all())
-    alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Alumno.objects.all())
+    # alumnos = forms.ModelMultipleChoiceField(widget=Select2MultipleWidget(), queryset=Alumno.objects.all())
+    alumnos = forms.CharField(help_text="Ingrese legajos individualmente seguido de tecla ENTER",
+                              widget=forms.TextInput(
+                              attrs={'type': 'text', 'placeholder': 'Ingrese legajos', 'multiple': 'multiple'}))
     titulo = forms.CharField(
         help_text='Ingrese nombre representativo del grupo, así se lo reconocerá facilmente en las demas pantallas.',
         min_length=4)

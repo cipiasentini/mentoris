@@ -784,25 +784,26 @@ def agregarGrupo(request):
                     grupo.tutores.add(tut)
             else:
                 grupo.tutores.add(Tutor.objects.get(dni=int(request.user.username)))
-            for alu in alumnos:
-                try:
-                    alumno_existente = Alumno.objects.get(dni=int(alu.numerodocu))
-                    grupo.alumnos.add(alumno_existente)
-                except:
-                    try:
-                        persona_sysacad = SysacadPersona.objects.get(numerodocu=alu.numerodocu)
-                    except:
-                        return render(request, 'menu/alta-grupo.html', {'form': form, 'error_alumno': True, 'nbar': 'grupos'})
-                    nuevo_alumno = Alumno(
-                        nombre=persona_sysacad.nombre.rstrip(),
-                        dni=int(alu.numerodocu),
-                        telefono=int(persona_sysacad.telefono),
-                        mail=persona_sysacad.mail.rstrip(),
-                        legajo=alu.legajo,
-                        situacion_riesgo='No'
-                    )
-                    Alumno.save(nuevo_alumno)
-                    grupo.alumnos.add(nuevo_alumno)
+            # for alu in alumnos:
+            #     try:
+            #         alumno_existente = Alumno.objects.get(dni=int(alu.numerodocu))
+            #         grupo.alumnos.add(alumno_existente)
+            #     except:
+            #         try:
+            #             persona_sysacad = SysacadPersona.objects.get(numerodocu=alu.numerodocu)
+            #         except:
+            #             return render(request, 'menu/alta-grupo.html', {'form': form, 'error_alumno': True, 'nbar': 'grupos'})
+            #         nuevo_alumno = Alumno(
+            #             nombre=persona_sysacad.nombre.rstrip(),
+            #             dni=int(alu.numerodocu),
+            #             telefono=int(persona_sysacad.telefono),
+            #             mail=persona_sysacad.mail.rstrip(),
+            #             legajo=alu.legajo,
+            #             situacion_riesgo='No'
+            #         )
+            #         Alumno.save(nuevo_alumno)
+            #         grupo.alumnos.add(nuevo_alumno)
+            grupo.alumnos = alumnos
             Grupo.save(grupo)
             grupos = Grupo.objects.all()
             return render(request, 'menu/listar-grupos-activos.html', {'grupos': grupos, 'grupo': grupo, 'agregado': True, 'nbar': 'grupos'})

@@ -32,7 +32,7 @@
         {% endif %}
 
         {% if field.help_text %}
-            <small class="form-text text-muted">{{ field.help_text }}</small>
+            <small class="form-text text-muted">{% autoescape off %}{{ field.help_text }}{% endautoescape %}</small>
         {% endif %}
     </div>
 {% endfor %}

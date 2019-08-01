@@ -177,12 +177,16 @@ class Grupo(models.Model):
     fecha_alta = models.DateTimeField(default=timezone.now)
     fecha_baja = models.DateTimeField(null=True, blank=True)
     horario = models.CharField(max_length=50, blank=True, null=True)
-    alumnos = models.ManyToManyField(Alumno)
+    alumnos = models.CharField(max_length=200)
+    # alumnos = models.ManyToManyField(Alumno)
     tutores = models.ManyToManyField(Tutor)
     estado = models.CharField(max_length=20, null=True, blank=True, default='Abierto')
 
     def __str__(self):
         return ' Grupo: {}, Horario: {}'.format(self.titulo, self.horario)
+
+    def alumnos_as_list(self):
+        return self.alumnos.split(',')
 
     def save(self, *args, **kwargs):
         for campo in ['titulo']:

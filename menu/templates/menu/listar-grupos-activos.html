@@ -66,8 +66,8 @@
                                                         <p class="card-text ml-5">{{ t.nombre }}<br></p>
                                                     {% endfor %}
                                                     <p><b>Alumnos: </b></p>
-                                                    {% for a in g.alumnos.all %}
-                                                        <p class="card-text ml-5">{{ a.nombre }}<br></p>
+                                                    {% for a in g.alumnos_as_list %}
+                                                        <p class="card-text ml-5">{{ a }}<br></p>
                                                     {% endfor %}
                                                 </div>
                                                 <div class="modal-footer">
