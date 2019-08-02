@@ -1,0 +1,31 @@
+{% extends "menu/index.html" %}
+
+{% block title %}<title>Tutorías: Nueva Materia</title>{% endblock %}
+
+
+{% block content %}
+    {% block warning %}
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                No se pudo dar de alta la materia, revise los campos ingresados.
+            </div>
+        {% endif %}
+        {% if success %}
+            <div id="separador" class="alert alert-success" role="alert">
+                La materia <b>{{ materia.materia }}</b> fue agregada correctamente.
+            </div>
+        {% endif %}
+    {% endblock %}
+
+    <h2>Nueva Materia</h2>
+    <div class="row">
+        <div class="col">
+            <form method="post">
+                {% csrf_token %}
+                {% include 'common/form_template.html' with form=form %}
+                <button type="submit" style="margin-top: 10px; float: right;" class="btn btn-primary">Añadir</button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

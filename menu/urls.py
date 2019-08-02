@@ -47,4 +47,8 @@ urlpatterns = [
     path('informes/estado-escuelas/', views.estadoEscuelas, name = 'estado-escuelas'),
     path('informes/categorizacion-alumnos/', views.categorizacionAlumnos, name = 'categorizacion-alumnos'),
     path('intervencion/tipo/eliminar/<int:id>/', views.eliminarTipoIntervencion, name = 'eliminar-tipo-intervencion'),
+    path('materia/nueva', views.agregarMateria, name = 'alta-materia'),
+    path('materias', views.listarMaterias, name = 'panel-materias'),
+    path('materia/editar/<int:id>/', views.editarMateria, name='editar-materia'),
+    path('materia/eliminar/<int:id>/', views.eliminarMateria, name = 'eliminar-materia'),
 ]

@@ -1,0 +1,84 @@
+{% extends "menu/index.html" %}
+
+{% block content %}
+
+    {% block warning %}
+        {% if not_found %}
+            <div id="separador" class="alert alert-danger" role="alert">
+                Error durante el alta de la materia.
+            </div>
+        {% endif %}
+        {% if success %}
+            <div id="separador" class="alert alert-success" role="alert">
+                La materia {{ materia.materia }} fue agregada correctamente.
+            </div>
+        {% endif %}
+    {% endblock %}
+
+
+
+
+
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+    </script>
+
+    <h2>Materias</h2>
+
+    {% if materias %}
+        <div class="row">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Especialidad</th>
+                    <th scope="col">Materia</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for mat in materias %}
+                    {#    MODAL     #}
+                    <div class="modal fade" id="exampleModalCenter{{ mat.id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Eliminar materia</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    ¿Está seguro que desa eliminar la materia?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
+                                    </button>
+                                    <a class='btn btn-danger' href='{% url 'menu:eliminar-materia' id=mat.id %}'>Eliminar
+                                        materia</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {#    END MODAL     #}
+                    <tr tabindex="0" role="button" data-toggle="popover" data-trigger="focus"
+                        data-html="true" data-content="<a class='btn btn-primary'
+                                            href='{% url 'menu:editar-materia' id=mat.id %}'>Editar materia</a></br></br>
+                                            <button type='button' class='btn btn-primary' data-toggle='modal' data-target='#exampleModalCenter{{ mat.id }}'>
+                                            Eliminar materia
+                                            </button>">
+                        <td style="border-width: thick">{{ mat.especialidad }}</td>
+                        <td style="border-width: thick">{{ mat.materia }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-primary" style="margin-top: 10px; float: right;"
+               href="{% url 'menu:alta-materia' %}">Agregar materia</a>
+        </div>
+    {% else %}
+        <h2>No hay materias para listar</h2>
+    {% endif %}
+
+{% endblock %}

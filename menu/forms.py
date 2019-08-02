@@ -1,9 +1,8 @@
 from django import forms
 from django.forms import ModelForm
-from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo
+from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo, Materia
 from django.core.exceptions import ValidationError
 from django_select2.forms import Select2Widget, Select2MultipleWidget
-from sysacad.models import Materia, Alumno as SysacadAlumno
 # date picker
 from bootstrap_datepicker_plus import DatePickerInput
 
@@ -342,6 +341,24 @@ class editarGrupoForm(ModelForm):
 class rankingConsultasTemaForm(forms.Form):
     desde = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d'))
     hasta = forms.DateTimeField(widget=DatePickerInput(format='%Y-%m-%d'))
+
+
+class agregarEditarMateriaForm(ModelForm):
+    TIPOS = (
+        ('ISI', 'ISI'),
+        ('IQ', 'IQ'),
+        ('IEM', 'IEM'),
+        ('LAR', 'LAR'),
+        ('TCP', 'TCP'),
+        ('TUM', 'TUM'),
+        ('BASICAS', 'BASICAS')
+    )
+    materia = forms.CharField(min_length=4, max_length=60, label='Nombre')
+    especialidad = forms.ChoiceField(choices=TIPOS, widget=Select2Widget)
+
+    class Meta:
+        model = Materia
+        exclude = ['']
 
 # class editarIntervencionForm(ModelForm):
 #     class Meta:

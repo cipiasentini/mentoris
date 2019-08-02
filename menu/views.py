@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, redirect
-from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo
+from .models import Alumno, Tutor, Intervencion, Tipo, Novedades, Tarea, Grupo, Materia
 from sysacad.models import (Persona as SysacadPersona, Alumno as SysacadAlumno, Materia as SysacadMateria,
                             Alumcom as MateriaAlumno, Especial as SysacadEspecial, Escuela as SysacadEscuela)
 from .forms import (agregarAlumnoForm,  buscarAlumnoForm, editarAlumnoForm, agregarIntervencionForm, agregarIntervencionTipoForm)
 from .forms import (agregarTutorForm, buscarTutorForm, agregarTutorPersonalizadoForm, agregarNovedadForm, editarIntervencionForm,
                     editarNovedadForm, agregarTareaForm, editarTutorForm, editarTareaForm, agregarGrupoForm, editarGrupoForm,
-                    rankingConsultasTemaForm)
+                    rankingConsultasTemaForm, agregarEditarMateriaForm)
 from django.contrib.auth.models import User
 from datetime import datetime
 from django.http import HttpResponse
@@ -1018,3 +1018,62 @@ def estadoEscuelas(request):
     else:
         form = rankingConsultasTemaForm()
         return render(request, 'menu/informe-escuela.html', {'form': form, 'nbar': 'informes'})
+
+# PARA LAS MATERIAS
+@staff_member_required
+def listarMaterias(request):
+    if request.method == 'GET':
+        materias = Materia.objects.all()
+        return render(request, 'menu/panel-materias.html', {'materias': materias, 'nbar': 'administrador'})
+
+
+@staff_member_required
+def agregarMateria(request):
+    if request.method == 'POST':
+        form = agregarEditarMateriaForm(request.POST)
+        if form.is_valid():
+            nueva_materia = Materia(
+                materia=str(form.cleaned_data['materia']),
+                especialidad=str(form.cleaned_data['especialidad'])
+            )
+            Materia.save(nueva_materia)
+            form = agregarEditarMateriaForm()
+            return render(request, 'menu/alta-materia.html', {'form': form, 'materia': nueva_materia,
+                                                              'success': True, 'nbar': 'administrador'})
+        else:
+            return render(request, 'menu/alta-materia.html', {'form': form,  'nbar': 'administrador'})
+    else:
+        form = agregarEditarMateriaForm()
+        return render(request, 'menu/alta-materia.html', {'form': form, 'nbar': 'administrador'})
+
+
+@staff_member_required
+def eliminarMateria(request, id):
+    if request.method == 'GET':
+        try:
+            materia = Materia.objects.get(id=id)
+        except:
+            return redirect('menu:index')
+        materia.delete()
+        return redirect('menu:index')
+    else:
+        return redirect('menu:index')
+
+
+@staff_member_required
+def editarMateria(request, id):
+    try:
+        materia = Materia.objects.get(id=id)
+    except:
+        return render(request, 'menu/editar-materia.html', {'not_found': True, 'nbar': 'administrador'})
+    form = agregarEditarMateriaForm(instance=materia)
+    if request.method == 'POST':
+        form = agregarEditarMateriaForm(request.POST, instance=materia)
+        if form.is_valid():
+            form.save()
+            return render(request, 'menu/editar-materia.html', {'form': form, 'success': True, 'materia': materia, 'nbar': 'administrador'})
+        else:
+            form = agregarEditarMateriaForm(instance=materia)
+            return render(request, 'menu/editar-materia.html', {'form': form, 'nbar': 'administrador', 'not_found': True})
+    else:
+        return render(request, 'menu/editar-materia.html', {'form': form, 'materia': materia, 'nbar': 'administrador'})

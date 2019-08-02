@@ -198,3 +198,23 @@ class Grupo(models.Model):
         if val:
             setattr(self, 'descripcion', val.capitalize())
         super(Grupo, self).save(*args, **kwargs)
+
+
+class Materia(models.Model):
+    materia = models.CharField(max_length=60, unique=True)
+    especialidad = models.CharField(max_length=40, unique=True)
+
+    def save(self, *args, **kwargs):
+        for campo in ['materia']:
+            val = getattr(self, campo, False)
+            if val:
+                val = val.rstrip().split()
+                valor = ''
+                for i in val:
+                    valor += i.lower().capitalize()+' '
+                valor = valor.rstrip()
+                setattr(self, campo, valor)
+        super(Materia, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return '{}, {}'.format(self.materia, self.especialidad)
